@@ -175,7 +175,7 @@ def get_circumcenter(X):
         X = XCenter.dot(V)
     muX = np.mean(X, 0)
     D = np.ones((X.shape[0], X.shape[0]+1))
-    #Subtract off centroid for numerical stability
+    # Subtract off centroid for numerical stability
     D[:, 1:-1] = X - muX
     D[:, 0] = np.sum(D[:, 1:-1]**2, 1)
     minor = lambda A, j: \
@@ -193,7 +193,7 @@ def get_circumcenter(X):
         return (x, rSqr)
     return (np.inf, np.inf) #SC2 (Points not in general position)
 
-def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_coccycles=False,\
+def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
                 squared_radii=False, rips_scale = True):
     """ Compute persistence diagrams for the alpha filtration of the 
         Euclidean point cloud represented in the array X
@@ -275,12 +275,15 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_coccycles=False,\
         maxdim = X.shape[1]-1
     
     ## Step 1: Figure out the filtration
-    simplices = Delaunay(X).simplices
+    delaunay_faces = Delaunay(X).simplices
     filtration = {}
-    for dim in range(maxdim+2, 0, -1):
-        for s in range(simplices.shape[0]):
-            simplex = simplices[s, :]
+    simplices_bydim = {}
+    for dim in range(maxdim+2, 1, -1):
+        simplices_bydim[dim] = []
+        for s in range(delaunay_faces.shape[0]):
+            simplex = delaunay_faces[s, :]
             for sigma in itertools.combinations(simplex, dim):
+                simplices_bydim[dim].append(sigma)
                 if not sigma in filtration:
                     filtration[sigma] = get_circumcenter(X[sigma, :])[1]
                 for i in range(dim):
@@ -302,25 +305,47 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_coccycles=False,\
                 filtration[f] *= 4
             else:
                 filtration[f] *= 2
-    return filtration
 
     ## Step 2: Take care of numerical artifacts that may result
     ## in simplices with greater filtration values than their co-faces
-
-    ##TODO: Finish this
+    for dim in range(maxdim+2, 2, -1):
+        for sigma in simplices_bydim[dim]:
+            for i in range(dim):
+                tau = sigma[0:i] + sigma[i+1::]
+                if filtration[tau] > filtration[sigma]:
+                    filtration[tau] = filtration[sigma]
 
     ## Step 3: Come up with a sparse distance matrix which gives rise
-    ## to the above filtration
-    ##TODO: Finish this
-    
-    """
-    dm = X
-    n_points = dm.shape[0]
+    ## to the above filtration via rips
+    I = []
+    J = []
+    V = []
+    fakevertexidx = X.shape[0]
+    for simplex in filtration:
+        val = filtration[simplex]
+        if len(simplex) == 2:
+            a, b = simplex
+            I += [a, b]
+            J += [b, a]
+            V += [val, val]
+        else:
+            # Add an edge from each vertex on the simplex to an
+            # "imaginary vertex" inside the simplex, each with a length
+            # equal to the entry time of the simplex.  This is the key hack
+            # to get a rips filtration to behave like an alpha filtration
+            for idx in simplex:
+                I += [idx, fakevertexidx]
+                J += [fakevertexidx, idx]
+                V += [val, val]
+                fakevertexidx += 1
+    I, J = np.array(I, dtype=np.int32), np.array(J, dtype=np.int32)
+    V = np.array(V, dtype=np.float32)
+    N = int(fakevertexidx)
+    dm = sparse.coo_matrix((V, (I, J)), shape=(N, N)).tocsr()
 
-    if sparse.issparse(dm):
-        coo = sparse.coo_matrix.astype(dm.tocoo(), dtype=np.float32)
-        res = DRFDMSparse(coo.row, coo.col, coo.data, n_points,
-                          maxdim, thresh, coeff, int(do_cocycles))
+    ## Step 4: Perform the filtration
+    res = DRFDMSparse(I, J, V, N,
+                        maxdim, thresh, coeff, int(do_cocycles))
 
     # Unwrap persistence diagrams
     dgms = res['births_and_deaths_by_dim']
@@ -342,7 +367,6 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_coccycles=False,\
            'num_edges': res['num_edges'], 'dm': dm,
            'filtration': filtration}
     return ret
-    """
 
 def plot_dgms(diagrams, plot_only=None, title=None, xy_range=None,
               labels=None, colormap='default', size=20,
