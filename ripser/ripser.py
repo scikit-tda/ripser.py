@@ -111,8 +111,11 @@ def ripser(X, maxdim=1, thresh=np.inf, coeff=2, distance_matrix=False,
     n_points = dm.shape[0]
 
     if sparse.issparse(dm):
-        coo = sparse.coo_matrix.astype(dm.tocoo(), dtype=np.float32)
-        res = DRFDMSparse(coo.row, coo.col, coo.data, n_points,
+        coo = dm.tocoo()
+        I, J, V = coo.row, coo.col, coo.data
+        I, J = np.array(I, dtype=np.int32), np.array(J, dtype=np.int32)
+        V = np.array(V, dtype=np.float32)
+        res = DRFDMSparse(I, J, V, n_points,
                           maxdim, thresh, coeff, int(do_cocycles))
     else:
         I, J = np.meshgrid(np.arange(n_points), np.arange(n_points))
@@ -342,31 +345,9 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
     V = np.array(V, dtype=np.float32)
     N = int(fakevertexidx)
     dm = sparse.coo_matrix((V, (I, J)), shape=(N, N)).tocsr()
-
-    ## Step 4: Perform the filtration
-    res = DRFDMSparse(I, J, V, N,
-                        maxdim, thresh, coeff, int(do_cocycles))
-
-    # Unwrap persistence diagrams
-    dgms = res['births_and_deaths_by_dim']
-    for dim in range(len(dgms)):
-        N = int(len(dgms[dim])/2)
-        dgms[dim] = np.reshape(np.array(dgms[dim]), [N, 2])
-
-    # Unwrap cocycles
-    cocycles = []
-    for dim in range(len(res['cocycles_by_dim'])):
-        cocycles.append([])
-        for j in range(len(res['cocycles_by_dim'][dim])):
-            ccl = res['cocycles_by_dim'][dim][j]
-            n = int(len(ccl)/(dim+2))
-            ccl = np.reshape(np.array(ccl, dtype=np.int64), [n, dim+2])
-            ccl[:, -1] = np.mod(ccl[:, -1], coeff)
-            cocycles[dim].append(ccl)
-    ret = {'dgms': dgms, 'cocycles': cocycles,
-           'num_edges': res['num_edges'], 'dm': dm,
-           'filtration': filtration}
-    return ret
+    res = ripser(dm, maxdim=maxdim, thresh=thresh, coeff=coeff, distance_matrix=True)
+    res['filtration'] = filtration
+    return res
 
 def plot_dgms(diagrams, plot_only=None, title=None, xy_range=None,
               labels=None, colormap='default', size=20,
