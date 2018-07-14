@@ -193,7 +193,8 @@ def get_circumcenter(X):
         return (x, rSqr)
     return (np.inf, np.inf) #SC2 (Points not in general position)
 
-def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False):
+def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_coccycles=False,\
+                squared_radii=False, rips_scale = True):
     """ Compute persistence diagrams for the alpha filtration of the 
         Euclidean point cloud represented in the array X
 
@@ -218,6 +219,15 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False):
         Indicator of whether to compute cocycles, if so, we compute and store
         cocycles in the cocycles_ dictionary Rips member variable
 
+    squared_radii: bool
+        Indicator of whether to use squared radii in the filtration (as in GUDHI)
+        or whether to return the ordinary radii
+    
+    rips_scale: bool
+        Indicator of whether to multiply the radii by two so the scale
+        matches that of rips, which uses diameter of enclosing balls 
+        between points on an edge instead of radii
+
     Return
     ------
     A dictionary holding all of the results of the computation
@@ -234,6 +244,8 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False):
         The number of edges added during the computation
      'dm' : ndarray (n_samples, n_samples)
         The distance matrix used in the computation
+     'filtration' : dictionary (tuples, filtration values)
+        The values in the filtration
     }
 
     Examples
@@ -266,21 +278,42 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False):
     simplices = Delaunay(X).simplices
     filtration = {}
     for dim in range(maxdim+2, 0, -1):
-        for sigma in itertools.combinations(range(X.shape[0]), dim):
-            if not sigma in filtration:
-                filtration[sigma] = get_circumcenter(X[sigma, :])[1]
-            for i in range(dim):
-                # Propagate alpha filtration value
-                tau = sigma[0:i] + sigma[i+1::]
-                if tau in filtration:
-                    filtration[tau] = min(filtration[tau], filtration[sigma])
-                elif len(tau) > 1:
-                    # If Tau is not empty
-                    print("TODO")
-                    # TODO: Finish this
+        for s in range(simplices.shape[0]):
+            simplex = simplices[s, :]
+            for sigma in itertools.combinations(simplex, dim):
+                if not sigma in filtration:
+                    filtration[sigma] = get_circumcenter(X[sigma, :])[1]
+                for i in range(dim):
+                    # Propagate alpha filtration value
+                    tau = sigma[0:i] + sigma[i+1::]
+                    if tau in filtration:
+                        filtration[tau] = min(filtration[tau], filtration[sigma])
+                    elif len(tau) > 1:
+                        # If Tau is not empty
+                        xtau, rtauSqr = get_circumcenter(X[tau, :])
+                        if np.sum((X[sigma[i], :]-xtau)**2) < rtauSqr:
+                            filtration[tau] = filtration[sigma]
+    if not squared_radii:
+        for f in filtration:
+            filtration[f] = np.sqrt(filtration[f])
+    if rips_scale:
+        for f in filtration:
+            if squared_radii:
+                filtration[f] *= 4
+            else:
+                filtration[f] *= 2
+    return filtration
 
-    ## Step 2: Come up with a sparse distance matrix which gives rise
+    ## Step 2: Take care of numerical artifacts that may result
+    ## in simplices with greater filtration values than their co-faces
+
+    ##TODO: Finish this
+
+    ## Step 3: Come up with a sparse distance matrix which gives rise
     ## to the above filtration
+    ##TODO: Finish this
+    
+    """
     dm = X
     n_points = dm.shape[0]
 
@@ -306,8 +339,10 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False):
             ccl[:, -1] = np.mod(ccl[:, -1], coeff)
             cocycles[dim].append(ccl)
     ret = {'dgms': dgms, 'cocycles': cocycles,
-           'num_edges': res['num_edges'], 'dm': dm}
+           'num_edges': res['num_edges'], 'dm': dm,
+           'filtration': filtration}
     return ret
+    """
 
 def plot_dgms(diagrams, plot_only=None, title=None, xy_range=None,
               labels=None, colormap='default', size=20,
