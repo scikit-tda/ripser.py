@@ -12,6 +12,7 @@ import matplotlib as mpl
 from scipy import sparse
 
 import numpy as np
+import numpy.linalg as linalg
 from sklearn.base import TransformerMixin
 from sklearn.metrics.pairwise import pairwise_distances
 
@@ -138,6 +139,175 @@ def ripser(X, maxdim=1, thresh=np.inf, coeff=2, distance_matrix=False,
            'num_edges': res['num_edges'], 'dm': dm}
     return ret
 
+def get_circumcenter(X):
+    """
+    Compute the circumcenter and circumradius of a simplex
+    Parameters
+    ----------
+    X : ndarray (N, d)
+        Coordinates of points on an N-simplex in d dimensions
+    
+    Returns
+    -------
+    (circumcenter, circumradius)
+        A tuple of the circumcenter and squared circumradius.  
+        (SC1) If there are fewer points than the ambient dimension plus one,
+          then return the circumcenter corresponding to the smallest
+          possible squared circumradius
+        (SC2) If the points are not in general position, 
+          it returns (np.inf, np.inf)
+        (SC3) If there are more points than the ambient dimension plus one
+          it returns (np.nan, np.nan)
+    """
+    if X.shape[0] > X.shape[1] + 1: # SC3 (too many points)
+        warnings.warn("Trying to compute circumsphere for " +\
+                      "%i points in %i dimensions"%(X.shape[0], X.shape[1]))
+        return (np.nan, np.nan)
+    # Transform arrays for PCA for SC1 (points in higher ambient dimension)
+    muV = np.array([])
+    V = np.array([]) 
+    if X.shape[0] < X.shape[1]+1:
+        # SC1: Do PCA down to NPoints-1
+        muV = np.mean(X, 0)
+        XCenter = X - muV
+        _, V = linalg.eigh((XCenter.T).dot(XCenter))
+        V = V[:, (X.shape[1]-X.shape[0]+1)::] #Put dimension NPoints-1
+        X = XCenter.dot(V)
+    muX = np.mean(X, 0)
+    D = np.ones((X.shape[0], X.shape[0]+1))
+    #Subtract off centroid for numerical stability
+    D[:, 1:-1] = X - muX
+    D[:, 0] = np.sum(D[:, 1:-1]**2, 1)
+    minor = lambda A, j: \
+            A[:, np.concatenate((np.arange(j), np.arange(j+1, A.shape[1])))]
+    dxs = np.array([linalg.det(minor(D, i)) for i in range(1, D.shape[1]-1)])
+    alpha = linalg.det(minor(D, 0))
+    if np.abs(alpha) > 0:
+        signs = (-1)**np.arange(len(dxs))
+        x = dxs*signs/(2*alpha) + muX #Add back centroid
+        gamma = ((-1)**len(dxs))*linalg.det(minor(D, D.shape[1]-1))
+        rSqr = (np.sum(dxs**2) + 4*alpha*gamma)/(4*alpha*alpha)
+        if V.size > 0:
+            # Transform back to ambient if SC1
+            x = x.dot(V.T) + muV
+        return (x, rSqr)
+    return (np.inf, np.inf) #SC2 (Points not in general position)
+
+def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False):
+    """ Compute persistence diagrams for the alpha filtration of the 
+        Euclidean point cloud represented in the array X
+
+    Parameters
+    ----------
+    X: ndarray (n_samples, n_features)
+        A numpy array of data in Euclidean space
+
+    maxdim : int, optional, default 1
+        Maximum homology dimension computed. Will compute all dimensions 
+        lower than and equal to this value. 
+        For 1, H_0 and H_1 will be computed.
+
+    thresh : float, default infinity
+        Maximum distances considered when constructing filtration. 
+        If infinity, compute the entire filtration.
+
+    coeff : int prime, default 2
+        Compute homology with coefficients in the prime field Z/pZ for p=coeff.
+
+    do_cocycles: bool
+        Indicator of whether to compute cocycles, if so, we compute and store
+        cocycles in the cocycles_ dictionary Rips member variable
+
+    Return
+    ------
+    A dictionary holding all of the results of the computation
+
+    {'dgms': list (size maxdim) of ndarray (n_pairs, 2)
+        A list of persistence diagrams, one for each dimension less 
+        than maxdim. Each diagram is an ndarray of size (n_pairs, 2) 
+        with the first column representing the birth time and the 
+        second column representing the death time of each pair.
+     'cocycles': list (size maxdim)
+        A list of representative cocycles in each dimension.  The list 
+        in each dimension is parallel to the diagram in that dimension.
+     'num_edges': int
+        The number of edges added during the computation
+     'dm' : ndarray (n_samples, n_samples)
+        The distance matrix used in the computation
+    }
+
+    Examples
+    --------
+
+    ```
+    from ripser import ripser_alpha, plot_dgms
+    from sklearn import datasets
+
+    data = datasets.make_circles(n_samples=110)[0]
+    dgms = ripser_alpha(data)['dgms']
+    plot_dgms(dgms)
+    ```
+
+    """
+    from scipy.spatial import Delaunay
+    import itertools
+    if X.shape[0] < X.shape[1]:
+                warnings.warn(
+                    "The input point cloud has more columns than rows; " +
+                    "did you mean to transpose?")
+    if maxdim > X.shape[1]-1:
+        warnings.warn(
+        "Cannot compute %i-d homology for an alpha complex"%maxdim +
+        "in %i dimensions; Computing only up to"%X.shape[1] + 
+        "%i-d homology"%(X.shape[1]-1))
+        maxdim = X.shape[1]-1
+    
+    ## Step 1: Figure out the filtration
+    simplices = Delaunay(X).simplices
+    filtration = {}
+    for dim in range(maxdim+2, 0, -1):
+        for sigma in itertools.combinations(range(X.shape[0]), dim):
+            if not sigma in filtration:
+                filtration[sigma] = get_circumcenter(X[sigma, :])[1]
+            for i in range(dim):
+                # Propagate alpha filtration value
+                tau = sigma[0:i] + sigma[i+1::]
+                if tau in filtration:
+                    filtration[tau] = min(filtration[tau], filtration[sigma])
+                elif len(tau) > 1:
+                    # If Tau is not empty
+                    print("TODO")
+                    # TODO: Finish this
+
+    ## Step 2: Come up with a sparse distance matrix which gives rise
+    ## to the above filtration
+    dm = X
+    n_points = dm.shape[0]
+
+    if sparse.issparse(dm):
+        coo = sparse.coo_matrix.astype(dm.tocoo(), dtype=np.float32)
+        res = DRFDMSparse(coo.row, coo.col, coo.data, n_points,
+                          maxdim, thresh, coeff, int(do_cocycles))
+
+    # Unwrap persistence diagrams
+    dgms = res['births_and_deaths_by_dim']
+    for dim in range(len(dgms)):
+        N = int(len(dgms[dim])/2)
+        dgms[dim] = np.reshape(np.array(dgms[dim]), [N, 2])
+
+    # Unwrap cocycles
+    cocycles = []
+    for dim in range(len(res['cocycles_by_dim'])):
+        cocycles.append([])
+        for j in range(len(res['cocycles_by_dim'][dim])):
+            ccl = res['cocycles_by_dim'][dim][j]
+            n = int(len(ccl)/(dim+2))
+            ccl = np.reshape(np.array(ccl, dtype=np.int64), [n, dim+2])
+            ccl[:, -1] = np.mod(ccl[:, -1], coeff)
+            cocycles[dim].append(ccl)
+    ret = {'dgms': dgms, 'cocycles': cocycles,
+           'num_edges': res['num_edges'], 'dm': dm}
+    return ret
 
 def plot_dgms(diagrams, plot_only=None, title=None, xy_range=None,
               labels=None, colormap='default', size=20,
