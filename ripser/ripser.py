@@ -320,30 +320,36 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
 
     ## Step 3: Come up with a sparse distance matrix which gives rise
     ## to the above filtration via rips
+    ## using the first barycentric subdivision
     I = []
     J = []
     V = []
-    fakevertexidx = X.shape[0]
+    N = X.shape[0]
+    barycenter_idxs = {}
+    for simplex in filtration:
+        barycenter_idxs[simplex] = N
+        N += 1
     for simplex in filtration:
         val = filtration[simplex]
-        if len(simplex) == 2:
-            a, b = simplex
-            I += [a, b]
-            J += [b, a]
+        bidx = barycenter_idxs[simplex]
+        # Vertex at barycenter comes in at simplex time
+        I.append(bidx)
+        J.append(bidx)
+        V.append(val)
+        # Add edges between barycenter and all simplex vertices
+        # with simplex time
+        for idx in simplex:
+            I += [idx, bidx]
+            J += [bidx, idx]
             V += [val, val]
-        else:
-            # Add an edge from each vertex on the simplex to an
-            # "imaginary vertex" inside the simplex, each with a length
-            # equal to the entry time of the simplex.  This is the key hack
-            # to get a rips filtration to behave like an alpha filtration
-            for idx in simplex:
-                I += [idx, fakevertexidx]
-                J += [fakevertexidx, idx]
+        # Add edges between simplex barycenter and barycenter
+        # of all of its faces with simplex time
+        for dim in range(2, len(simplex)):
+            for tau in itertools.combinations(simplex, dim):
+                idx = barycenter_idxs[tau]
+                I += [idx, bidx]
+                J += [bidx, idx]
                 V += [val, val]
-                fakevertexidx += 1
-    I, J = np.array(I, dtype=np.int32), np.array(J, dtype=np.int32)
-    V = np.array(V, dtype=np.float32)
-    N = int(fakevertexidx)
     dm = sparse.coo_matrix((V, (I, J)), shape=(N, N)).tocsr()
     res = ripser(dm, maxdim=maxdim, thresh=thresh, coeff=coeff, distance_matrix=True)
     res['filtration'] = filtration
