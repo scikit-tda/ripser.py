@@ -286,6 +286,7 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
         for s in range(delaunay_faces.shape[0]):
             simplex = delaunay_faces[s, :]
             for sigma in itertools.combinations(simplex, dim):
+                sigma = tuple(sorted(sigma))
                 simplices_bydim[dim].append(sigma)
                 if not sigma in filtration:
                     filtration[sigma] = get_circumcenter(X[sigma, :])[1]
@@ -346,6 +347,7 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
         # of all of its faces with simplex time
         for dim in range(2, len(simplex)):
             for tau in itertools.combinations(simplex, dim):
+                tau = tuple(sorted(tau))
                 idx = barycenter_idxs[tau]
                 I += [idx, bidx]
                 J += [bidx, idx]
@@ -353,6 +355,7 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
     dm = sparse.coo_matrix((V, (I, J)), shape=(N, N)).tocsr()
     res = ripser(dm, maxdim=maxdim, thresh=thresh, coeff=coeff, distance_matrix=True)
     res['filtration'] = filtration
+    res['barycenter_idxs'] = barycenter_idxs
     return res
 
 def plot_dgms(diagrams, plot_only=None, title=None, xy_range=None,
