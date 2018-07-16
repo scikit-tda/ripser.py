@@ -62,6 +62,15 @@ def ripser(X, maxdim=1, thresh=np.inf, filtration='rips', coeff=2, distance_matr
         recorded. The callable should take two arrays from X as input and 
         return a value indicating the distance between them.
 
+    squared_radii: bool
+        Indicator of whether to use squared radii in the filtration (as in GUDHI)
+        or whether to return the ordinary radii
+    
+    rips_scale: bool
+        Indicator of whether to multiply the radii by two so the scale
+        matches that of rips, which uses diameter of enclosing balls 
+        between points on an edge instead of radii
+
     Return
     ------
     A dictionary holding all of the results of the computation
@@ -95,6 +104,11 @@ def ripser(X, maxdim=1, thresh=np.inf, filtration='rips', coeff=2, distance_matr
     """
 
     if not distance_matrix:
+        if maxdim == -1:
+            maxdim = X.shape[1]-1
+
+
+
         if X.shape[0] == X.shape[1]:
             warnings.warn(
                 "The input matrix is square, but the distance_matrix " +
@@ -114,6 +128,7 @@ def ripser(X, maxdim=1, thresh=np.inf, filtration='rips', coeff=2, distance_matr
                 "in %i dimensions; Computing only up to"%X.shape[1] + 
                 "%i-d homology"%(X.shape[1]-1))
                 maxdim = X.shape[1]-1
+
 
             squared_radii = False
             rips_scale = True
@@ -213,6 +228,7 @@ def get_circumcenter(X):
 
 
 def alpha_dm(X, maxdim, squared_radii, rips_scale):
+
     ## Step 1: Figure out the filtration
     delaunay_faces = Delaunay(X).simplices
     filtration = {}
@@ -246,7 +262,6 @@ def alpha_dm(X, maxdim, squared_radii, rips_scale):
             else:
                 filtration[f] *= 2
 
-   
     ## Step 2: Take care of numerical artifacts that may result
     ## in simplices with greater filtration values than their co-faces
     for dim in range(maxdim+2, 2, -1):
