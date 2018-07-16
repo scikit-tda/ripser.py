@@ -196,7 +196,7 @@ def get_circumcenter(X):
         return (x, rSqr)
     return (np.inf, np.inf) #SC2 (Points not in general position)
 
-def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
+def ripser_alpha(X, maxdim=-1, thresh=np.inf, coeff=2, do_cocycles=False,\
                 squared_radii=False, rips_scale = True):
     """ Compute persistence diagrams for the alpha filtration of the 
         Euclidean point cloud represented in the array X
@@ -209,7 +209,9 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
     maxdim : int, optional, default 1
         Maximum homology dimension computed. Will compute all dimensions 
         lower than and equal to this value. 
-        For 1, H_0 and H_1 will be computed.
+        e.g. For 1, H_0 and H_1 will be computed.
+        By default, this is equal to the ambient dimension of the point
+        cloud minus one for alpha
 
     thresh : float, default infinity
         Maximum distances considered when constructing filtration. 
@@ -277,6 +279,15 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
         "%i-d homology"%(X.shape[1]-1))
         maxdim = X.shape[1]-1
     
+    if maxdim == -1:
+        maxdim = X.shape[1]-1
+    elif maxdim > X.shape[1]-1:
+        maxdim = X.shape[1]-1
+        warnings.warn("Trying to compute homology for alpha filtration" +
+                      "which is greater than the ambient dimension minus one." +
+                      "Capping the computation at the ambient dimension minus one" +
+                      "so only nontrivial homology is computed")
+
     ## Step 1: Figure out the filtration
     delaunay_faces = Delaunay(X).simplices
     filtration = {}
@@ -355,7 +366,6 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
     dm = sparse.coo_matrix((V, (I, J)), shape=(N, N)).tocsr()
     res = ripser(dm, maxdim=maxdim, thresh=thresh, coeff=coeff, distance_matrix=True)
     res['filtration'] = filtration
-    res['barycenter_idxs'] = barycenter_idxs
     return res
 
 def plot_dgms(diagrams, plot_only=None, title=None, xy_range=None,
