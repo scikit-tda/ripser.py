@@ -6,7 +6,8 @@
 
 from itertools import cycle
 import warnings
-
+from scipy.spatial import Delaunay
+import itertools
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from scipy import sparse
@@ -20,7 +21,7 @@ from pyRipser import doRipsFiltrationDM as DRFDM
 from pyRipser import doRipsFiltrationDMSparse as DRFDMSparse
 
 
-def ripser(X, maxdim=1, thresh=np.inf, coeff=2, distance_matrix=False,
+def ripser(X, maxdim=1, thresh=np.inf, filtration='rips', coeff=2, distance_matrix=False,
            do_cocycles=False, metric='euclidean'):
     """ Compute persistence diagrams for X data array. If X is not a 
         distance matrix, it will be converted to a distance matrix using 
@@ -103,11 +104,25 @@ def ripser(X, maxdim=1, thresh=np.inf, coeff=2, distance_matrix=False,
             warnings.warn(
                 "The input point cloud has more columns than rows; " +
                 "did you mean to transpose?")
-        X = pairwise_distances(X, metric=metric)
 
-    if not (X.shape[0] == X.shape[1]):
-        raise Exception('Distance matrix is not square')
-    dm = X
+        if filtration == 'rips':
+            dm = pairwise_distances(X, metric=metric)
+        elif filtration == 'alpha':
+            if maxdim > X.shape[1]-1:
+                warnings.warn(
+                "Cannot compute %i-d homology for an alpha complex"%maxdim +
+                "in %i dimensions; Computing only up to"%X.shape[1] + 
+                "%i-d homology"%(X.shape[1]-1))
+                maxdim = X.shape[1]-1
+
+            squared_radii = False
+            rips_scale = True
+            dm = alpha_dm(X, maxdim, squared_radii, rips_scale)
+    else:
+        dm = X
+        if not (X.shape[0] == X.shape[1]):
+            raise Exception('Distance matrix is not square')
+    
     n_points = dm.shape[0]
 
     if sparse.issparse(dm):
@@ -196,87 +211,8 @@ def get_circumcenter(X):
         return (x, rSqr)
     return (np.inf, np.inf) #SC2 (Points not in general position)
 
-def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
-                squared_radii=False, rips_scale = True):
-    """ Compute persistence diagrams for the alpha filtration of the 
-        Euclidean point cloud represented in the array X
 
-    Parameters
-    ----------
-    X: ndarray (n_samples, n_features)
-        A numpy array of data in Euclidean space
-
-    maxdim : int, optional, default 1
-        Maximum homology dimension computed. Will compute all dimensions 
-        lower than and equal to this value. 
-        For 1, H_0 and H_1 will be computed.
-
-    thresh : float, default infinity
-        Maximum distances considered when constructing filtration. 
-        If infinity, compute the entire filtration.
-
-    coeff : int prime, default 2
-        Compute homology with coefficients in the prime field Z/pZ for p=coeff.
-
-    do_cocycles: bool
-        Indicator of whether to compute cocycles, if so, we compute and store
-        cocycles in the cocycles_ dictionary Rips member variable
-
-    squared_radii: bool
-        Indicator of whether to use squared radii in the filtration (as in GUDHI)
-        or whether to return the ordinary radii
-    
-    rips_scale: bool
-        Indicator of whether to multiply the radii by two so the scale
-        matches that of rips, which uses diameter of enclosing balls 
-        between points on an edge instead of radii
-
-    Return
-    ------
-    A dictionary holding all of the results of the computation
-
-    {'dgms': list (size maxdim) of ndarray (n_pairs, 2)
-        A list of persistence diagrams, one for each dimension less 
-        than maxdim. Each diagram is an ndarray of size (n_pairs, 2) 
-        with the first column representing the birth time and the 
-        second column representing the death time of each pair.
-     'cocycles': list (size maxdim)
-        A list of representative cocycles in each dimension.  The list 
-        in each dimension is parallel to the diagram in that dimension.
-     'num_edges': int
-        The number of edges added during the computation
-     'dm' : ndarray (n_samples, n_samples)
-        The distance matrix used in the computation
-     'filtration' : dictionary (tuples, filtration values)
-        The values in the filtration
-    }
-
-    Examples
-    --------
-
-    ```
-    from ripser import ripser_alpha, plot_dgms
-    from sklearn import datasets
-
-    data = datasets.make_circles(n_samples=110)[0]
-    dgms = ripser_alpha(data)['dgms']
-    plot_dgms(dgms)
-    ```
-
-    """
-    from scipy.spatial import Delaunay
-    import itertools
-    if X.shape[0] < X.shape[1]:
-                warnings.warn(
-                    "The input point cloud has more columns than rows; " +
-                    "did you mean to transpose?")
-    if maxdim > X.shape[1]-1:
-        warnings.warn(
-        "Cannot compute %i-d homology for an alpha complex"%maxdim +
-        "in %i dimensions; Computing only up to"%X.shape[1] + 
-        "%i-d homology"%(X.shape[1]-1))
-        maxdim = X.shape[1]-1
-    
+def alpha_dm(X, maxdim, squared_radii, rips_scale):
     ## Step 1: Figure out the filtration
     delaunay_faces = Delaunay(X).simplices
     filtration = {}
@@ -310,6 +246,7 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
             else:
                 filtration[f] *= 2
 
+   
     ## Step 2: Take care of numerical artifacts that may result
     ## in simplices with greater filtration values than their co-faces
     for dim in range(maxdim+2, 2, -1):
@@ -353,10 +290,9 @@ def ripser_alpha(X, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False,\
                 J += [bidx, idx]
                 V += [val, val]
     dm = sparse.coo_matrix((V, (I, J)), shape=(N, N)).tocsr()
-    res = ripser(dm, maxdim=maxdim, thresh=thresh, coeff=coeff, distance_matrix=True)
-    res['filtration'] = filtration
-    res['barycenter_idxs'] = barycenter_idxs
-    return res
+
+    return dm
+
 
 def plot_dgms(diagrams, plot_only=None, title=None, xy_range=None,
               labels=None, colormap='default', size=20,
