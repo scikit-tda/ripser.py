@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to ripser’s documentation! &mdash; Ripser 0.0.1 documentation</title>
+  <title>Ripser &mdash; Ripser 0.0.1 documentation</title>
   
 
   
@@ -27,7 +27,8 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Ripser demonstration" href="Ripser Demonstration.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -76,12 +77,15 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Welcome to ripser’s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Ripser Demonstration.html">Ripser demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Approximate Sparse Filtrations.html">Approximate Sparse Filtrations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Sparse Distance Matrices.html">Sparse Distance Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Representative Cocycles.html">Representative Cocycles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lower Star Time Series.html">Lower Star Time Series</a></li>
 </ul>
-</div>
+
             
           
         </div>
@@ -125,7 +129,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Welcome to ripser’s documentation!</li>
+      <li>Ripser</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -144,9 +148,76 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-ripser-s-documentation">
-<h1>Welcome to ripser’s documentation!<a class="headerlink" href="#welcome-to-ripser-s-documentation" title="Permalink to this headline">¶</a></h1>
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<p><a class="reference external" href="https://badge.fury.io/py/ripser"><img alt="PyPI version" src="https://badge.fury.io/py/ripser.svg" /></a> <a class="reference external" href="https://travis-ci.org/ctralie/ripser"><img alt="Travis-CI" src="https://travis-ci.org/ctralie/ripser.svg?branch=master" /></a> <a class="reference external" href="https://ci.appveyor.com/project/ctralie/ripser"><img alt="Appveyor" src="https://ci.appveyor.com/api/projects/status/sfy7yybs66e5qanu?svg=true" /></a> <a class="reference external" href="https://codecov.io/gh/ctralie/ripser"><img alt="Codecov" src="https://codecov.io/gh/ctralie/ripser/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://www.gnu.org/licenses/lgpl-3.0"><img alt="License: LGPL v3" src="https://img.shields.io/badge/License-LGPL%20v3-blue.svg" /></a></p>
+<div class="section" id="ripser">
+<h1>Ripser<a class="headerlink" href="#ripser" title="Permalink to this headline">¶</a></h1>
+<p>This package provides the awesome Ripser project as an easy to use Python module. It is easy to install and is even easier to use.</p>
+<p>For the original C++ library, see <a class="reference external" href="https://github.com/Ripser/ripser/releases/latest">Ripser/ripser</a>.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>Installation requires Cython, and currently must be installed from source. An example of how to install is</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">Cython</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">Ripser</span>
+</pre></div>
+</div>
+<p>We use matplotlib for generating persistence diagrams</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span><span class="p">,</span> <span class="n">plot_dgms</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">diagrams</span> <span class="o">=</span> <span class="n">ripser</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s1">&#39;dgms&#39;</span><span class="p">]</span>
+<span class="n">plot_dgms</span><span class="p">(</span><span class="n">diagrams</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that there is also a &lt;i&gt;Rips&lt;/i&gt; object with the same functionality, which conforms to the Scikit-learn API.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">diagram</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">diagram</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Ripser Demonstration.html">Ripser demonstration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Ripser Demonstration.html#Default-args-make-it-very-easy.">Default args make it very easy.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ripser Demonstration.html#Homology-over-any-prime-basis">Homology over any prime basis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ripser Demonstration.html#Specify-which-homology-classes-to-compute">Specify which homology classes to compute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ripser Demonstration.html#Specify-maximum-radius-for-Rips-filtration">Specify maximum radius for Rips filtration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Ripser Demonstration.html#Plotting-Options">Plotting Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Approximate Sparse Filtrations.html">Approximate Sparse Filtrations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Sparse Distance Matrices.html">Sparse Distance Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Representative Cocycles.html">Representative Cocycles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lower Star Time Series.html">Lower Star Time Series</a></li>
+</ul>
+</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -163,6 +234,13 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Ripser Demonstration.html" class="btn btn-neutral float-right" title="Ripser demonstration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>
