@@ -4,7 +4,7 @@ gh-pages:
 	echo "Make gh-pages"
 	cd docs; make html
 	git checkout gh-pages
-	rm -rf _*
+	rm -rf _images _sources _static
 	mv -fv docs/_build/html/* .
 	rm -rf docs
 	git add -A
