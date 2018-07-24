@@ -1,0 +1,745 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ripser.ripser &mdash; Ripser 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Ripser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Usage:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Ripser Demonstration.html">Ripser demonstration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Approximate Sparse Filtrations.html">Approximate Sparse Filtrations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Sparse Distance Matrices.html">Sparse Distance Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Representative Cocycles.html">Representative Cocycles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Lower Star Time Series.html">Lower Star Time Series</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Ripser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>ripser.ripser</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ripser.ripser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ripser provides functionality for persistent cohomology calculations, </span>
+<span class="sd">    including computing barcodes, cocycles, and visualizations.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">cycle</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sparse</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">TransformerMixin</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="k">import</span> <span class="n">pairwise_distances</span>
+
+<span class="kn">from</span> <span class="nn">pyRipser</span> <span class="k">import</span> <span class="n">doRipsFiltrationDM</span> <span class="k">as</span> <span class="n">DRFDM</span>
+<span class="kn">from</span> <span class="nn">pyRipser</span> <span class="k">import</span> <span class="n">doRipsFiltrationDMSparse</span> <span class="k">as</span> <span class="n">DRFDMSparse</span>
+
+
+<div class="viewcode-block" id="ripser"><a class="viewcode-back" href="../../reference.html#ripser.ripser">[docs]</a><span class="k">def</span> <span class="nf">ripser</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">maxdim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">thresh</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+    <span class="n">coeff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">do_cocycles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute persistence diagrams for X data array. If X is not a distance matrix, it will be converted to a distance matrix using the chosen metric.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: ndarray (n_samples, n_features)</span>
+<span class="sd">        A numpy array of either data or distance matrix.</span>
+<span class="sd">        Can also be a sparse distance matrix of type scipy.sparse</span>
+
+<span class="sd">    maxdim : int, optional, default 1</span>
+<span class="sd">        Maximum homology dimension computed. Will compute all dimensions </span>
+<span class="sd">        lower than and equal to this value. </span>
+<span class="sd">        For 1, H_0 and H_1 will be computed.</span>
+
+<span class="sd">    thresh : float, default infinity</span>
+<span class="sd">        Maximum distances considered when constructing filtration. </span>
+<span class="sd">        If infinity, compute the entire filtration.</span>
+
+<span class="sd">    coeff : int prime, default 2</span>
+<span class="sd">        Compute homology with coefficients in the prime field Z/pZ for p=coeff.</span>
+
+<span class="sd">    distance_matrix: bool</span>
+<span class="sd">        Indicator that X is a distance matrix, if not we compute a </span>
+<span class="sd">        distance matrix from X using the chosen metric.</span>
+
+<span class="sd">    do_cocycles: bool</span>
+<span class="sd">        Indicator of whether to compute cocycles, if so, we compute and store</span>
+<span class="sd">        cocycles in the cocycles_ dictionary Rips member variable</span>
+
+<span class="sd">    metric: string or callable</span>
+<span class="sd">        The metric to use when calculating distance between instances in a </span>
+<span class="sd">        feature array. If metric is a string, it must be one of the options </span>
+<span class="sd">        specified in PAIRED_DISTANCES, including &quot;euclidean&quot;, &quot;manhattan&quot;, </span>
+<span class="sd">        or &quot;cosine&quot;. Alternatively, if metric is a callable function, it is </span>
+<span class="sd">        called on each pair of instances (rows) and the resulting value </span>
+<span class="sd">        recorded. The callable should take two arrays from X as input and </span>
+<span class="sd">        return a value indicating the distance between them.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A dictionary holding all of the results of the computation</span>
+
+<span class="sd">    {&#39;dgms&#39;: list (size maxdim) of ndarray (n_pairs, 2)</span>
+<span class="sd">        A list of persistence diagrams, one for each dimension less </span>
+<span class="sd">        than maxdim. Each diagram is an ndarray of size (n_pairs, 2) </span>
+<span class="sd">        with the first column representing the birth time and the </span>
+<span class="sd">        second column representing the death time of each pair.</span>
+<span class="sd">     &#39;cocycles&#39;: list (size maxdim)</span>
+<span class="sd">        A list of representative cocycles in each dimension.  The list </span>
+<span class="sd">        in each dimension is parallel to the diagram in that dimension.</span>
+<span class="sd">     &#39;num_edges&#39;: int</span>
+<span class="sd">        The number of edges added during the computation</span>
+<span class="sd">     &#39;dm&#39; : ndarray (n_samples, n_samples)</span>
+<span class="sd">        The distance matrix used in the computation</span>
+<span class="sd">    }</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    .. code:: python</span>
+
+<span class="sd">        from ripser import ripser, plot_dgms</span>
+<span class="sd">        from sklearn import datasets</span>
+
+<span class="sd">        data = datasets.make_circles(n_samples=110)[0]</span>
+<span class="sd">        dgms = ripser(data)[&#39;dgms&#39;]</span>
+<span class="sd">        plot_dgms(dgms)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">distance_matrix</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The input matrix is square, but the distance_matrix &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;flag is off.  Did you mean to indicate that &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;this was a distance matrix?&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The input point cloud has more columns than rows; &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;did you mean to transpose?&quot;</span>
+            <span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">pairwise_distances</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Distance matrix is not square&quot;</span><span class="p">)</span>
+    <span class="n">dm</span> <span class="o">=</span> <span class="n">X</span>
+    <span class="n">n_points</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">dm</span><span class="p">):</span>
+        <span class="n">coo</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">tocoo</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">DRFDMSparse</span><span class="p">(</span>
+            <span class="n">coo</span><span class="o">.</span><span class="n">row</span><span class="p">,</span>
+            <span class="n">coo</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
+            <span class="n">coo</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">n_points</span><span class="p">,</span>
+            <span class="n">maxdim</span><span class="p">,</span>
+            <span class="n">thresh</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="p">,</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">do_cocycles</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">I</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_points</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_points</span><span class="p">))</span>
+        <span class="n">DParam</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dm</span><span class="p">[</span><span class="n">I</span> <span class="o">&gt;</span> <span class="n">J</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">DRFDM</span><span class="p">(</span><span class="n">DParam</span><span class="p">,</span> <span class="n">maxdim</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">do_cocycles</span><span class="p">))</span>
+
+    <span class="c1"># Unwrap persistence diagrams</span>
+    <span class="n">dgms</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;births_and_deaths_by_dim&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dgms</span><span class="p">)):</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dgms</span><span class="p">[</span><span class="n">dim</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">dgms</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dgms</span><span class="p">[</span><span class="n">dim</span><span class="p">]),</span> <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+    <span class="c1"># Unwrap cocycles</span>
+    <span class="n">cocycles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;cocycles_by_dim&quot;</span><span class="p">])):</span>
+        <span class="n">cocycles</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;cocycles_by_dim&quot;</span><span class="p">][</span><span class="n">dim</span><span class="p">])):</span>
+            <span class="n">ccl</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;cocycles_by_dim&quot;</span><span class="p">][</span><span class="n">dim</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ccl</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">dim</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">ccl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ccl</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">dim</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="n">ccl</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">ccl</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">coeff</span><span class="p">)</span>
+            <span class="n">cocycles</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ccl</span><span class="p">)</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dgms&quot;</span><span class="p">:</span> <span class="n">dgms</span><span class="p">,</span> <span class="s2">&quot;cocycles&quot;</span><span class="p">:</span> <span class="n">cocycles</span><span class="p">,</span> <span class="s2">&quot;num_edges&quot;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;num_edges&quot;</span><span class="p">],</span> <span class="s2">&quot;dm&quot;</span><span class="p">:</span> <span class="n">dm</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="plot_dgms"><a class="viewcode-back" href="../../reference.html#ripser.plot_dgms">[docs]</a><span class="k">def</span> <span class="nf">plot_dgms</span><span class="p">(</span>
+    <span class="n">diagrams</span><span class="p">,</span>
+    <span class="n">plot_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">xy_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">ax_color</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]),</span>
+    <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">diagonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">lifetime</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A helper function to plot persistence diagrams. </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    diagrams: ndarray (n_pairs, 2) or list of diagrams</span>
+<span class="sd">        A diagram or list of diagrams. If diagram is a list of diagrams, </span>
+<span class="sd">        then plot all on the same plot using different colors.</span>
+
+<span class="sd">    plot_only: list of numeric</span>
+<span class="sd">        If specified, an array of only the diagrams that should be plotted.</span>
+
+<span class="sd">    title: string, default is None</span>
+<span class="sd">        If title is defined, add it as title of the plot.</span>
+
+<span class="sd">    xy_range: list of numeric [xmin, xmax, ymin, ymax]</span>
+<span class="sd">        User provided range of axes. This is useful for comparing </span>
+<span class="sd">        multiple persistence diagrams.</span>
+
+<span class="sd">    labels: string or list of strings</span>
+<span class="sd">        Legend labels for each diagram. </span>
+<span class="sd">        If none are specified, we use H_0, H_1, H_2,... by default.</span>
+
+<span class="sd">    colormap: string, default is &#39;default&#39;</span>
+<span class="sd">        Any of matplotlib color palettes. </span>
+<span class="sd">        Some options are &#39;default&#39;, &#39;seaborn&#39;, &#39;sequential&#39;. </span>
+<span class="sd">        See all available styles with</span>
+<span class="sd">        </span>
+<span class="sd">        .. code:: python</span>
+
+<span class="sd">            import matplotlib as mpl</span>
+<span class="sd">            print(mpl.styles.available)</span>
+
+<span class="sd">    size: numeric, default is 20</span>
+<span class="sd">        Pixel size of each point plotted.</span>
+
+<span class="sd">    ax_color: any valid matplotlib color type. </span>
+<span class="sd">        See [https://matplotlib.org/api/colors_api.html](https://matplotlib.org/api/colors_api.html) for complete API.</span>
+
+<span class="sd">    diagonal: bool, default is True</span>
+<span class="sd">        Plot the diagonal x=y line.</span>
+
+<span class="sd">    lifetime: bool, default is False. If True, diagonal is turned to False.</span>
+<span class="sd">        Plot life time of each point instead of birth and death. </span>
+<span class="sd">        Essentially, visualize (x, y-x).</span>
+
+<span class="sd">    legend: bool, default is True</span>
+<span class="sd">        If true, show the legend.</span>
+
+<span class="sd">    show: bool, default is False</span>
+<span class="sd">        Call plt.show() after plotting. If you are using self.plot() as part </span>
+<span class="sd">        of a subplot, set show=False and call plt.show() only once at the end.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Provide default labels for diagrams if using self.dgm_</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;$H_0$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$H_1$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$H_2$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$H_3$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$H_4$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$H_5$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$H_6$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$H_7$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;$H_8$&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diagrams</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># Must have diagrams as a list for processing downstream</span>
+        <span class="n">diagrams</span> <span class="o">=</span> <span class="p">[</span><span class="n">diagrams</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">plot_only</span><span class="p">:</span>
+        <span class="n">diagrams</span> <span class="o">=</span> <span class="p">[</span><span class="n">diagrams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plot_only</span><span class="p">]</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plot_only</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">diagrams</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">colormap</span><span class="p">)</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="n">cycle</span><span class="p">([</span><span class="s2">&quot;C0&quot;</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">,</span> <span class="s2">&quot;C3&quot;</span><span class="p">,</span> <span class="s2">&quot;C4&quot;</span><span class="p">,</span> <span class="s2">&quot;C5&quot;</span><span class="p">,</span> <span class="s2">&quot;C6&quot;</span><span class="p">,</span> <span class="s2">&quot;C7&quot;</span><span class="p">,</span> <span class="s2">&quot;C8&quot;</span><span class="p">,</span> <span class="s2">&quot;C9&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Construct copy with proper type of each diagram</span>
+    <span class="c1"># so we can freely edit them.</span>
+    <span class="n">diagrams</span> <span class="o">=</span> <span class="p">[</span><span class="n">dgm</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">dgm</span> <span class="ow">in</span> <span class="n">diagrams</span><span class="p">]</span>
+
+    <span class="c1"># find min and max of all visible diagrams</span>
+    <span class="n">concat_dgms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">diagrams</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">has_inf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">concat_dgms</span><span class="p">))</span>
+    <span class="n">finite_dgms</span> <span class="o">=</span> <span class="n">concat_dgms</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">concat_dgms</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">xy_range</span><span class="p">:</span>
+        <span class="c1"># define bounds of diagram</span>
+        <span class="n">ax_min</span><span class="p">,</span> <span class="n">ax_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">finite_dgms</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">finite_dgms</span><span class="p">)</span>
+        <span class="n">ax_range</span> <span class="o">=</span> <span class="n">ax_max</span> <span class="o">-</span> <span class="n">ax_min</span>
+
+        <span class="c1"># Give plot a nice buffer on all sides.</span>
+        <span class="c1"># ax_range=0 when only one point,</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">ax_range</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">ax_range</span> <span class="o">/</span> <span class="mi">5</span>
+
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">ax_min</span> <span class="o">-</span> <span class="n">buffer</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">bx</span> <span class="o">=</span> <span class="n">ax_max</span> <span class="o">+</span> <span class="n">buffer</span>
+
+        <span class="n">ay</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span> <span class="n">bx</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">xy_range</span>
+
+    <span class="c1"># have inf line slightly below top</span>
+    <span class="n">b_inf</span> <span class="o">=</span> <span class="n">bx</span> <span class="o">*</span> <span class="mf">0.95</span>
+
+    <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Birth&quot;</span><span class="p">,</span> <span class="s2">&quot;Death&quot;</span>
+
+    <span class="k">if</span> <span class="n">lifetime</span><span class="p">:</span>
+        <span class="c1"># Don&#39;t plot landscape and diagonal at the same time.</span>
+        <span class="n">diagonal</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># reset y axis so it doesn&#39;t go much below zero</span>
+        <span class="n">ay</span> <span class="o">=</span> <span class="o">-</span><span class="n">buffer</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="c1"># set custom ylabel</span>
+        <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Lifetime&quot;</span>
+
+        <span class="c1"># set diagrams to be (x, y-x)</span>
+        <span class="k">for</span> <span class="n">dgm</span> <span class="ow">in</span> <span class="n">diagrams</span><span class="p">:</span>
+            <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># plot horizon line</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">ax_color</span><span class="p">)</span>
+
+    <span class="c1"># Plot diagonal</span>
+    <span class="k">if</span> <span class="n">diagonal</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">],</span> <span class="p">[</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">ax_color</span><span class="p">)</span>
+
+    <span class="c1"># Plot inf line</span>
+    <span class="k">if</span> <span class="n">has_inf</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">],</span> <span class="p">[</span><span class="n">b_inf</span><span class="p">,</span> <span class="n">b_inf</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\infty$&quot;</span><span class="p">)</span>
+
+        <span class="c1"># convert each inf in each diagram with b_inf</span>
+        <span class="k">for</span> <span class="n">dgm</span> <span class="ow">in</span> <span class="n">diagrams</span><span class="p">:</span>
+            <span class="n">dgm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">dgm</span><span class="p">)]</span> <span class="o">=</span> <span class="n">b_inf</span>
+
+    <span class="c1"># Plot each diagram</span>
+    <span class="k">for</span> <span class="n">dgm</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">diagrams</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="c1"># plot persistence pairs</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">dgm</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="n">ay</span><span class="p">,</span> <span class="n">by</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">legend</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Rips"><a class="viewcode-back" href="../../reference.html#ripser.Rips">[docs]</a><span class="k">class</span> <span class="nc">Rips</span><span class="p">(</span><span class="n">TransformerMixin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;sklearn style class wrapper around Uli Bauer&#39;s ripser code </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    maxdim : int, optional, default 1</span>
+<span class="sd">        Maximum homology dimension computed. Will compute all dimensions </span>
+<span class="sd">        lower than and equal to this value. </span>
+<span class="sd">        For 1, H_0 and H_1 will be computed.</span>
+
+<span class="sd">    thresh : float, default infinity</span>
+<span class="sd">        Maximum distances considered when constructing filtration. </span>
+<span class="sd">        If infinity, compute the entire filtration.</span>
+
+<span class="sd">    coeff : int prime, default 2</span>
+<span class="sd">        Compute homology with coefficients in the prime field Z/pZ for p=coeff.</span>
+
+<span class="sd">    do_cocycles: bool</span>
+<span class="sd">        Indicator of whether to compute cocycles, if so, we compute and store</span>
+<span class="sd">        cocycles in the cocycles_ dictionary Rips member variable</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dgm_ : list of ndarray, each shape (n_pairs, 2)</span>
+<span class="sd">        After `transform`, dgm_ contains computed persistence diagrams in</span>
+<span class="sd">        each dimension</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">     .. code:: python</span>
+
+<span class="sd">        from ripser import Rips</span>
+<span class="sd">        from sklearn import datasets</span>
+<span class="sd">        data = datasets.make_circles(n_samples=110)[0]</span>
+<span class="sd">        rips = Rips()</span>
+<span class="sd">        rips.transform(data)</span>
+<span class="sd">        rips.plot()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">maxdim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">do_cocycles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxdim</span> <span class="o">=</span> <span class="n">maxdim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thresh</span> <span class="o">=</span> <span class="n">thresh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">coeff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_cocycles</span> <span class="o">=</span> <span class="n">do_cocycles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        <span class="c1"># Internal variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cocycles_</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dm_</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Distance matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_edges_</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Number of edges added</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Rips(maxdim=</span><span class="si">{}</span><span class="s2">, thresh=</span><span class="si">{}</span><span class="s2">, coeff=</span><span class="si">{}</span><span class="s2">, do_cocycles=</span><span class="si">{}</span><span class="s2">, verbose=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">maxdim</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">do_cocycles</span><span class="p">,</span> <span class="n">verbose</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">ripser</span><span class="p">(</span>
+            <span class="n">X</span><span class="p">,</span>
+            <span class="n">maxdim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">maxdim</span><span class="p">,</span>
+            <span class="n">thresh</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">thresh</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coeff</span><span class="p">,</span>
+            <span class="n">do_cocycles</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">do_cocycles</span><span class="p">,</span>
+            <span class="n">distance_matrix</span><span class="o">=</span><span class="n">distance_matrix</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;dgms&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_edges_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;num_edges&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dm_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;dm&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cocycles_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;cocycles&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span>
+
+<div class="viewcode-block" id="Rips.fit_transform"><a class="viewcode-back" href="../../reference.html#ripser.Rips.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute persistence diagrams for X data array and return the diagrams.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: ndarray (n_samples, n_features)</span>
+<span class="sd">            A numpy array of either data or distance matrix.</span>
+
+<span class="sd">        distance_matrix: bool</span>
+<span class="sd">            Indicator that X is a distance matrix, if not we compute a </span>
+<span class="sd">            distance matrix from X using the chosen metric.</span>
+
+<span class="sd">        metric: string or callable</span>
+<span class="sd">            The metric to use when calculating distance between instances in a </span>
+<span class="sd">            feature array. If metric is a string, it must be one of the options </span>
+<span class="sd">            specified in PAIRED_DISTANCES, including &quot;euclidean&quot;, &quot;manhattan&quot;, </span>
+<span class="sd">            or &quot;cosine&quot;. Alternatively, if metric is a callable function, it is </span>
+<span class="sd">            called on each pair of instances (rows) and the resulting value </span>
+<span class="sd">            recorded. The callable should take two arrays from X as input and </span>
+<span class="sd">            return a value indicating the distance between them.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dgms: list (size maxdim) of ndarray (n_pairs, 2)</span>
+<span class="sd">            A list of persistence diagrams, one for each dimension less </span>
+<span class="sd">            than maxdim. Each diagram is an ndarray of size (n_pairs, 2) with </span>
+<span class="sd">            the first column representing the birth time and the second column </span>
+<span class="sd">            representing the death time of each pair.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="p">,</span> <span class="n">metric</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span></div>
+
+<div class="viewcode-block" id="Rips.plot"><a class="viewcode-back" href="../../reference.html#ripser.Rips.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">diagrams</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">plot_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">xy_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">ax_color</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]),</span>
+        <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">diagonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">lifetime</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A helper function to plot persistence diagrams. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        diagrams: ndarray (n_pairs, 2) or list of diagrams</span>
+<span class="sd">            A diagram or list of diagrams as returned from self.fit. </span>
+<span class="sd">            If diagram is None, we use self.dgm_ for plotting. </span>
+<span class="sd">            If diagram is a list of diagrams, then plot all on the same plot </span>
+<span class="sd">            using different colors.</span>
+
+<span class="sd">        plot_only: list of numeric</span>
+<span class="sd">            If specified, an array of only the diagrams that should be plotted.</span>
+
+<span class="sd">        title: string, default is None</span>
+<span class="sd">            If title is defined, add it as title of the plot.</span>
+
+<span class="sd">        xy_range: list of numeric [xmin, xmax, ymin, ymax]</span>
+<span class="sd">            User provided range of axes. This is useful for comparing </span>
+<span class="sd">            multiple persistence diagrams.</span>
+
+<span class="sd">        labels: string or list of strings</span>
+<span class="sd">            Legend labels for each diagram. </span>
+<span class="sd">            If none are specified, we use H_0, H_1, H_2,... by default.</span>
+
+<span class="sd">        colormap: string, default is &#39;default&#39;</span>
+<span class="sd">            Any of matplotlib color palettes. </span>
+<span class="sd">            Some options are &#39;default&#39;, &#39;seaborn&#39;, &#39;sequential&#39;. </span>
+<span class="sd">            See all available styles with</span>
+<span class="sd">            </span>
+<span class="sd">            .. code:: python</span>
+
+<span class="sd">                import matplotlib as mpl</span>
+<span class="sd">                print(mpl.styles.available)</span>
+
+<span class="sd">        size: numeric, default is 20</span>
+<span class="sd">            Pixel size of each point plotted.</span>
+
+<span class="sd">        ax_color: any valid matplitlib color type. </span>
+<span class="sd">            See [https://matplotlib.org/api/colors_api.html](https://matplotlib.org/api/colors_api.html) for complete API.</span>
+
+<span class="sd">        diagonal: bool, default is True</span>
+<span class="sd">            Plot the diagonal x=y line.</span>
+
+<span class="sd">        lifetime: bool, default is False. If True, diagonal is turned to False.</span>
+<span class="sd">            Plot life time of each point instead of birth and death. </span>
+<span class="sd">            Essentially, visualize (x, y-x).</span>
+
+<span class="sd">        legend: bool, default is True</span>
+<span class="sd">            If true, show the legend.</span>
+
+<span class="sd">        show: bool, default is True</span>
+<span class="sd">            Call plt.show() after plotting. </span>
+<span class="sd">            If you are using self.plot() as part of a subplot, </span>
+<span class="sd">            set show=False and call plt.show() only once at the end.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">diagrams</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Allow using transformed diagrams as default</span>
+            <span class="n">diagrams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span>
+        <span class="n">plot_dgms</span><span class="p">(</span>
+            <span class="n">diagrams</span><span class="p">,</span>
+            <span class="n">plot_only</span><span class="o">=</span><span class="n">plot_only</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">xy_range</span><span class="o">=</span><span class="n">xy_range</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+            <span class="n">colormap</span><span class="o">=</span><span class="n">colormap</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+            <span class="n">ax_color</span><span class="o">=</span><span class="n">ax_color</span><span class="p">,</span>
+            <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+            <span class="n">diagonal</span><span class="o">=</span><span class="n">diagonal</span><span class="p">,</span>
+            <span class="n">lifetime</span><span class="o">=</span><span class="n">lifetime</span><span class="p">,</span>
+            <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
+            <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Christopher Tralie and Nathaniel Saul and Ulrich Bauer.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
