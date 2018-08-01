@@ -1,4 +1,4 @@
-from .ripser import Rips, ripser, plot_dgms
+from .ripser import *
 
 # Enable access to version number
 import pkg_resources
