@@ -66,6 +66,23 @@ class TestPlotting:
         np.testing.assert_array_equal(pathcols[0].get_offsets(), diagrams[0])
         np.testing.assert_array_equal(pathcols[1].get_offsets(), diagrams[1])
 
+    def test_plot_only(self):
+        diagrams = [
+            np.array([[0, 1], [1, 1], [2, 4], [3, 5]]),
+            np.array([[0.5, 3], [2, 4], [4, 5], [10, 15]])
+        ]
+        f, ax = plt.subplots()
+        plot_dgms(diagrams, legend=False, show=False, plot_only=[1])
+
+    @pytest.mark.skip
+    def test_show(self):
+        diagrams = [
+            np.array([[0, 1], [1, 1], [2, 4], [3, 5]]),
+            np.array([[0.5, 3], [2, 4], [4, 5], [10, 15]])
+        ]
+        f, ax = plt.subplots()
+        plot_dgms(diagrams, legend=False, show=True)
+
     def test_legend_true(self):
         diagrams = [
             np.array([[0, 1], [1, 1], [2, 4], [3, 5]]),

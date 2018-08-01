@@ -222,6 +222,8 @@ def plot_dgms(
 
     """
 
+    xlabel, ylabel = "Birth", "Death"
+
     if labels is None:
         # Provide default labels for diagrams if using self.dgm_
         labels = [
@@ -263,11 +265,11 @@ def plot_dgms(
     if not xy_range:
         # define bounds of diagram
         ax_min, ax_max = np.min(finite_dgms), np.max(finite_dgms)
-        ax_range = ax_max - ax_min
+        x_r = ax_max - ax_min
 
         # Give plot a nice buffer on all sides.
         # ax_range=0 when only one point,
-        buffer = 1 if ax_range == 0 else ax_range / 5
+        buffer = 1 if xy_range == 0 else x_r / 5
 
         ax = ax_min - buffer / 2
         bx = ax_max + buffer
@@ -276,17 +278,16 @@ def plot_dgms(
     else:
         ax, bx, ay, by = xy_range
 
-    # have inf line slightly below top
-    b_inf = bx * 0.95
-
-    xlabel, ylabel = "Birth", "Death"
+    yr = by - ay
 
     if lifetime:
+
         # Don't plot landscape and diagonal at the same time.
         diagonal = False
 
         # reset y axis so it doesn't go much below zero
-        ay = -buffer / 2
+        ay = -yr * 0.05
+        by = ay + yr
 
         # set custom ylabel
         ylabel = "Lifetime"
@@ -296,7 +297,7 @@ def plot_dgms(
             dgm[:, 1] -= dgm[:, 0]
 
         # plot horizon line
-        plt.plot([ax, bx], [0, 0], "--", c=ax_color)
+        plt.plot([ax, bx], [0, 0], c=ax_color)
 
     # Plot diagonal
     if diagonal:
@@ -304,7 +305,9 @@ def plot_dgms(
 
     # Plot inf line
     if has_inf:
-        plt.plot([ax, bx], [b_inf, b_inf], c="k", label=r"$\infty$")
+        # put inf line slightly below top
+        b_inf = ay + yr * 0.95
+        plt.plot([ax, bx], [b_inf, b_inf], "--", c="k", label=r"$\infty$")
 
         # convert each inf in each diagram with b_inf
         for dgm in diagrams:
@@ -312,6 +315,7 @@ def plot_dgms(
 
     # Plot each diagram
     for dgm, color, label in zip(diagrams, colors, labels):
+
         # plot persistence pairs
         plt.scatter(dgm[:, 0], dgm[:, 1], size, color, label=label, edgecolor="none")
 
@@ -329,6 +333,60 @@ def plot_dgms(
 
     if show is True:
         plt.show()
+
+
+def lower_star_img(img):
+    """
+    Construct a lower star filtration on an image
+
+    Parameters
+    ----------
+    img: ndarray (M, N)
+        An array of single channel image data
+
+    Returns
+    -------
+    I: ndarray (K, 2)
+        A 0-dimensional persistence diagram corresponding to the sublevelset filtration
+    """
+    m, n = img.shape
+
+    idxs = np.arange(m * n).reshape((m, n))
+
+    I = idxs.flatten()
+    J = idxs.flatten()
+    V = img.flatten()
+
+    # Connect 8 spatial neighbors
+    tidxs = np.ones((m + 2, n + 2), dtype=np.int64) * np.nan
+    tidxs[1:-1, 1:-1] = idxs
+
+    tD = np.ones_like(tidxs) * np.nan
+    tD[1:-1, 1:-1] = img
+
+    for di in [-1, 0, 1]:
+        for dj in [-1, 0, 1]:
+
+            if di == 0 and dj == 0:
+                continue
+
+            thisJ = np.roll(np.roll(tidxs, di, axis=0), dj, axis=1)
+            thisD = np.roll(np.roll(tD, di, axis=0), dj, axis=1)
+            thisD = np.maximum(thisD, tD)
+
+            # Deal with boundaries
+            boundary = ~np.isnan(thisD)
+            thisI = tidxs[boundary]
+            thisJ = thisJ[boundary]
+            thisD = thisD[boundary]
+
+            I = np.concatenate((I, thisI.flatten()))
+            J = np.concatenate((J, thisJ.flatten()))
+            V = np.concatenate((V, thisD.flatten()))
+
+    sparseDM = sparse.coo_matrix((V, (I, J)), shape=(idxs.size, idxs.size))
+
+    return ripser(sparseDM, distance_matrix=True, maxdim=0)["dgms"][0]
 
 
 class Rips(TransformerMixin):
@@ -532,3 +590,6 @@ class Rips(TransformerMixin):
             legend=legend,
             show=show,
         )
+
+
+__all__ = ["Rips", "ripser", "plot_dgms", "lower_star_img"]

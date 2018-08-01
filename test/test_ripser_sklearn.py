@@ -46,6 +46,7 @@ class TestTransform():
             rips.transform(data)
 
     def test_non_square_dist_matrix(self):
+        
         rips = Rips()
         data = np.random.random((3, 10))
 
@@ -54,6 +55,21 @@ class TestTransform():
 
 
 class TestParams():
+    def test_verbose_true(self):
+        data = np.array([[0.0, 0.0], [10.0, 0.0], [10.0, 10.0], [0.0, 10.0]])
+        rips = Rips(verbose=True)
+        dgm = rips.fit_transform(data)
+        assert len(dgm) == 2
+        assert dgm[0].shape == (4,2)
+        assert dgm[1].shape == (1,2)
+
+    def test_verbose_false(self):
+        data = np.array([[0.0, 0.0], [10.0, 0.0], [10.0, 10.0], [0.0, 10.0]])
+        rips = Rips(verbose=False)
+        dgm = rips.fit_transform(data)
+        assert dgm[0].shape == (4,2)
+        assert dgm[1].shape == (1,2)
+
     def test_defaults(self):
         data = np.random.random((100, 3))
 

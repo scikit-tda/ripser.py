@@ -110,3 +110,5 @@ class TestParams():
         idx = np.argsort(I11[:, 0])
         I11 = I11[idx, :]
         assert np.allclose(I10, I11)
+
+
