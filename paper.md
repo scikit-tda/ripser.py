@@ -9,7 +9,7 @@ authors:
   orcid: 0000-0003-4206-1963
   affiliation: 1
  - name: Nathaniel Saul
-  orcid: 0000-0000-0000-0000
+  orcid: 0000-0002-8549-9810
   affiliation: 2
  - name: Rann Bar-On
   orcid: 0000-0002-4675-222X
