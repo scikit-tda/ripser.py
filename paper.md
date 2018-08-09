@@ -11,6 +11,9 @@ authors:
  - name: Nathaniel Saul
   orcid: 0000-0000-0000-0000
   affiliation: 2
+ - name: Rann Bar-On
+  orcid: 0000-0002-4675-222X
+  affiliation: 1
 affiliations:
  - name: Department of Mathematics, Duke University
   index: 1
@@ -47,7 +50,7 @@ Our Python library supplies two interfaces: one lightweight and functional inter
 We allow the user to pass on a sparse distance matrix between points using the scipy.sparse library. In one of our notebooks, we demonstrate Ripser can be used in conjunction with "sparse filtration" approximation algorithms [@cavannageometric] to add further computational speedups.  Additionally, sparse matrices allow us to easily define a "sublevelset filtration," or the "watershed algorithm," for quantifying critical points in grid data such as time series and images, and we have exposed a function to make this easy for image data.  One of our notebooks demonstrates how this can be used to identify cells in an image, for instance.
 
 ### Coefficient Fields
-Most applications that use TDA use the field $\mathbb{Z} / 2\mathbb{Z}$, or "binary coefficients," in the Rips filtration, and as a result, most TDA software to date can only handle binary coefficients.  However, using other coefficient fields $\mathbb{Z} / p\mathbb{Z}$ for prime $p$, makes it possible to detect "twists" in point cloud data.  This surprisingly appears in some important real world applications in periodic time series analysis [@perea2015sliding] and image analysis [@perea2014klein].  Ripser naturally allows the specification of arbitrary field coefficients.  We have included an example notebook that shows how this can differentiate a point cloud sampled from the boundary of a Moebius strip from a point cloud sampled from an ordinary, untwisted loop.  This feature of ripser.py has been used in a pipeline to synthesize slow motion videos [@tralie2018slomoloops] and Kis currently being used to help quantify periodicites in repetitive motions with children with autism spectrum disorder [@tralie2018autism].
+Most applications that use TDA use the field $\mathbb{Z} / 2\mathbb{Z}$, or "binary coefficients," in the Rips filtration, and as a result, most TDA software to date can only handle binary coefficients.  However, using other coefficient fields $\mathbb{Z} / p\mathbb{Z}$ for prime $p$, makes it possible to detect "twists" in point cloud data.  This surprisingly appears in some important real world applications in periodic time series analysis [@perea2015sliding] and image analysis [@perea2014klein].  Ripser naturally allows the specification of arbitrary field coefficients.  We have included an example notebook that shows how this can differentiate a point cloud sampled from the boundary of a Moebius strip from a point cloud sampled from an ordinary, untwisted loop.  This feature of ripser.py has been used in a pipeline to synthesize slow motion videos [@tralie2018slomoloops] and is currently being used to help quantify periodicities in repetitive motions with children with autism spectrum disorder [@tralie2018autism].
 
 
 ### Higher Homology
@@ -58,11 +61,11 @@ TDA is generally used to quantify topological features, but there has been some 
 
 
 ### Source Code
-The source code for Ripser.py is available on github through the Scikit-TDA organization [https://github.com/scikit-tda/Ripser.py][https://github.com/scikit-tda/Ripser.py].   The original Ripser library can be found at [https://github.com/Ripser/Ripser/][https://github.com/Ripser/Ripser/]
+The source code for Ripser.py is available on Github through the Scikit-TDA organization [https://github.com/scikit-tda/Ripser.py][https://github.com/scikit-tda/Ripser.py].   The original Ripser library can be found at [https://github.com/Ripser/Ripser/][https://github.com/Ripser/Ripser/]
 
 
 # Acknowledgements
 
-Christoher Tralie was supported by an NSF big data grant DKA-1447491.  We thank Ulrich Bauer for the original Ripser library and for valuable feedback during development of Ripser.py.  We also thank various suggestions and bug fixes from Rann Bar-On, Jose Perea, William Guss, and Matija (@mtsch).  Finally, we thank the students of the "Topological Data Analysis and Persistent Homology" workshop in Levico, Italy for beta testing the code.
+Christoher Tralie was supported by an NSF big data grant DKA-1447491.  We thank Ulrich Bauer for the original Ripser library and for valuable feedback during development of Ripser.py.  We also thank various suggestions and bug fixes from Jose Perea, William Guss, and Matija (@mtsch).  Finally, we thank the students of the "Topological Data Analysis and Persistent Homology" workshop in Levico, Italy for beta testing the code.
 
 # References
