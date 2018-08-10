@@ -68,6 +68,6 @@ The source code for Ripser.py is available on Github through the Scikit-TDA orga
 
 # Acknowledgements
 
-Christoher Tralie and Rann Bar-On were supported by an NSF big data grant DKA-1447491. Nathaniel Saul was partially supported by ABI-XXXXXX. We thank Ulrich Bauer for the original Ripser library and for valuable feedback during development of Ripser.py.  We also thank various suggestions and bug fixes from Jose Perea, William Guss, and Matija (@mtsch).  Finally, we thank the students of the "Topological Data Analysis and Persistent Homology" workshop in Levico, Italy for beta testing the code.
+Christoher Tralie and Rann Bar-On were supported by an NSF big data grant DKA-1447491. Nathaniel Saul was partially supported by NSF DBI-1661348 and by Washington NASA Space Grant Consortium, NASA Grant #NNX15AJ98H. We thank Ulrich Bauer for the original Ripser library and for valuable feedback during development of Ripser.py.  We also thank various suggestions and bug fixes from Jose Perea, William Guss, and Matija (@mtsch).  Finally, we thank the students of the "Topological Data Analysis and Persistent Homology" workshop in Levico, Italy for beta testing the code.
 
 # References
