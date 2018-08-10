@@ -29,7 +29,6 @@ bibliography: paper.bib
 TODO:
 
 * Citations Other existing software packages, including julia Ripser wrapper?
-* I think the opening description of TDA is a little myopic. We can spin it to a more general audience who don't understand by saying something like "understanding shape and structure within data". 
 * I think the second paragraph of each feature section is largely unnecessary. Judging by other JoSS submissions, I think shorter is better. We should however incorporate lots of those details into the general documentation.
 -->
 
@@ -41,7 +40,7 @@ Topological data analysis (TDA) [@edelsbrunner2010computational],[@carlsson2009t
 
 Persistent homology [@edelsbrunner2010computational] is the main workhorse of TDA, and the most commonly used scheme for generating persistence diagrams is the so-called "Vietoris Rips filtration," since it is easily defined for any point cloud described by pairwise similarites between points. In its naive implementation, it is prohibitively slow, but recently a C++ library known as "Ripser" [@bauer2017Ripser] has been devised to aggregate all known computational speedups of the Vietoris Rips filtration into one concise implementation. Because of the unprecedented speed of Ripser, it has created a large user base for both research and applications. However, the library as it stands is only a command line tool. As a result, multiple efforts have been made to wrap the C++ library for use in other languages, often via clunky system calls to the command line from the respective languages.
 
-In this work, we provide a renovated Python implementation of the Ripser package using Cython to wrap around the C++ codebase and have gone through extensive testing via continuous integration frameworks to ensure it works across all platform. As a result, Ripser.py is currently as easy to setup as `pip install ripser`, which helpful for everyone who is interested in TDA. We see this package to be useful for mathematicians with little programming experience who would like to use TDA as an entry point into data science or for researchers with little understanding of Algebraic Topology to apply TDA to their problem domain.  To aid this, we have created a large set of Jupyter notebooks to showcase some of the many applications that are possible with this library.
+In this work, we provide a renovated Python implementation of the Ripser package using Cython to wrap around the C++ codebase and have gone through extensive testing via continuous integration frameworks to ensure it works across all platforms. As a result, Ripser.py is currently as easy to setup as `pip install ripser`, which helpful for everyone who is interested in TDA. We see this package as particularly useful for mathematicians with little programming experience who would like to use TDA as an entry point into data science, or conversely for researchers with little understanding of Algebraic Topology who would like to apply TDA to their problem domain.  To aid this, we have created a large set of Jupyter notebooks to showcase some of the many applications that are possible with this library.
 
 # Library Details
 Our Python library supplies two interfaces: one lightweight and functional interface, as well as an object-oriented interface designed to fit within the Scikit-Learn transformer paradigm [@scikit-learn]. We have merged together multiple branches of the original Ripser library ("sparse-distance-matrix," "representative-cocycles") to expose some lesser known but incredibly useful features hidden in Ripser.  Below we detail some of the special features made easy with our library.
@@ -69,6 +68,6 @@ The source code for Ripser.py is available on Github through the Scikit-TDA orga
 
 # Acknowledgements
 
-Christoher Tralie was supported by an NSF big data grant DKA-1447491. Nathaniel Saul was partially supported by ABI-XXXXXX. We thank Ulrich Bauer for the original Ripser library and for valuable feedback during development of Ripser.py.  We also thank various suggestions and bug fixes from Jose Perea, William Guss, and Matija (@mtsch).  Finally, we thank the students of the "Topological Data Analysis and Persistent Homology" workshop in Levico, Italy for beta testing the code.
+Christoher Tralie and Rann Bar-On were supported by an NSF big data grant DKA-1447491. Nathaniel Saul was partially supported by ABI-XXXXXX. We thank Ulrich Bauer for the original Ripser library and for valuable feedback during development of Ripser.py.  We also thank various suggestions and bug fixes from Jose Perea, William Guss, and Matija (@mtsch).  Finally, we thank the students of the "Topological Data Analysis and Persistent Homology" workshop in Levico, Italy for beta testing the code.
 
 # References
