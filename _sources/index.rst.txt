@@ -65,10 +65,13 @@ Note that there is also a <i>Rips</i> object with the same functionality, which 
     :maxdepth: 2
     :caption: Examples:
 
+    Representative Cocycles
     Approximate Sparse Filtrations
     Sparse Distance Matrices
-    Representative Cocycles
     Lower Star Time Series
+    Lower Star Image Filtrations
+    Moebius Strip And The Field of Coefficients
+
 
 .. |PyPI version| image:: https://badge.fury.io/py/ripser.svg
    :target: https://badge.fury.io/py/ripser
