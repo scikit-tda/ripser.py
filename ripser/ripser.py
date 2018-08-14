@@ -54,16 +54,16 @@ def ripser(
         A numpy array of either data or distance matrix.
         Can also be a sparse distance matrix of type scipy.sparse
 
-    maxdim : int, optional, default 1
+    maxdim: int, optional, default 1
         Maximum homology dimension computed. Will compute all dimensions 
         lower than and equal to this value. 
         For 1, H_0 and H_1 will be computed.
 
-    thresh : float, default infinity
+    thresh: float, default infinity
         Maximum distances considered when constructing filtration. 
         If infinity, compute the entire filtration.
 
-    coeff : int prime, default 2
+    coeff: int prime, default 2
         Compute homology with coefficients in the prime field Z/pZ for p=coeff.
 
     distance_matrix: bool
@@ -97,7 +97,7 @@ def ripser(
         in each dimension is parallel to the diagram in that dimension.
      'num_edges': int
         The number of edges added during the computation
-     'dm' : ndarray (n_samples, n_samples)
+     'dm': ndarray (n_samples, n_samples)
         The distance matrix used in the computation
     }
 
@@ -167,7 +167,6 @@ def ripser(
             cocycles[dim].append(ccl)
     ret = {"dgms": dgms, "cocycles": cocycles, "num_edges": res["num_edges"], "dm": dm}
     return ret
-
 
 def plot_dgms(
     diagrams,
@@ -407,20 +406,20 @@ def lower_star_img(img):
 
 
 class Rips(TransformerMixin):
-    """sklearn style class wrapper around Uli Bauer's ripser code 
+    """ sklearn style class wrapper for `ripser` and `plot_dgms`.
 
     Parameters
     ----------
-    maxdim : int, optional, default 1
+    maxdim: int, optional, default 1
         Maximum homology dimension computed. Will compute all dimensions 
         lower than and equal to this value. 
         For 1, H_0 and H_1 will be computed.
 
-    thresh : float, default infinity
+    thresh: float, default infinity
         Maximum distances considered when constructing filtration. 
         If infinity, compute the entire filtration.
 
-    coeff : int prime, default 2
+    coeff: int prime, default 2
         Compute homology with coefficients in the prime field Z/pZ for p=coeff.
 
     do_cocycles: bool
@@ -429,7 +428,7 @@ class Rips(TransformerMixin):
 
     Attributes
     ----------
-    dgm_ : list of ndarray, each shape (n_pairs, 2)
+    dgm_: list of ndarray, each shape (n_pairs, 2)
         After `transform`, dgm_ contains computed persistence diagrams in
         each dimension
 

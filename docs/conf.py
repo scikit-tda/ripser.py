@@ -20,8 +20,8 @@
 # -- Project information -----------------------------------------------------
 
 project = u'Ripser'
-copyright = u'2018, Christopher Tralie and Nathaniel Saul and Ulrich Bauer'
-author = u'Christopher Tralie and Nathaniel Saul and Ulrich Bauer'
+copyright = u'2018, Christopher Tralie and Nathaniel Saul'
+author = u'Christopher Tralie and Nathaniel Saul'
 
 # The short X.Y version
 version = u''
@@ -89,6 +89,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+
 html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -96,6 +97,8 @@ html_theme = 'sphinx_rtd_theme'
 # documentation.
 #
 # html_theme_options = {}
+
+html_logo = 'logo.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -144,7 +147,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'ripser.tex', u'Ripser Documentation',
-     u'Christopher Tralie and Nathaniel Saul and Ulrich Bauer', 'manual'),
+     u'Christopher Tralie and Nathaniel Saul', 'manual'),
 ]
 
 
