@@ -45,10 +45,20 @@
         <div class="wy-side-nav-search">
           
 
+
+          <a href="https://scikit-tda.org">
+            <big>a scikit-tda project</big>
+          </a>
+
+
+
           
             <a href="../../index.html" class="icon icon-home"> Ripser
           
 
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -132,7 +142,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="https://scikit-tda.org">Scikit-TDA</a>&raquo;<a href="../../index.html">Docs</a> &raquo;</li>
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
@@ -153,9 +163,27 @@
             
   <h1>Source code for ripser.ripser</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    ripser provides functionality for persistent cohomology calculations, </span>
-<span class="sd">    including computing barcodes, cocycles, and visualizations.</span>
+<span class="sd">MIT License</span>
 
+<span class="sd">Copyright (c) 2018 Christopher Tralie and Nathaniel Saul</span>
+
+<span class="sd">Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="sd">of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="sd">in the Software without restriction, including without limitation the rights</span>
+<span class="sd">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="sd">copies of the Software, and to permit persons to whom the Software is</span>
+<span class="sd">furnished to do so, subject to the following conditions:</span>
+
+<span class="sd">The above copyright notice and this permission notice shall be included in all</span>
+<span class="sd">copies or substantial portions of the Software.</span>
+
+<span class="sd">THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="sd">IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="sd">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="sd">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="sd">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="sd">OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="sd">SOFTWARE. </span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">cycle</span>
@@ -247,7 +275,6 @@
 <span class="sd">        data = datasets.make_circles(n_samples=110)[0]</span>
 <span class="sd">        dgms = ripser(data)[&#39;dgms&#39;]</span>
 <span class="sd">        plot_dgms(dgms)</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">distance_matrix</span><span class="p">:</span>
@@ -376,6 +403,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Birth&quot;</span><span class="p">,</span> <span class="s2">&quot;Death&quot;</span>
+
     <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Provide default labels for diagrams if using self.dgm_</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
@@ -417,11 +446,11 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">xy_range</span><span class="p">:</span>
         <span class="c1"># define bounds of diagram</span>
         <span class="n">ax_min</span><span class="p">,</span> <span class="n">ax_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">finite_dgms</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">finite_dgms</span><span class="p">)</span>
-        <span class="n">ax_range</span> <span class="o">=</span> <span class="n">ax_max</span> <span class="o">-</span> <span class="n">ax_min</span>
+        <span class="n">x_r</span> <span class="o">=</span> <span class="n">ax_max</span> <span class="o">-</span> <span class="n">ax_min</span>
 
         <span class="c1"># Give plot a nice buffer on all sides.</span>
         <span class="c1"># ax_range=0 when only one point,</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">ax_range</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">ax_range</span> <span class="o">/</span> <span class="mi">5</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">xy_range</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">x_r</span> <span class="o">/</span> <span class="mi">5</span>
 
         <span class="n">ax</span> <span class="o">=</span> <span class="n">ax_min</span> <span class="o">-</span> <span class="n">buffer</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">bx</span> <span class="o">=</span> <span class="n">ax_max</span> <span class="o">+</span> <span class="n">buffer</span>
@@ -430,17 +459,16 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">xy_range</span>
 
-    <span class="c1"># have inf line slightly below top</span>
-    <span class="n">b_inf</span> <span class="o">=</span> <span class="n">bx</span> <span class="o">*</span> <span class="mf">0.95</span>
-
-    <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Birth&quot;</span><span class="p">,</span> <span class="s2">&quot;Death&quot;</span>
+    <span class="n">yr</span> <span class="o">=</span> <span class="n">by</span> <span class="o">-</span> <span class="n">ay</span>
 
     <span class="k">if</span> <span class="n">lifetime</span><span class="p">:</span>
+
         <span class="c1"># Don&#39;t plot landscape and diagonal at the same time.</span>
         <span class="n">diagonal</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># reset y axis so it doesn&#39;t go much below zero</span>
-        <span class="n">ay</span> <span class="o">=</span> <span class="o">-</span><span class="n">buffer</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">ay</span> <span class="o">=</span> <span class="o">-</span><span class="n">yr</span> <span class="o">*</span> <span class="mf">0.05</span>
+        <span class="n">by</span> <span class="o">=</span> <span class="n">ay</span> <span class="o">+</span> <span class="n">yr</span>
 
         <span class="c1"># set custom ylabel</span>
         <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Lifetime&quot;</span>
@@ -450,7 +478,7 @@
             <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># plot horizon line</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">ax_color</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">ax_color</span><span class="p">)</span>
 
     <span class="c1"># Plot diagonal</span>
     <span class="k">if</span> <span class="n">diagonal</span><span class="p">:</span>
@@ -458,7 +486,9 @@
 
     <span class="c1"># Plot inf line</span>
     <span class="k">if</span> <span class="n">has_inf</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">],</span> <span class="p">[</span><span class="n">b_inf</span><span class="p">,</span> <span class="n">b_inf</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\infty$&quot;</span><span class="p">)</span>
+        <span class="c1"># put inf line slightly below top</span>
+        <span class="n">b_inf</span> <span class="o">=</span> <span class="n">ay</span> <span class="o">+</span> <span class="n">yr</span> <span class="o">*</span> <span class="mf">0.95</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">ax</span><span class="p">,</span> <span class="n">bx</span><span class="p">],</span> <span class="p">[</span><span class="n">b_inf</span><span class="p">,</span> <span class="n">b_inf</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\infty$&quot;</span><span class="p">)</span>
 
         <span class="c1"># convert each inf in each diagram with b_inf</span>
         <span class="k">for</span> <span class="n">dgm</span> <span class="ow">in</span> <span class="n">diagrams</span><span class="p">:</span>
@@ -466,6 +496,7 @@
 
     <span class="c1"># Plot each diagram</span>
     <span class="k">for</span> <span class="n">dgm</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">diagrams</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+
         <span class="c1"># plot persistence pairs</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">dgm</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
 
@@ -483,6 +514,60 @@
 
     <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">lower_star_img</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Construct a lower star filtration on an image</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img: ndarray (M, N)</span>
+<span class="sd">        An array of single channel image data</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    I: ndarray (K, 2)</span>
+<span class="sd">        A 0-dimensional persistence diagram corresponding to the sublevelset filtration</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+
+    <span class="n">I</span> <span class="o">=</span> <span class="n">idxs</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">idxs</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="c1"># Connect 8 spatial neighbors</span>
+    <span class="n">tidxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">m</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">tidxs</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">idxs</span>
+
+    <span class="n">tD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">tidxs</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">tD</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">img</span>
+
+    <span class="k">for</span> <span class="n">di</span> <span class="ow">in</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">dj</span> <span class="ow">in</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+
+            <span class="k">if</span> <span class="n">di</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dj</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">thisJ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">tidxs</span><span class="p">,</span> <span class="n">di</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">dj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">thisD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">tD</span><span class="p">,</span> <span class="n">di</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">dj</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">thisD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">thisD</span><span class="p">,</span> <span class="n">tD</span><span class="p">)</span>
+
+            <span class="c1"># Deal with boundaries</span>
+            <span class="n">boundary</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">thisD</span><span class="p">)</span>
+            <span class="n">thisI</span> <span class="o">=</span> <span class="n">tidxs</span><span class="p">[</span><span class="n">boundary</span><span class="p">]</span>
+            <span class="n">thisJ</span> <span class="o">=</span> <span class="n">thisJ</span><span class="p">[</span><span class="n">boundary</span><span class="p">]</span>
+            <span class="n">thisD</span> <span class="o">=</span> <span class="n">thisD</span><span class="p">[</span><span class="n">boundary</span><span class="p">]</span>
+
+            <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">I</span><span class="p">,</span> <span class="n">thisI</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">J</span><span class="p">,</span> <span class="n">thisJ</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+            <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">V</span><span class="p">,</span> <span class="n">thisD</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+
+    <span class="n">sparseDM</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">coo_matrix</span><span class="p">((</span><span class="n">V</span><span class="p">,</span> <span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">J</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">idxs</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">idxs</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">ripser</span><span class="p">(</span><span class="n">sparseDM</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxdim</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="s2">&quot;dgms&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="Rips"><a class="viewcode-back" href="../../reference.html#ripser.Rips">[docs]</a><span class="k">class</span> <span class="nc">Rips</span><span class="p">(</span><span class="n">TransformerMixin</span><span class="p">):</span>
@@ -686,6 +771,9 @@
             <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
             <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
         <span class="p">)</span></div></div>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Rips&quot;</span><span class="p">,</span> <span class="s2">&quot;ripser&quot;</span><span class="p">,</span> <span class="s2">&quot;plot_dgms&quot;</span><span class="p">,</span> <span class="s2">&quot;lower_star_img&quot;</span><span class="p">]</span>
 </pre></div>
 
            </div>

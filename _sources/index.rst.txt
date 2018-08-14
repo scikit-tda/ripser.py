@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 
-|PyPI version| |Travis-CI| |Appveyor| |Codecov| |License: LGPL v3|
+|PyPI version| |Travis-CI| |Appveyor| |Codecov| |License: MIT|
 
 Ripser
 ========
@@ -12,7 +12,6 @@ Ripser
 This package provides the awesome Ripser project as an easy to use Python module. It is easy to install and is even easier to use.
 
 For the original C++ library, see `Ripser/ripser <https://github.com/Ripser/ripser/releases/latest>`_.
-
 
 Setup
 ------
@@ -76,12 +75,12 @@ Note that there is also a <i>Rips</i> object with the same functionality, which 
 .. |PyPI version| image:: https://badge.fury.io/py/ripser.svg
    :target: https://badge.fury.io/py/ripser
 
-.. |Travis-CI| image:: https://travis-ci.org/ctralie/ripser.svg?branch=master
-    :target: https://travis-ci.org/ctralie/ripser
+.. |Travis-CI| image:: https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master
+    :target: https://travis-ci.org/scikit-tda/ripser.py
 
 .. |Appveyor| image:: https://ci.appveyor.com/api/projects/status/sfy7yybs66e5qanu?svg=true
-    :target: https://ci.appveyor.com/project/ctralie/ripser
-.. |Codecov| image:: https://codecov.io/gh/ctralie/ripser/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/ctralie/ripser
-.. |License: LGPL v3| image:: https://img.shields.io/badge/License-LGPL%20v3-blue.svg
-   :target: https://www.gnu.org/licenses/lgpl-3.0
+    :target: https://ci.appveyor.com/project/scikit-tda/ripser
+.. |Codecov| image:: https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/scikit-tda/ripser.py
+.. |License: MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
+   :target: https://opensource.org/licenses/MIT)
