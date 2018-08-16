@@ -1,5 +1,5 @@
-Reference
-===========
+Ripser.py API Guide
+====================
 
 
 .. automodule:: ripser

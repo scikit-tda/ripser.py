@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Reference &mdash; Ripser 0.0.1 documentation</title>
+  <title>Ripser.py API Guide &mdash; Ripser 0.0.1 documentation</title>
   
 
   
@@ -26,10 +26,10 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Representative Cocycles" href="Representative Cocycles.html" />
-    <link rel="prev" title="Ripser demonstration" href="Ripser Demonstration.html" /> 
+    <link rel="prev" title="Moebius Strip And The Field of Coefficients" href="Moebius Strip And The Field of Coefficients.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -88,19 +88,22 @@
               
             
             
-              <p class="caption"><span class="caption-text">Usage:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Ripser Demonstration.html">Ripser demonstration</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a></li>
+              <p class="caption"><span class="caption-text">Background</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Basic Usage.html">Ripser demonstration</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples:</span></p>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Representative Cocycles.html">Representative Cocycles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Approximate Sparse Filtrations.html">Approximate Sparse Filtrations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Sparse Distance Matrices.html">Sparse Distance Matrices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Lower Star Time Series.html">Lower Star Time Series</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Lower Star Image Filtrations.html">Lower Star Image Filtrations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Moebius Strip And The Field of Coefficients.html">Moebius Strip And The Field of Coefficients</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ripser.py API Guide</a></li>
 </ul>
 
             
@@ -146,7 +149,7 @@
     
       <li><a href="https://scikit-tda.org">Scikit-TDA</a>&raquo;<a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Reference</li>
+      <li>Ripser.py API Guide</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -185,16 +188,20 @@
 }
 </style>
 <div class="section" id="module-ripser">
-<span id="reference"></span><h1>Reference<a class="headerlink" href="#module-ripser" title="Permalink to this headline">¶</a></h1>
+<span id="ripser-py-api-guide"></span><h1>Ripser.py API Guide<a class="headerlink" href="#module-ripser" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="ripser.ripser">
 <code class="descclassname">ripser.</code><code class="descname">ripser</code><span class="sig-paren">(</span><em>X</em>, <em>maxdim=1</em>, <em>thresh=inf</em>, <em>coeff=2</em>, <em>distance_matrix=False</em>, <em>do_cocycles=False</em>, <em>metric='euclidean'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ripser/ripser.html#ripser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.ripser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute persistence diagrams for X data array. If X is not a distance matrix, it will be converted to a distance matrix using the chosen metric.</p>
+<dd><dl class="docutils">
+<dt>Compute persistence diagrams for X data array. If X is not a </dt>
+<dd>distance matrix, it will be converted to a distance matrix using 
+the chosen metric.</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>X: ndarray (n_samples, n_features)</strong></dt>
 <dd><p class="first last">A numpy array of either data or distance matrix.
 Can also be a sparse distance matrix of type scipy.sparse</p>
@@ -217,7 +224,7 @@ distance matrix from X using the chosen metric.</p>
 </dd>
 <dt><strong>do_cocycles: bool</strong></dt>
 <dd><p class="first last">Indicator of whether to compute cocycles, if so, we compute and store
-cocycles in the <a href="#id1"><span class="problematic" id="id2">cocycles_</span></a> dictionary Rips member variable</p>
+cocycles in the <a href="#id23"><span class="problematic" id="id24">cocycles_</span></a> dictionary Rips member variable</p>
 </dd>
 <dt><strong>metric: string or callable</strong></dt>
 <dd><p class="first last">The metric to use when calculating distance between instances in a 
@@ -231,45 +238,16 @@ return a value indicating the distance between them.</p>
 </dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>A dictionary holding all of the results of the computation</strong></dt>
-<dd></dd>
-<dt><strong>{‘dgms’: list (size maxdim) of ndarray (n_pairs, 2)</strong></dt>
-<dd><blockquote class="first">
-<div><p>A list of persistence diagrams, one for each dimension less 
-than maxdim. Each diagram is an ndarray of size (n_pairs, 2) 
-with the first column representing the birth time and the 
-second column representing the death time of each pair.</p>
-</div></blockquote>
-<dl class="last docutils">
-<dt>‘cocycles’: list (size maxdim)</dt>
-<dd><p class="first last">A list of representative cocycles in each dimension.  The list 
-in each dimension is parallel to the diagram in that dimension.</p>
-</dd>
-<dt>‘num_edges’: int</dt>
-<dd><p class="first last">The number of edges added during the computation</p>
-</dd>
-<dt>‘dm’ <span class="classifier-delimiter">:</span> <span class="classifier">ndarray (n_samples, n_samples)</span></dt>
-<dd><p class="first last">The distance matrix used in the computation</p>
-</dd>
-</dl>
-</dd>
-<dt><strong>}</strong></dt>
-<dd></dd>
-</dl>
-</td>
-</tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span><span class="p">,</span> <span class="n">plot_dgms</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">110</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">dgms</span> <span class="o">=</span> <span class="n">ripser</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s1">&#39;dgms&#39;</span><span class="p">]</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgms</span><span class="p">)</span>
-</pre></div>
-</div>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+from ripser import ripser, plot_dgms
+from sklearn import datasets</p>
+<p>data = datasets.make_circles(n_samples=110)[0]
+dgms = ripser(data)[‘dgms’]
+plot_dgms(dgms)
+<a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
 </dd></dl>
 
 <dl class="function">
@@ -302,16 +280,18 @@ If none are specified, we use H_0, H_1, H_2,… by default.</p>
 <dt><strong>colormap: string, default is ‘default’</strong></dt>
 <dd><p class="first">Any of matplotlib color palettes. 
 Some options are ‘default’, ‘seaborn’, ‘sequential’. 
-See all available styles with</p>
-<div class="last highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
-<span class="k">print</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">available</span><span class="p">)</span>
-</pre></div>
-</div>
+See all availble styles with
+<a href="#id7"><span class="problematic" id="id8">``</span></a><a href="#id9"><span class="problematic" id="id10">`</span></a></p>
+<blockquote>
+<div><p>import matplotlib as mpl
+print(mpl.styles.available)</p>
+</div></blockquote>
+<p class="last"><a href="#id11"><span class="problematic" id="id12">``</span></a><a href="#id13"><span class="problematic" id="id14">`</span></a></p>
 </dd>
 <dt><strong>size: numeric, default is 20</strong></dt>
 <dd><p class="first last">Pixel size of each point plotted.</p>
 </dd>
-<dt><strong>ax_color: any valid matplotlib color type.</strong></dt>
+<dt><strong>ax_color: any valid matplitlib color type.</strong></dt>
 <dd><p class="first last">See [<a class="reference external" href="https://matplotlib.org/api/colors_api.html](https://matplotlib.org/api/colors_api.html">https://matplotlib.org/api/colors_api.html](https://matplotlib.org/api/colors_api.html</a>) for complete API.</p>
 </dd>
 <dt><strong>diagonal: bool, default is True</strong></dt>
@@ -338,7 +318,7 @@ of a subplot, set show=False and call plt.show() only once at the end.</p>
 <dl class="class">
 <dt id="ripser.Rips">
 <em class="property">class </em><code class="descclassname">ripser.</code><code class="descname">Rips</code><span class="sig-paren">(</span><em>maxdim=1</em>, <em>thresh=inf</em>, <em>coeff=2</em>, <em>do_cocycles=False</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ripser/ripser.html#Rips"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.Rips" title="Permalink to this definition">¶</a></dt>
-<dd><p>sklearn style class wrapper around Uli Bauer’s ripser code</p>
+<dd><p>sklearn class wrapper around Uli Bauer’s ripser code</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -358,7 +338,7 @@ If infinity, compute the entire filtration.</p>
 </dd>
 <dt><strong>do_cocycles: bool</strong></dt>
 <dd><p class="first last">Indicator of whether to compute cocycles, if so, we compute and store
-cocycles in the <a href="#id3"><span class="problematic" id="id4">cocycles_</span></a> dictionary Rips member variable</p>
+cocycles in the <a href="#id25"><span class="problematic" id="id26">cocycles_</span></a> dictionary Rips member variable</p>
 </dd>
 </dl>
 </td>
@@ -366,21 +346,21 @@ cocycles in the <a href="#id3"><span class="problematic" id="id4">cocycles_</spa
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">110</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">rips</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
-<span class="n">rips</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">rips</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">from</span> <span class="pre">ripser</span> <span class="pre">import</span> <span class="pre">Rips</span>
+<span class="pre">from</span> <span class="pre">sklearn</span> <span class="pre">import</span> <span class="pre">datasets</span>
+<span class="pre">data</span> <span class="pre">=</span> <span class="pre">datasets.make_circles(n_samples=110)[0]</span>
+<span class="pre">rips</span> <span class="pre">=</span> <span class="pre">Rips()</span>
+<span class="pre">rips.transform(data)</span>
+<span class="pre">rips.plot()</span>
+<span class="pre">`</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>dgm_</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of ndarray, each shape (n_pairs, 2)</span></dt>
-<dd><p class="first last">After <cite>transform</cite>, <a href="#id5"><span class="problematic" id="id6">dgm_</span></a> contains computed persistence diagrams in
+<dd><p class="first last">After <cite>transform</cite>, <a href="#id27"><span class="problematic" id="id28">dgm_</span></a> contains computed persistence diagrams in
 each dimension</p>
 </dd>
 </dl>
@@ -396,7 +376,7 @@ each dimension</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>X: ndarray (n_samples, n_features)</strong></dt>
 <dd><p class="first last">A numpy array of either data or distance matrix.</p>
 </dd>
@@ -416,16 +396,6 @@ return a value indicating the distance between them.</p>
 </dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>dgms: list (size maxdim) of ndarray (n_pairs, 2)</strong></dt>
-<dd><p class="first last">A list of persistence diagrams, one for each dimension less 
-than maxdim. Each diagram is an ndarray of size (n_pairs, 2) with 
-the first column representing the birth time and the second column 
-representing the death time of each pair.</p>
-</dd>
-</dl>
-</td>
-</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -441,7 +411,7 @@ representing the death time of each pair.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>diagrams: ndarray (n_pairs, 2) or list of diagrams</strong></dt>
 <dd><p class="first last">A diagram or list of diagrams as returned from self.fit. 
-If diagram is None, we use <a href="#id7"><span class="problematic" id="id8">self.dgm_</span></a> for plotting. 
+If diagram is None, we use <a href="#id29"><span class="problematic" id="id30">self.dgm_</span></a> for plotting. 
 If diagram is a list of diagrams, then plot all on the same plot 
 using different colors.</p>
 </dd>
@@ -462,11 +432,13 @@ If none are specified, we use H_0, H_1, H_2,… by default.</p>
 <dt><strong>colormap: string, default is ‘default’</strong></dt>
 <dd><p class="first">Any of matplotlib color palettes. 
 Some options are ‘default’, ‘seaborn’, ‘sequential’. 
-See all available styles with</p>
-<div class="last highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
-<span class="k">print</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">available</span><span class="p">)</span>
-</pre></div>
-</div>
+See all availble styles with
+<a href="#id15"><span class="problematic" id="id16">``</span></a><a href="#id17"><span class="problematic" id="id18">`</span></a></p>
+<blockquote>
+<div><p>import matplotlib as mpl
+print(mpl.styles.available)</p>
+</div></blockquote>
+<p class="last"><a href="#id19"><span class="problematic" id="id20">``</span></a><a href="#id21"><span class="problematic" id="id22">`</span></a></p>
 </dd>
 <dt><strong>size: numeric, default is 20</strong></dt>
 <dd><p class="first last">Pixel size of each point plotted.</p>
@@ -508,10 +480,8 @@ set show=False and call plt.show() only once at the end.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Representative Cocycles.html" class="btn btn-neutral float-right" title="Representative Cocycles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="Ripser Demonstration.html" class="btn btn-neutral" title="Ripser demonstration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Moebius Strip And The Field of Coefficients.html" class="btn btn-neutral" title="Moebius Strip And The Field of Coefficients" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

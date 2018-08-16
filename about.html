@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Ripser.py &mdash; Ripser 0.0.1 documentation</title>
+  <title>About &mdash; Ripser 0.0.1 documentation</title>
   
 
   
@@ -26,10 +26,11 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="author" title="About these documents" href="#" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="About" href="about.html" /> 
+    <link rel="next" title="Ripser demonstration" href="Basic Usage.html" />
+    <link rel="prev" title="Ripser.py" href="index.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +56,7 @@
 
 
           
-            <a href="#" class="icon icon-home"> Ripser
+            <a href="index.html" class="icon icon-home"> Ripser
           
 
           
@@ -89,8 +90,12 @@
             
             
               <p class="caption"><span class="caption-text">Background</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Basic Usage.html">Ripser demonstration</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
@@ -118,7 +123,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Ripser</a>
+          <a href="index.html">Ripser</a>
         
       </nav>
 
@@ -147,15 +152,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="https://scikit-tda.org">Scikit-TDA</a>&raquo;<a href="#">Docs</a> &raquo;</li>
+      <li><a href="https://scikit-tda.org">Scikit-TDA</a>&raquo;<a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Ripser.py</li>
+      <li>About</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/about.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -187,58 +192,28 @@
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
-<p><a class="reference external" href="https://badge.fury.io/py/ripser"><img alt="PyPI version" src="https://badge.fury.io/py/ripser.svg" /></a> <a class="reference external" href="https://travis-ci.org/scikit-tda/ripser.py"><img alt="Travis-CI" src="https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master" /></a> <a class="reference external" href="https://ci.appveyor.com/project/scikit-tda/ripser"><img alt="Appveyor" src="https://ci.appveyor.com/api/projects/status/sfy7yybs66e5qanu?svg=true" /></a> <a class="reference external" href="https://codecov.io/gh/scikit-tda/ripser.py"><img alt="Codecov" src="https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/MIT)"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a></p>
-<div class="section" id="ripser-py">
-<h1>Ripser.py<a class="headerlink" href="#ripser-py" title="Permalink to this headline">¶</a></h1>
-<p>Ripser.py</p>
-<p>This package provides the awesome Ripser project as an easy to use Python module. It is easy to install and is even easier to use.</p>
-<p>For the original C++ library, see <a class="reference external" href="https://github.com/Ripser/ripser/releases/latest">Ripser/ripser</a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">diagram</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">diagram</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="section" id="about">
+<h1>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+<p>Ripser.py is an evolution of the original C++ Ripser project. We have put extensive work into making the package available to Python developers across all major platforms.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>Ripser.py is available on Pypi. To install, you’ll first need Cython.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">Cython</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">Ripser</span>
 </pre></div>
 </div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Background</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="about.html#setup">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="about.html#usage">Usage</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="Basic Usage.html">Ripser demonstration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Basic Usage.html#Default-args-make-it-very-easy.">Default args make it very easy.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Basic Usage.html#Homology-over-any-prime-basis">Homology over any prime basis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Basic Usage.html#Specify-which-homology-classes-to-compute">Specify which homology classes to compute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Basic Usage.html#Specify-maximum-radius-for-Rips-filtration">Specify maximum radius for Rips filtration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Basic Usage.html#Plotting-Options">Plotting Options</a></li>
-</ul>
-</li>
-</ul>
 </div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Representative Cocycles.html">Representative Cocycles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Approximate Sparse Filtrations.html">Approximate Sparse Filtrations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Lower Star Time Series.html">Lower Star Time Series</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Lower Star Image Filtrations.html">Lower Star Image Filtrations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Lower Star Image Filtrations.html#Gaussian-Blob-Example">Gaussian Blob Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Lower Star Image Filtrations.html#Cell-Biology-Image-Example">Cell Biology Image Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="Moebius Strip And The Field of Coefficients.html">Moebius Strip And The Field of Coefficients</a></li>
-</ul>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span><span class="p">,</span> <span class="n">plot_dgms</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">diagrams</span> <span class="o">=</span> <span class="n">ripser</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s1">&#39;dgms&#39;</span><span class="p">]</span>
+<span class="n">plot_dgms</span><span class="p">(</span><span class="n">diagrams</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">API Reference</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Ripser.py API Guide</a></li>
-</ul>
+<p>Note that there is also a <em>Rips</em> object with the same functionality, which conforms to the Scikit-learn API.</p>
 </div>
 </div>
 
@@ -250,8 +225,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="about.html" class="btn btn-neutral float-right" title="About" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Basic Usage.html" class="btn btn-neutral float-right" title="Ripser demonstration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+      
+        <a href="index.html" class="btn btn-neutral" title="Ripser.py" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
