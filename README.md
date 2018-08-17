@@ -1,8 +1,8 @@
 [![PyPI version](https://badge.fury.io/py/ripser.svg)](https://badge.fury.io/py/ripser)
 [![Build Status](https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master)](https://travis-ci.org/scikit-tda/ripser.py)
-[![Build status](https://ci.appveyor.com/api/projects/status/sfy7yybs66e5qanu?svg=true)](https://ci.appveyor.com/project/scikit-tda/ripser)
+[![Build status](https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true)](https://ci.appveyor.com/project/sauln/ripser-py)
 [![codecov](https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-tda/ripser.py)
-[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Ripser.py
 
