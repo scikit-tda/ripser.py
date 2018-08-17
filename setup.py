@@ -37,13 +37,13 @@ class CustomBuildExtCommand(build_ext):
 
 
 setup(name="ripser",
-      version='0.2.6.dev0',
+      version='0.2.7',
       description="A Lean Persistent Homology Library for Python",
       long_description=long_description,
       long_description_content_type="text/markdown",
       author="Chris Tralie, Nathaniel Saul",
       author_email="chris.tralie@gmail.com, nathaniel.saul@wsu.edu",
-      url="https://github.com/scikit-tda/ripser.py",
+      url="https://ripser.scikit-tda.org",
       license='MIT',
       packages=['ripser'],
       ext_modules=cythonize(Extension("pyRipser",

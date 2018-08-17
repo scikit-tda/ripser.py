@@ -1,3 +1,6 @@
+# 0.2.7:
+    - Updating home url
+
 # 0.2.6:
     - Update license to MIT.
 
