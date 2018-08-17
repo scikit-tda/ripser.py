@@ -1,3 +1,6 @@
+# 0.2.6:
+    - Update license to MIT.
+
 # 0.2.5:
     - Docs and notebooks revamp.
     - Support for Windows.

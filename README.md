@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-tda/ripser.py)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 
-# Ripser
+# Ripser.py
 
 Ripser.py is a renovated Python implementation of the Ripser package. We provide a slim interface for computing persistence cohomology of sparse and dense data sets, visualizing persistence diagrams, computing lowerstar filtrations on images, and computing representative cochains.
 
