@@ -61,7 +61,7 @@ You can find the source code on github at `Scikit-TDA/ripser.py <https://github.
     :target: https://travis-ci.org/scikit-tda/ripser.py
 
 .. |Appveyor| image:: https://ci.appveyor.com/api/projects/status/sfy7yybs66e5qanu?svg=true
-    :target: https://ci.appveyor.com/project/scikit-tda/ripser
+    :target: https://ci.appveyor.com/project/scikit-tda/ripser.py
 .. |Codecov| image:: https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/scikit-tda/ripser.py
 .. |License: MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
