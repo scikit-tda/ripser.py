@@ -1,3 +1,10 @@
+# 0.2.5:
+    - Docs and notebooks revamp.
+    - Support for Windows.
+
+# 0.2.4:
+    - Interface redesign
+
 # 0.2.3:
     - Support for lower star filtrations
     - Notebook on lower star filtrations
