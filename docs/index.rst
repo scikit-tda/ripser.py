@@ -9,11 +9,15 @@
 Ripser.py
 ==========
 
-Ripser.py 
+Ripser.py is a renovated Python implementation of the Ripser package. 
 
-This package provides the awesome Ripser project as an easy to use Python module. It is easy to install and is even easier to use.
+We provide a slim interface for computing persistence cohomology of sparse and dense data sets, visualizing persistence diagrams, computing lowerstar filtrations on images, and computing representative cochains. 
 
-For the original C++ library, see `Ripser/ripser <https://github.com/Ripser/ripser/releases/latest>`_.
+We supply a large set of interactive notebooks that demonstrate how to take advantage of all the features available.
+
+Through extensive testing and continuous integration, Ripser.py is easy to install on Mac, Linux, and Windows platforms.   
+
+You can find the source code on github at `Scikit-TDA/ripser.py <https://github.com/scikit-tda/ripser.py>`_. For the original C++ library, see `Ripser/ripser <https://github.com/Ripser/ripser/releases/latest>`_.
 
 .. code:: python
 

@@ -2,7 +2,7 @@ About
 ======
 
 
-Ripser.py is an evolution of the original C++ Ripser project. We have put extensive work into making the package available to Python developers across all major platforms.
+Ripser.py is an evolution of the original C++ Ripser project. We have put extensive work into making the package available to Python developers across all major platforms. If you are having trouble installing, please let us know by opening a github issue.
 
 
 Setup
