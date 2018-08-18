@@ -6,19 +6,19 @@ tags:
  - Topological Data Analysis
 authors:
  - name: Christopher Tralie
-  orcid: 0000-0003-4206-1963
-  affiliation: 1
+   orcid: 0000-0003-4206-1963
+   affiliation: 1
  - name: Nathaniel Saul
-  orcid: 0000-0002-8549-9810
-  affiliation: 2
+   orcid: 0000-0002-8549-9810
+   affiliation: 2
  - name: Rann Bar-On
-  orcid: 0000-0002-4675-222X
-  affiliation: 1
+   orcid: 0000-0002-4675-222X
+   affiliation: 1
 affiliations:
  - name: Department of Mathematics, Duke University
-  index: 1
+   index: 1
  - name: Department of Mathematics and Statistics, Washington State University
-  index: 2
+   index: 2
 date: 15 August 2018
 bibliography: paper.bib
 ---
