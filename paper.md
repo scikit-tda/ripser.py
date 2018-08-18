@@ -58,7 +58,7 @@ Because of long standing speed concerns with TDA, most applications have focused
 
 
 # Source Code
-The source code for Ripser.py is available on Github through the Scikit-TDA organization [https://github.com/scikit-tda/Ripser.py][https://github.com/scikit-tda/Ripser.py].   The original Ripser library can be found at [https://github.com/Ripser/Ripser/][https://github.com/Ripser/Ripser/]
+The source code for Ripser.py is available on Github through the Scikit-TDA organization [https://github.com/scikit-tda/Ripser.py](https://github.com/scikit-tda/Ripser.py).   The original Ripser library can be found at [https://github.com/Ripser/Ripser/](https://github.com/Ripser/Ripser/)
 
 
 # Acknowledgements
