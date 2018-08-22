@@ -6,11 +6,18 @@
 
 # Ripser.py
 
-Ripser.py is a renovated Python implementation of the Ripser package. We provide a slim interface for computing persistence cohomology of sparse and dense data sets, visualizing persistence diagrams, computing lowerstar filtrations on images, and computing representative cochains.
+Ripser.py is a lean persistent homology package for Python. Building blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for 
+
+- computing persistence cohomology of sparse and dense data sets, 
+- visualizing persistence diagrams, 
+- computing lowerstar filtrations on images, and 
+- computing representative cochains. 
+
+Additionally, through extensive testing and continuous integration, Ripser.py is easy to install on Mac, Linux, and Windows platforms.
 
 To aid your use of the package, we've put together a large set of notebooks that demonstrate many of the features available. Complete documentation about the package can be found at [ripser.scikit-tda.org](https://ripser.scikit-tda.org). 
 
-Through extensive testing and continuous integration, Ripser.py is easy to install on Mac, Linux, and Windows platforms.
+
 
 If you're looking for the original C++ library, you can find it at [Ripser/ripser](https://github.com/ripser/ripser).
 
@@ -50,7 +57,8 @@ rips.plot(diagrams)
 
 # License
 
-Ripser.py is available under an MIT license!
+Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Baeur. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.
+
 
 # Contributions
 

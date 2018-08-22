@@ -30,3 +30,10 @@ Usage
 
 
 Note that there is also a *Rips* object with the same functionality, which conforms to the Scikit-learn API.
+
+
+License
+--------
+
+Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Baeur. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.
+
