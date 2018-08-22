@@ -1,0 +1,8 @@
+Background
+===========
+
+Persistent homology is one of the main tools of Topological Data Analysis. 
+Homology can be seen as a way of summarizing an object by counting holes. Zero-dimensional homology captures the number of connected components, one-dimensional homology captures the number of holes, and two-dimensional homology counts the number of voids (like in a basketball).  We can keep going to higher dimensions, but can't visualize them quite as well. 
+
+Persistent homology provides a way of summarizing the homology of a data set. Because each point is disjoint, a data set with $n$ observations would have zeroth-homology equal to $n$. 
+

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Ripser.py &mdash; Ripser 0.0.1 documentation</title>
+  <title>Ripser.py &mdash; Ripser.py 0.2.7 documentation</title>
   
 
   
@@ -55,7 +55,7 @@
 
 
           
-            <a href="#" class="icon icon-home"> Ripser
+            <a href="#" class="icon icon-home"> Ripser.py
           
 
           
@@ -66,6 +66,10 @@
 
           
             
+            
+              <div class="version">
+                0.2
+              </div>
             
           
 
@@ -118,7 +122,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Ripser</a>
+          <a href="#">Ripser.py</a>
         
       </nav>
 
@@ -190,11 +194,18 @@
 <p><a class="reference external" href="https://badge.fury.io/py/ripser"><img alt="PyPI version" src="https://badge.fury.io/py/ripser.svg" /></a> <a class="reference external" href="https://travis-ci.org/scikit-tda/ripser.py"><img alt="Travis-CI" src="https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master" /></a> <a class="reference external" href="https://ci.appveyor.com/project/sauln/ripser-py"><img alt="Appveyor" src="https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true" /></a> <a class="reference external" href="https://codecov.io/gh/scikit-tda/ripser.py"><img alt="Codecov" src="https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/MIT)"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a></p>
 <div class="section" id="ripser-py">
 <h1>Ripser.py<a class="headerlink" href="#ripser-py" title="Permalink to this headline">¶</a></h1>
-<p>Ripser.py is a renovated Python implementation of the Ripser package.</p>
-<p>We provide a slim interface for computing persistence cohomology of sparse and dense data sets, visualizing persistence diagrams, computing lowerstar filtrations on images, and computing representative cochains.</p>
+<p>Ripser.py is a lean persistent homology package for Python. Building blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for</p>
+<ul class="simple">
+<li>computing persistence cohomology of sparse and dense data sets,</li>
+<li>visualizing persistence diagrams,</li>
+<li>computing lowerstar filtrations on images, and</li>
+<li>computing representative cochains.</li>
+</ul>
+<p>Additionally, through extensive testing and continuous integration, Ripser.py is easy to install on Mac, Linux, and Windows platforms.</p>
 <p>We supply a large set of interactive notebooks that demonstrate how to take advantage of all the features available.</p>
-<p>Through extensive testing and continuous integration, Ripser.py is easy to install on Mac, Linux, and Windows platforms.</p>
-<p>You can find the source code on github at <a class="reference external" href="https://github.com/scikit-tda/ripser.py">Scikit-TDA/ripser.py</a>. For the original C++ library, see <a class="reference external" href="https://github.com/Ripser/ripser/releases/latest">Ripser/ripser</a>.</p>
+<p>You can find the source code on github at <a class="reference external" href="https://github.com/scikit-tda/ripser.py">Scikit-TDA/Ripser.py</a>. For the original C++ library, see <a class="reference external" href="https://github.com/Ripser/ripser/releases/latest">Ripser/ripser</a>.</p>
+<div class="section" id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
@@ -210,6 +221,7 @@
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="about.html#setup">Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="about.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="about.html#license">License</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Basic Usage.html">Ripser demonstration</a><ul>
@@ -243,6 +255,7 @@
 </ul>
 </div>
 </div>
+</div>
 
 
            </div>
@@ -262,7 +275,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Christopher Tralie and Nathaniel Saul.
+        &copy; Copyright 2018, (Documentation) Christopher Tralie and Nathaniel Saul.
 
     </p>
   </div>
@@ -284,7 +297,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.0.1',
+            VERSION:'0.2.7',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
