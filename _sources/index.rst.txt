@@ -9,7 +9,7 @@
 Ripser.py
 ==========
 
-Ripser.py is a lean persistent homology package for Python. Building blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for 
+Ripser.py is a lean persistent homology package for Python. Building on the blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for 
 
 - computing persistence cohomology of sparse and dense data sets, 
 - visualizing persistence diagrams, 
