@@ -4,3 +4,4 @@ test
 ripser.egg-info
 ripser
 .cache
+.ipynb
