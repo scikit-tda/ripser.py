@@ -23,12 +23,25 @@ If you're looking for the original C++ library, you can find it at [Ripser/ripse
 
 ## Setup
 
-Installation requires Cython, but other than that, it is available on all platforms (if you are having trouble installing, please let us know!)
+
+Ripser.py is available on all major platforms. All that is required is that you install the standard Python numerical computing libraries and Cython. 
+
+Dependencies:
+- Cython
+- numpy
+- scipy
+- matplotlib
+- scikit-learn
+
+Cython should be the only library required before installation.  To install, type the following commands into your environment:
 
 ```
 pip install Cython
 pip install Ripser
 ```
+
+If you are having trouble installing, please let us know!
+
 
 ## Usage
 
