@@ -69,7 +69,7 @@ rips.plot(diagrams)
 ```
 
 
-<img src="https://i.imgur.com/2PpWjwa.png" alt="Ripser.py output persistence diagram" width="70%"/>
+<img src="https://i.imgur.com/WmQPYnn.png" alt="Ripser.py output persistence diagram" width="70%"/>
 
 
 
