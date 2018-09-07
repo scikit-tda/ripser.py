@@ -64,9 +64,14 @@ from ripser import Rips
 
 rips = Rips()
 data = np.random.random((100,2))
-diagrams = rips.fit_transform(data)['dgms']
+diagrams = rips.fit_transform(data)
 rips.plot(diagrams)
 ```
+
+
+<img src="https://i.imgur.com/2PpWjwa.png" alt="Ripser.py output persistence diagram" width="70%"/>
+
+
 
 # License
 
