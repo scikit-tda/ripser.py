@@ -23,17 +23,8 @@ date: 15 August 2018
 bibliography: paper.bib
 ---
 
-
-<!---
-- This paper was put together by following directions from https://joss.readthedocs.io/en/latest/submitting.html
-TODO:
-
-* Citations Other existing software packages, including julia Ripser wrapper?
-* I think the second paragraph of each feature section is largely unnecessary. Judging by other JoSS submissions, I think shorter is better. We should however incorporate lots of those details into the general documentation.
--->
-
 # Summary
-Topological data analysis (TDA) [@edelsbrunner2010computational],[@carlsson2009topology] is a field focused on understanding the shape and structure of data by computing topological descriptors that summarize features as connected components, loops, and voids. TDA has found wide applications across nonlinear time series analysis [@perea2015sliding], computer vision [@perea2014klein], computational neuroscience [@giusti2015clique],[@bendich2016persistent], computational biology [@iyer2010imaging],[@wu2017optimal], and materials science [@kramar2013persistence], to name a few of the many areas of impact in recent years.
+Topological data analysis (TDA) [@edelsbrunner2010computational], [@carlsson2009topology] is a field focused on understanding the shape and structure of data by computing topological descriptors that summarize features as connected components, loops, and voids. TDA has found wide applications across nonlinear time series analysis [@perea2015sliding], computer vision [@perea2014klein], computational neuroscience [@giusti2015clique], [@bendich2016persistent], computational biology [@iyer2010imaging], [@wu2017optimal], and materials science [@kramar2013persistence], to name a few of the many areas of impact in recent years.
 
 Persistent homology [@edelsbrunner2010computational] is the main workhorse of TDA, and it computes a data structure known as the persistence diagram to summarize the space of stable topological features. The most commonly used scheme for generating persistence diagrams is the Vietoris Rips filtration (VR) since it is easily defined for any point cloud. In its naive implementation, VR is prohibitively slow, but recently a C++ library known as Ripser [@bauer2017ripser] has been devised to aggregate all known computational speedups of the VR filtration into one concise implementation. Because of the unprecedented speed of Ripser, it has created a large user base for both research and applications. However, the library as it stands is only a command line tool and as a result, multiple efforts have been made to wrap the C++ library for use in other languages, often via clunky system calls to the command line.
 
