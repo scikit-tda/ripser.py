@@ -1,3 +1,7 @@
+# 0.3.0:
+    - Completed JOSS review, thanks @lmcinnes and @arokem!!
+    - Documentation details updated.
+
 # 0.2.7:
     - Updating home url
 

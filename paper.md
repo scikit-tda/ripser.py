@@ -19,7 +19,7 @@ affiliations:
    index: 1
  - name: Department of Mathematics and Statistics, Washington State University
    index: 2
-date: 15 August 2018
+date: 10 September 2018
 bibliography: paper.bib
 ---
 
