@@ -36,7 +36,7 @@ Dependencies:
 Cython should be the only library required before installation.  To install, type the following commands into your environment:
 
 ```
-pip install Cython
+pip install cython
 pip install ripser
 ```
 
