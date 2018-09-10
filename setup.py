@@ -15,7 +15,7 @@ except:
 
 
 import re
-VERSIONFILE="persim/_version.py"
+VERSIONFILE="ripser/_version.py"
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
 mo = re.search(VSRE, verstrline, re.M)

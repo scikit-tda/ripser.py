@@ -19,14 +19,16 @@
 
 # -- Project information -----------------------------------------------------
 
+from ripser import __version__
+
 project = u'Ripser.py'
 copyright = u'2018, (Documentation) Christopher Tralie and Nathaniel Saul'
 author = u'Christopher Tralie and Nathaniel Saul'
 
 # The short X.Y version
-version = u'0.3'
+version = __version__
 # The full version, including alpha/beta/rc tags
-release = u'0.3.0'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
