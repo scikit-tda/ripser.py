@@ -37,7 +37,7 @@ Cython should be the only library required before installation.  To install, typ
 
 ```
 pip install Cython
-pip install Ripser
+pip install ripser
 ```
 
 If you are having trouble installing, please let us know!
