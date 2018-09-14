@@ -74,13 +74,35 @@ rips.plot(diagrams)
 
 
 
-# License
-
-Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Baeur. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.
-
 
 # Contributions
 
 We welcome all kinds of contributions! Please get in touch if you would like to help out. Everything from code to notebooks to examples and documentation are all equally valuable so please don't feel you can't contribute. To contribute please fork the project make your changes and submit a pull request. We will do our best to work through any issues with you and get your code merged into the main branch.
 
 If you found a bug, have questions, or are just having trouble with the library, please open an issue in our [issue tracker](https://github.com/scikit-tda/ripser.py/issues/new) and we'll try to help resolve the concern.
+
+# License
+
+Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Baeur. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.
+
+# Citing
+
+If you use this package, please site the JoSS paper found here: [![DOI](http://joss.theoj.org/papers/10.21105/joss.00925/status.svg)](https://doi.org/10.21105/joss.00925)
+
+You can use the following bibtex entry
+```
+@article{ctralie2018ripser,
+  doi = {10.21105/joss.00925},
+  url = {https://doi.org/10.21105/joss.00925},
+  year  = {2018},
+  month = {Sep},
+  publisher = {The Open Journal},
+  volume = {3},
+  number = {29},
+  pages = {925},
+  author = {Christopher Tralie and Nathaniel Saul and Rann Bar-On},
+  title = {{Ripser.py}: A Lean Persistent Homology Library for Python},
+  journal = {The Journal of Open Source Software}
+}
+```
+
