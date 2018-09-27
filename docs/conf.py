@@ -30,7 +30,7 @@ version = __version__
 # The full version, including alpha/beta/rc tags
 release = __version__
 
-
+googleanalytics_id = 'UA-124965309-1'
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -54,6 +54,7 @@ extensions = [
     'nbsphinx',
     'numpydoc',
     'IPython.sphinxext.ipython_console_highlighting',
+    'sphinxcontrib.googleanalytics',
 ]
 
 exclude_patterns = ['_build', '**.ipynb_checkpoints']
