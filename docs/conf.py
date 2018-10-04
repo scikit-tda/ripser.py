@@ -30,7 +30,7 @@ version = __version__
 # The full version, including alpha/beta/rc tags
 release = __version__
 
-googleanalytics_id = 'UA-124965309-1'
+googleanalytics_id = 'UA-124965309-2'
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
