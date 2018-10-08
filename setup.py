@@ -1,10 +1,11 @@
 import sys
 import os
+import platform
 
 from setuptools import setup
 from setuptools.extension import Extension
 
-# we'd better have Cython installed, or it's a no-go
+# Ensure Cython is installed before we even attempt to install Ripser.py
 try:
     from Cython.Build import cythonize
     from Cython.Distutils import build_ext
@@ -13,7 +14,7 @@ except:
     print("copy from www.cython.org or install it with `pip install Cython`")
     sys.exit(1)
 
-
+## Get version information from _version.py
 import re
 VERSIONFILE="ripser/_version.py"
 verstrline = open(VERSIONFILE, "rt").read()
@@ -24,21 +25,29 @@ if mo:
 else:
     raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
-
-
-
+# Use README.md as the package long description  
 with open('README.md') as f:
     long_description = f.read()
 
-options = ["-std=c++11", "-Ofast", "-D_hypot=hypot"]
+    
+## Compiler options
+# Default options
+options = ["-v", "-std=c++11", "-Ofast", "-D_hypot=hypot"]
 
+# This option is required for old versions of MacOS and is okay for new versions of Mac
+# This option will break linux installs. 
+# if platform.system() == "Darwin":
+#     print("Add compile flag macs")
+#     options.append("-stdlib=libc++")
+
+# Options for Python 2.7
 if sys.version_info[0] == 2:
     options.append("-fpermissive")
 
-
 class CustomBuildExtCommand(build_ext):
-    """ This extension command lets us not require numpy be installed before running pip install ripser """
-    """build_ext command for use when numpy headers are needed."""
+    """ This extension command lets us not require numpy be installed before running pip install ripser 
+        build_ext command for use when numpy headers are needed.
+    """
 
     def run(self):
         # Import numpy here, only when headers are needed
@@ -66,7 +75,6 @@ setup(name="ripser",
                                       extra_compile_args=options,
                                       language="c++"
                                       )),
-
       install_requires=[
           'Cython',
           'numpy',
@@ -75,4 +83,4 @@ setup(name="ripser",
           'scikit-learn'
       ],
       cmdclass={'build_ext': CustomBuildExtCommand},
-      )
+)
