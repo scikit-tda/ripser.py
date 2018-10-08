@@ -34,6 +34,8 @@ Dependencies:
 - matplotlib
 - scikit-learn
 
+**Windows users:** If you are using a Windows machine, you will also need to install [MinGW](http://www.mingw.org) on your system.
+
 Cython should be the only library required before installation.  To install, type the following commands into your environment:
 
 ```
