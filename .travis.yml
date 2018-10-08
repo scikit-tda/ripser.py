@@ -13,11 +13,8 @@ matrix:
       dist: xenial
       python: "3.7"
     - name: "Broken linux version"
-      language: python
-      dist: lion
       python: "3.6"
     
- 
 before_install:
     # Tricks to avoid matplotlib error about X11:
     # 'no display name and no $DISPLAY environment variable'
