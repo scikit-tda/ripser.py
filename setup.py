@@ -34,6 +34,11 @@ with open('README.md') as f:
 # Default options
 options = ["-std=c++11", "-Ofast", "-D_hypot=hypot"]
 
+print("System Parameters:")
+print("\tSystem: "+platform.system())
+print("\tRelease: "+platform.release())
+
+
 # Options for old versions of MacOS
 if platform.system() == "Darwin" and next(map(int, platform.release().split("."))) <= 10:
     options.append("-stdlib=libc++")
