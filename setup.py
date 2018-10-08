@@ -30,7 +30,7 @@ else:
 with open('README.md') as f:
     long_description = f.read()
 
-options = ["-std=c++11", "-stdlib=libc++", "-Ofast", "-D_hypot=hypot"]
+options = ["-std=c++11", "-Ofast", "-D_hypot=hypot"]
 
 if sys.version_info[0] == 2:
     options.append("-fpermissive")
