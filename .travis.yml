@@ -4,7 +4,14 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "3.7"
+  
+matrix:
+  include:
+    language: python
+    sudo: required
+    dist: xenial
+    python: "3.7"
+  
 
 before_install:
     # Tricks to avoid matplotlib error about X11:
