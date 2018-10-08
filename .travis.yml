@@ -12,14 +12,12 @@ matrix:
       sudo: required
       dist: xenial
       python: "3.7"
-    - name: "Mac 10.7, Very old Mac versions"
+    - name: "Broken linux version"
       language: python
-      os: osx
       dist: lion
       python: "3.6"
     
-  
-
+ 
 before_install:
     # Tricks to avoid matplotlib error about X11:
     # 'no display name and no $DISPLAY environment variable'
