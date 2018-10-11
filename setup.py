@@ -1,6 +1,8 @@
 import sys
 import os
 import platform
+import distutils.util
+
 
 from setuptools import setup
 from setuptools.extension import Extension
@@ -37,10 +39,22 @@ options = ["-std=c++11", "-Ofast", "-D_hypot=hypot"]
 print("System Parameters:")
 print("\tSystem: "+platform.system())
 print("\tRelease: "+platform.release())
+print("\tDistutils platform: "+distutils.util.get_platform())
+
+def parse_platform():
+    pl = distutils.util.get_platform()
+    
+    try:
+        mac, verstr, arch = pl.split("-")
+        base, d = map(int, verstr.split("."))
+        
+        return d
+    except:
+        return 0
 
 
 # Options for old versions of MacOS
-if platform.system() == "Darwin" and next(map(int, platform.release().split("."))) <= 10:
+if platform.system() == "Darwin" and parse_platform() <= 10:
     options.append("-stdlib=libc++")
 
 # Options for Python 2.7
