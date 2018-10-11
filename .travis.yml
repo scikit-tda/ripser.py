@@ -12,8 +12,6 @@ matrix:
       sudo: required
       dist: xenial
       python: "3.7"
-    - name: "Broken linux version"
-      python: "3.6"
     
 before_install:
     # Tricks to avoid matplotlib error about X11:
@@ -24,7 +22,7 @@ before_install:
 
 install:
   - pip install Cython
-  - pip install .
+  - pip -v install .
   - pip install pytest-cov
 
 
