@@ -1,7 +1,6 @@
 import sys
 import os
 import platform
-# import distutils.util
 
 from setuptools import setup
 from setuptools.extension import Extension
@@ -35,24 +34,8 @@ with open('README.md') as f:
 # Default options
 options = ["-std=c++11", "-Ofast", "-D_hypot=hypot"]
 
-# print("System Parameters:")
-# print("\tSystem: "+platform.system())
-# print("\tRelease: "+platform.release())
-# print("\tDistutils platform: "+distutils.util.get_platform())
-
-# def parse_platform():
-#     pl = distutils.util.get_platform()
-    
-#     try:
-#         mac, verstr, arch = pl.split("-")
-#         base, d = map(int, verstr.split("."))
-        
-#         return d
-#     except:
-#         return 0
-
-
-# Options for old versions of MacOS
+# This option is required for old versions of MacOS and is okay for new versions of Mac
+# This option will break linux installs. 
 if platform.system() == "Darwin":
     print("Add compile flag macs")
     options.append("-stdlib=libc++")
@@ -60,7 +43,6 @@ if platform.system() == "Darwin":
 # Options for Python 2.7
 if sys.version_info[0] == 2:
     options.append("-fpermissive")
-
 
 class CustomBuildExtCommand(build_ext):
     """ This extension command lets us not require numpy be installed before running pip install ripser 
@@ -93,7 +75,6 @@ setup(name="ripser",
                                       extra_compile_args=options,
                                       language="c++"
                                       )),
-
       install_requires=[
           'Cython',
           'numpy',
@@ -102,4 +83,4 @@ setup(name="ripser",
           'scikit-learn'
       ],
       cmdclass={'build_ext': CustomBuildExtCommand},
-      )
+)
