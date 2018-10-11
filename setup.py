@@ -34,7 +34,7 @@ with open('README.md') as f:
     
 ## Compiler options
 # Default options
-options = ["-std=c++11", "-Ofast", "-D_hypot=hypot"]
+options = ["-std=c++11", "-stdlib=libc++", "-Ofast", "-D_hypot=hypot"]
 
 print("System Parameters:")
 print("\tSystem: "+platform.system())
@@ -55,6 +55,7 @@ def parse_platform():
 
 # Options for old versions of MacOS
 if platform.system() == "Darwin" and parse_platform() <= 10:
+    print("Add compile flag for old versions")
     options.append("-stdlib=libc++")
 
 # Options for Python 2.7
