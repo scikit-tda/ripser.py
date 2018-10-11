@@ -1,8 +1,7 @@
 import sys
 import os
 import platform
-import distutils.util
-
+# import distutils.util
 
 from setuptools import setup
 from setuptools.extension import Extension
@@ -34,23 +33,23 @@ with open('README.md') as f:
     
 ## Compiler options
 # Default options
-options = ["-std=c++11", "-stdlib=libc++", "-Ofast", "-D_hypot=hypot"]
+options = ["-std=c++11", "-Ofast", "-D_hypot=hypot"]
 
-print("System Parameters:")
-print("\tSystem: "+platform.system())
-print("\tRelease: "+platform.release())
-print("\tDistutils platform: "+distutils.util.get_platform())
+# print("System Parameters:")
+# print("\tSystem: "+platform.system())
+# print("\tRelease: "+platform.release())
+# print("\tDistutils platform: "+distutils.util.get_platform())
 
-def parse_platform():
-    pl = distutils.util.get_platform()
+# def parse_platform():
+#     pl = distutils.util.get_platform()
     
-    try:
-        mac, verstr, arch = pl.split("-")
-        base, d = map(int, verstr.split("."))
+#     try:
+#         mac, verstr, arch = pl.split("-")
+#         base, d = map(int, verstr.split("."))
         
-        return d
-    except:
-        return 0
+#         return d
+#     except:
+#         return 0
 
 
 # Options for old versions of MacOS
