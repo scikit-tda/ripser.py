@@ -54,8 +54,8 @@ def parse_platform():
 
 
 # Options for old versions of MacOS
-if platform.system() == "Darwin" and parse_platform() <= 10:
-    print("Add compile flag for old versions")
+if platform.system() == "Darwin":
+    print("Add compile flag macs")
     options.append("-stdlib=libc++")
 
 # Options for Python 2.7
