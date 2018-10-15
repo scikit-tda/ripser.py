@@ -4,7 +4,15 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-
+  
+matrix:
+  include:
+    - name: "Python 3.7 workaround"
+      language: python
+      sudo: required
+      dist: xenial
+      python: "3.7"
+    
 before_install:
     # Tricks to avoid matplotlib error about X11:
     # 'no display name and no $DISPLAY environment variable'
