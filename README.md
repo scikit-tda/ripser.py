@@ -85,7 +85,7 @@ If you found a bug, have questions, or are just having trouble with the library,
 
 # License
 
-Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Baeur. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.
+Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Bauer. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.
 
 # Citing
 
