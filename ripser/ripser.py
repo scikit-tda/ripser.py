@@ -177,11 +177,11 @@ def plot_dgms(
     colormap="default",
     size=20,
     ax_color=np.array([0.0, 0.0, 0.0]),
-    colors=None,
     diagonal=True,
     lifetime=False,
     legend=True,
     show=False,
+    ax=None
 ):
     """A helper function to plot persistence diagrams. 
 
@@ -238,6 +238,9 @@ def plot_dgms(
 
     """
 
+    ax = ax or plt.gca()
+    mpl.style.use(colormap)
+
     xlabel, ylabel = "Birth", "Death"
 
     if labels is None:
@@ -265,10 +268,6 @@ def plot_dgms(
     if not isinstance(labels, list):
         labels = [labels] * len(diagrams)
 
-    if colors is None:
-        mpl.style.use(colormap)
-        colors = cycle(["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"])
-
     # Construct copy with proper type of each diagram
     # so we can freely edit them.
     diagrams = [dgm.astype(np.float32, copy=True) for dgm in diagrams]
@@ -278,6 +277,7 @@ def plot_dgms(
     has_inf = np.any(np.isinf(concat_dgms))
     finite_dgms = concat_dgms[np.isfinite(concat_dgms)]
 
+    # clever bounding boxes of the diagram
     if not xy_range:
         # define bounds of diagram
         ax_min, ax_max = np.min(finite_dgms), np.max(finite_dgms)
@@ -287,14 +287,14 @@ def plot_dgms(
         # ax_range=0 when only one point,
         buffer = 1 if xy_range == 0 else x_r / 5
 
-        ax = ax_min - buffer / 2
-        bx = ax_max + buffer
+        x_down = ax_min - buffer / 2
+        x_up = ax_max + buffer
 
-        ay, by = ax, bx
+        y_down, y_up = x_down, x_up
     else:
-        ax, bx, ay, by = xy_range
+        x_down, x_up, y_down, y_up = xy_range
 
-    yr = by - ay
+    yr = y_up - y_down
 
     if lifetime:
 
@@ -302,8 +302,8 @@ def plot_dgms(
         diagonal = False
 
         # reset y axis so it doesn't go much below zero
-        ay = -yr * 0.05
-        by = ay + yr
+        y_down = -yr * 0.05
+        y_up = y_down + yr
 
         # set custom ylabel
         ylabel = "Lifetime"
@@ -313,39 +313,40 @@ def plot_dgms(
             dgm[:, 1] -= dgm[:, 0]
 
         # plot horizon line
-        plt.plot([ax, bx], [0, 0], c=ax_color)
+        ax.plot([x_down, x_up], [0, 0], c=ax_color)
 
     # Plot diagonal
     if diagonal:
-        plt.plot([ax, bx], [ax, bx], "--", c=ax_color)
+        ax.plot([x_down, x_up], [x_down, x_up], "--", c=ax_color)
 
     # Plot inf line
     if has_inf:
         # put inf line slightly below top
-        b_inf = ay + yr * 0.95
-        plt.plot([ax, bx], [b_inf, b_inf], "--", c="k", label=r"$\infty$")
+        b_inf = y_down + yr * 0.95
+        ax.plot([x_down, x_up], [b_inf, b_inf], "--", c="k", label=r"$\infty$")
 
         # convert each inf in each diagram with b_inf
         for dgm in diagrams:
             dgm[np.isinf(dgm)] = b_inf
 
     # Plot each diagram
-    for dgm, color, label in zip(diagrams, colors, labels):
+    for dgm, label in zip(diagrams, labels):
 
         # plot persistence pairs
-        plt.scatter(dgm[:, 0], dgm[:, 1], size, color, label=label, edgecolor="none")
+        ax.scatter(dgm[:, 0], dgm[:, 1], size, label=label, edgecolor="none")
 
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
 
-    plt.xlim([ax, bx])
-    plt.ylim([ay, by])
+    ax.set_xlim([x_down, x_up])
+    ax.set_ylim([y_down, y_up])
+    ax.set_aspect('equal', 'box')
 
     if title is not None:
-        plt.title(title)
+        ax.set_title(title)
 
     if legend is True:
-        plt.legend(loc="lower right")
+        ax.legend(loc="lower right")
 
     if show is True:
         plt.show()
@@ -526,7 +527,6 @@ class Rips(TransformerMixin):
         colormap="default",
         size=20,
         ax_color=np.array([0.0, 0.0, 0.0]),
-        colors=None,
         diagonal=True,
         lifetime=False,
         legend=True,
@@ -600,7 +600,6 @@ class Rips(TransformerMixin):
             colormap=colormap,
             size=size,
             ax_color=ax_color,
-            colors=colors,
             diagonal=diagonal,
             lifetime=lifetime,
             legend=legend,
