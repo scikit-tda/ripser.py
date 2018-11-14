@@ -177,6 +177,7 @@ def plot_dgms(
     colormap="default",
     size=20,
     alpha=0.5,
+    edgecolors='k',
     ax_color=np.array([0.0, 0.0, 0.0]),
     diagonal=True,
     lifetime=False,
@@ -222,6 +223,9 @@ def plot_dgms(
 
     alpha: double in [0.0, 1.0]
         Determines transparency of points in scatter plot.
+
+    edgecolors: str, matplotlib color code, default is 'k' (black)
+        Color for edge of poitns in scatterplot. If 'none', then no edge is plotted. 
 
     ax_color: any valid matplotlib color type. 
         See [https://matplotlib.org/api/colors_api.html](https://matplotlib.org/api/colors_api.html) for complete API.
@@ -337,7 +341,7 @@ def plot_dgms(
     for dgm, label in zip(diagrams, labels):
 
         # plot persistence pairs
-        ax.scatter(dgm[:, 0], dgm[:, 1], size, label=label, alpha=alpha, edgecolors='k')
+        ax.scatter(dgm[:, 0], dgm[:, 1], size, label=label, alpha=alpha, edgecolors=edgecolors)
 
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
