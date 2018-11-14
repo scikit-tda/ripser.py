@@ -5,6 +5,7 @@ from ripser import ripser
 from sklearn import datasets
 from sklearn.metrics.pairwise import pairwise_distances
 from scipy import sparse
+import itertools
 
 
 def makeSparseDM(X, thresh):
@@ -110,5 +111,20 @@ class TestParams():
         idx = np.argsort(I11[:, 0])
         I11 = I11[idx, :]
         assert np.allclose(I10, I11)
-
-
+    
+    def test_sphere_sparse_H2(self):
+        n=3
+        segment = [np.linspace(0,1,5)]
+        endpoints = [np.linspace(0,1,2)]
+        face = segment * (n - 1) + endpoints
+        vertices = []
+        for k in range(n):
+            vertices.extend(itertools.product(*(face[k:] + face[:k])))
+        coords = np.array(vertices)
+        thresh = 1.5
+        D = makeSparseDM(coords, thresh)
+        rips = ripser(D, distance_matrix=True, maxdim=2, thresh=thresh)
+        I2 = rips['dgms'][2]
+        assert(I2.shape[0] == 1)
+        assert(np.allclose(1.0, I2[0, 1]))
+        
