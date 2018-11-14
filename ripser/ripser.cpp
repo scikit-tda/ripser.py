@@ -995,6 +995,8 @@ void ripser<sparse_distance_matrix>::assemble_columns_to_reduce(
 	}
 
 	simplices.swap(next_simplices);
+	std::sort(columns_to_reduce.begin(), columns_to_reduce.end(),
+				greater_diameter_or_smaller_index<diameter_index_t>());
 }
 
 ripserResults rips_dm(float* D, int N, int modulus, int dim_max, float threshold, int do_cocycles) {
