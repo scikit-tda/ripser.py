@@ -13,17 +13,5 @@ function [Is, Cocycles] = ripserDM( D, coeff, maxdim, thresh )
     d = D(I < J);
     d = single(d(:));
     [Is, Cocycles] = ripser(d, coeff, maxdim, thresh);
-    
-    %Delete entries with numerically insignificant persistence
-%     for ii = 1:length(Is)
-%         I = Is{ii};
-%         if numel(I) == 0
-%             continue;
-%         end
-%         P = I(:, 2) - I(:, 1);
-%         idx = P > eps;
-%         Is{ii} = I(idx, :);
-%         Cocycles{ii} = Cocycles{ii}(idx);
-%     end
 end
 
