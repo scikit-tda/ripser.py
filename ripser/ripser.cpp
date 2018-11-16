@@ -1191,20 +1191,13 @@ void mexFunction(int nOutArray, mxArray *OutArray[], int nInArray, const mxArray
 		mexErrMsgTxt("Expecting D, threshold, modulus, dim_max");
 		return;
 	}
+	ripserResults res;
 	//Inputs: Distances, thresh, coeff, dim_max
 	const mwSize *dims;
-	dims = mxGetDimensions(InArray[0]);
-	size_t N = dims[0];
-	value_t* D = (value_t*)mxGetPr(InArray[0]);
-	coefficient_t modulus = (coefficient_t)(*((double*)mxGetPr(InArray[1])));
-	index_t dim_max = (index_t)(*((double*)mxGetPr(InArray[2])));
-	double threshold = *((double*)mxGetPr(InArray[3]));
-	value_t maxD = D[0];
-	for (size_t i = 1; i < N; i++) {
-		if (D[i] > maxD) {
-			maxD = D[i];
-		}
-	}
+	coefficient_t modulus = (coefficient_t)(*((double*)mxGetPr(InArray[0])));
+	index_t dim_max = (index_t)(*((double*)mxGetPr(InArray[1])));
+	double threshold = *((double*)mxGetPr(InArray[2]));
+	float ratio = 1.0; //TODO: This is a dummy parameter at the moment
 	//Check to make sure there are enough output arguments to hold
 	//all persistence diagrams
 	if (nOutArray < 1) {
@@ -1223,39 +1216,52 @@ void mexFunction(int nOutArray, mxArray *OutArray[], int nInArray, const mxArray
 		OutArray[1] = cocycles;
 		do_cocycles = true;
 	}
-	//Setup distance matrix, coefficient tables, etc
-	std::vector<value_t> distances(D, D+N);
-	compressed_lower_distance_matrix dist = compressed_lower_distance_matrix(compressed_upper_distance_matrix(std::move(distances)));
-	float ratio = 1.0; //TODO: This seems like a dummy parameter at the moment
-	value_t min = std::numeric_limits<value_t>::infinity(),
-	        max = -std::numeric_limits<value_t>::infinity(), max_finite = max;
-	int num_edges = 0;
-	value_t enclosing_radius = std::numeric_limits<value_t>::infinity();
-	for (size_t i = 0; i < dist.size(); ++i) {
-		value_t r_i = -std::numeric_limits<value_t>::infinity();
-		for (size_t j = 0; j < dist.size(); ++j) r_i = std::max(r_i, dist(i, j));
-		enclosing_radius = std::min(enclosing_radius, r_i);
+	if (nInArray == 4) {
+		//Input is a dense matrix
+		//Setup distance matrix, coefficient tables, etc
+		dims = mxGetDimensions(InArray[3]);
+		size_t N = dims[0];
+		value_t* D = (value_t*)mxGetPr(InArray[3]);
+
+		std::vector<value_t> distances(D, D+N);
+		compressed_lower_distance_matrix dist = compressed_lower_distance_matrix(compressed_upper_distance_matrix(std::move(distances)));
+		value_t min = std::numeric_limits<value_t>::infinity(),
+				max = -std::numeric_limits<value_t>::infinity(), max_finite = max;
+		value_t enclosing_radius = std::numeric_limits<value_t>::infinity();
+		for (size_t i = 0; i < dist.size(); ++i) {
+			value_t r_i = -std::numeric_limits<value_t>::infinity();
+			for (size_t j = 0; j < dist.size(); ++j) r_i = std::max(r_i, dist(i, j));
+			enclosing_radius = std::min(enclosing_radius, r_i);
+		}
+		if (threshold == std::numeric_limits<value_t>::max()) threshold = enclosing_radius;
+		for (auto d : dist.distances) {
+			min = std::min(min, d);
+			max = std::max(max, d);
+			max_finite = d != std::numeric_limits<value_t>::infinity() ? std::max(max, d) : max_finite;
+		}
+		
+		if (threshold >= max) {
+			ripser<compressed_lower_distance_matrix> r(std::move(dist), dim_max, threshold, ratio,
+													modulus, do_cocycles);
+			r.compute_barcodes();
+			r.copy_results(res);
+		} else {
+			ripser<sparse_distance_matrix> r(sparse_distance_matrix(std::move(dist), threshold), dim_max,
+										threshold, ratio, modulus, do_cocycles);
+			r.compute_barcodes();
+			r.copy_results(res);
+		}
 	}
-	if (threshold == std::numeric_limits<value_t>::max()) threshold = enclosing_radius;
-	for (auto d : dist.distances) {
-		min = std::min(min, d);
-		max = std::max(max, d);
-		max_finite = d != std::numeric_limits<value_t>::infinity() ? std::max(max, d) : max_finite;
-		if (d <= threshold) ++num_edges;
+	else if (nInArray == 7) {
+		//Input is a sparse matrix
+		dims = mxGetDimensions(InArray[3]);
+		size_t NEdges = dims[0];
+		int* I = (int*)mxGetPr(InArray[3]);
+		int* J = (int*)mxGetPr(InArray[4]);
+		value_t* S = (value_t*)mxGetPr(InArray[5]);
+		index_t N = (index_t)(*((double*)mxGetPr(InArray[6])));
+		res = rips_dm_sparse(I, J, S, NEdges, N, modulus, dim_max, threshold, do_cocycles);
 	}
-	ripserResults res;
-	if (threshold >= max) {
-		ripser<compressed_lower_distance_matrix> r(std::move(dist), dim_max, threshold, ratio,
-		                                         modulus, do_cocycles);
-		r.compute_barcodes();
-		r.copy_results(res);
-	} else {
-		ripser<sparse_distance_matrix> r(sparse_distance_matrix(std::move(dist), threshold), dim_max,
-		                               threshold, ratio, modulus, do_cocycles);
-		r.compute_barcodes();
-		r.copy_results(res);
-	}
-	res.num_edges = num_edges;
 	//Write back diagrams
 	for (size_t dim = 0; dim <= dim_max; dim++) {
 		mwSize N = (mwSize)(res.births_and_deaths_by_dim[dim].size()/2);

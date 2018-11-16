@@ -30,7 +30,7 @@ function [] = plotDGMs(dgms)
     
     labels = {};
     for ii = 1:length(dgms)
-        scatter(dgms{ii}(:, 1), dgms{ii}(:, 2), 'fill');
+        scatter(dgms{ii}(:, 1), dgms{ii}(:, 2), 20, 'fill');
         labels{end+1} = sprintf('H%i', ii-1);
     end
     
@@ -41,9 +41,11 @@ function [] = plotDGMs(dgms)
         plot([x_down, x_up], [b_inf, b_inf], '--');
         labels{end+1} = '\infty';
     end
-    legend(labels);
+    legend(labels, 'Location', 'southeast');
+    axis equal;
     xlim([x_down, x_up]);
     ylim([y_down, y_up]);
-    axis equal;
+    xlabel('Birth');
+    ylabel('Death');
 end
 
