@@ -30,6 +30,9 @@ function [] = plotDGMs(dgms)
     
     labels = {};
     for ii = 1:length(dgms)
+        if isempty(dgms{ii})
+            continue;
+        end
         scatter(dgms{ii}(:, 1), dgms{ii}(:, 2), 20, 'fill');
         labels{end+1} = sprintf('H%i', ii-1);
     end
