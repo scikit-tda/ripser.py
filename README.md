@@ -71,11 +71,7 @@ diagrams = rips.fit_transform(data)
 rips.plot(diagrams)
 ```
 
-
 <img src="https://i.imgur.com/WmQPYnn.png" alt="Ripser.py output persistence diagram" width="70%"/>
-
-
-
 
 # Contributions
 
@@ -107,4 +103,3 @@ You can use the following bibtex entry
   journal = {The Journal of Open Source Software}
 }
 ```
-

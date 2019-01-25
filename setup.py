@@ -29,21 +29,6 @@ else:
 with open('README.md') as f:
     long_description = f.read()
 
-    
-## Compiler options
-# Default options
-options = ["-std=c++11", "-Ofast", "-D_hypot=hypot"]
-
-# This option is required for old versions of MacOS and is okay for new versions of Mac
-# This option will break linux installs. 
-if platform.system() == "Darwin":
-    print("Add compile flag macs")
-    options.append("-stdlib=libc++")
-
-# Options for Python 2.7
-if sys.version_info[0] == 2:
-    options.append("-fpermissive")
-
 class CustomBuildExtCommand(build_ext):
     """ This extension command lets us not require numpy be installed before running pip install ripser 
         build_ext command for use when numpy headers are needed.
@@ -57,30 +42,60 @@ class CustomBuildExtCommand(build_ext):
         # Call original build_ext command
         build_ext.run(self)
 
+extra_compile_args = ["-Ofast", "-D_hypot=hypot"]
+extra_link_args = []
 
-setup(name="ripser",
-      version=verstr,
-      description="A Lean Persistent Homology Library for Python",
-      long_description=long_description,
-      long_description_content_type="text/markdown",
-      author="Chris Tralie, Nathaniel Saul",
-      author_email="chris.tralie@gmail.com, nathaniel.saul@wsu.edu",
-      url="https://ripser.scikit-tda.org",
-      license='MIT',
-      packages=['ripser'],
-      ext_modules=cythonize(Extension("pyRipser",
-                                      sources=["ripser/pyRipser.pyx"],
-                                      define_macros=[("USE_COEFFICIENTS", 1),
-                                                     ("NDEBUG", 1), ("ASSEMBLE_REDUCTION_MATRIX", 1)],
-                                      extra_compile_args=options,
-                                      language="c++"
-                                      )),
-      install_requires=[
-          'Cython',
-          'numpy',
-          'scipy',
-          'matplotlib',
-          'scikit-learn'
-      ],
-      cmdclass={'build_ext': CustomBuildExtCommand},
+if platform.system() == "Windows":
+    extra_compile_args.extend([
+        "/std:c++latest", 
+        "/EHsc"
+    ])
+elif platform.system() == "Darwin":
+    extra_compile_args.extend([
+        '-std=c++11', 
+        "-mmacosx-version-min=10.9"
+    ])
+    extra_link_args.extend([
+        "-stdlib=libc++", 
+        "-mmacosx-version-min=10.9"
+    ])
+else:
+    extra_compile_args.extend([
+        "-std=c++11"
+    ])
+
+ext_modules = Extension(
+    "pyRipser",
+    sources=["ripser/pyRipser.pyx"],
+    define_macros=[
+        ("USE_COEFFICIENTS", 1),
+        ("NDEBUG", 1), 
+        ("ASSEMBLE_REDUCTION_MATRIX", 1)
+    ],
+    extra_compile_args=extra_compile_args,
+    extra_link_args=extra_link_args,
+    language="c++"
+)
+
+
+setup(
+    name="ripser",
+    version=verstr,
+    description="A Lean Persistent Homology Library for Python",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    author="Chris Tralie, Nathaniel Saul",
+    author_email="chris.tralie@gmail.com, nathaniel.saul@wsu.edu",
+    url="https://ripser.scikit-tda.org",
+    license='MIT',
+    packages=['ripser'],
+    ext_modules=cythonize(ext_modules),
+    install_requires=[
+        'Cython',
+        'numpy',
+        'scipy',
+        'matplotlib',
+        'scikit-learn'
+    ],
+    cmdclass={'build_ext': CustomBuildExtCommand},
 )
