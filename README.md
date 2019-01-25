@@ -71,11 +71,7 @@ diagrams = rips.fit_transform(data)
 rips.plot(diagrams)
 ```
 
-
 <img src="https://i.imgur.com/WmQPYnn.png" alt="Ripser.py output persistence diagram" width="70%"/>
-
-
-
 
 # Contributions
 
@@ -85,7 +81,7 @@ If you found a bug, have questions, or are just having trouble with the library,
 
 # License
 
-Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Baeur. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.
+Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Bauer. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.
 
 # Citing
 
@@ -107,4 +103,3 @@ You can use the following bibtex entry
   journal = {The Journal of Open Source Software}
 }
 ```
-

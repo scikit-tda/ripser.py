@@ -5,7 +5,7 @@ import platform
 from setuptools import setup
 from setuptools.extension import Extension
 
-# we'd better have Cython installed, or it's a no-go
+# Ensure Cython is installed before we even attempt to install Ripser.py
 try:
     from Cython.Build import cythonize
     from Cython.Distutils import build_ext
@@ -14,7 +14,7 @@ except:
     print("copy from www.cython.org or install it with `pip install Cython`")
     sys.exit(1)
 
-
+## Get version information from _version.py
 import re
 VERSIONFILE="ripser/_version.py"
 verstrline = open(VERSIONFILE, "rt").read()
@@ -25,14 +25,14 @@ if mo:
 else:
     raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
-
+# Use README.md as the package long description  
 with open('README.md') as f:
     long_description = f.read()
 
-
 class CustomBuildExtCommand(build_ext):
-    """ This extension command lets us not require numpy be installed before running pip install ripser """
-    """build_ext command for use when numpy headers are needed."""
+    """ This extension command lets us not require numpy be installed before running pip install ripser 
+        build_ext command for use when numpy headers are needed.
+    """
 
     def run(self):
         # Import numpy here, only when headers are needed
@@ -41,7 +41,6 @@ class CustomBuildExtCommand(build_ext):
         self.include_dirs.append(numpy.get_include())
         # Call original build_ext command
         build_ext.run(self)
-
 
 extra_compile_args = ["-Ofast", "-D_hypot=hypot"]
 extra_link_args = []
@@ -64,7 +63,6 @@ else:
     extra_compile_args.extend([
         "-std=c++11"
     ])
-
 
 ext_modules = Extension(
     "pyRipser",

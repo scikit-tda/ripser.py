@@ -21,7 +21,6 @@ matrix:
       language: generic
       env: PYTHON_VERSION="3.7"
 
-
 before_install:
     # Tricks to avoid matplotlib error about X11:
     # 'no display name and no $DISPLAY environment variable'
@@ -38,11 +37,6 @@ before_install:
 
 services:
   - xvfb
-
-# addons:
-#   apt:
-#     packages:
-#     - xvfb # For matplotlib headless
 
 install: source ci_scripts/install.sh
 
