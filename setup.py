@@ -47,10 +47,11 @@ extra_compile_args = ["-Ofast", "-D_hypot=hypot"]
 extra_link_args = []
 
 if platform.system() == "Windows":
-    extra_compile_args.extend([
-        "/std:c++latest", 
-        "/EHsc"
-    ])
+    # extra_compile_args.extend([
+    #     "/std:c++latest", 
+    #     "/EHsc"
+    # ])
+    pass
 elif platform.system() == "Darwin":
     extra_compile_args.extend([
         '-std=c++11', 
