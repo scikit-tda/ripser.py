@@ -133,11 +133,11 @@ def ripser(
     n_points = dm.shape[0]
 
     if sparse.issparse(dm):
-        coo = sparse.coo_matrix.astype(dm.tocoo(), dtype=np.float32)
+        coo = dm.tocoo()
         res = DRFDMSparse(
             coo.row,
             coo.col,
-            coo.data,
+            np.array(coo.data, dtype=np.float32),
             n_points,
             maxdim,
             thresh,
