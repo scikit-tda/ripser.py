@@ -45,6 +45,18 @@ class TestTransform():
 
         with pytest.raises(Exception):
             ripser(data, distance_matrix=True)
+    
+    def test_too_many_perm(self):
+        X = np.zeros((10, 2))
+
+        with pytest.raises(Exception):
+            ripser(X, n_perm = 11)
+
+    def test_sparse_greedyperm(self):
+        D = np.zeros((4, 4))
+        
+        with pytest.raises(Exception):
+            ripser(sparse.coo_matrix(D), distance_matrix=True, n_perm = 2)
 
 
 class TestParams():

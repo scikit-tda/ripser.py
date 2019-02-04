@@ -229,6 +229,9 @@ def ripser(
     idx_perm = np.arange(X.shape[0])
     r_cover = 0.0
     if n_perm > 0:
+        if n_perm > X.shape[0]:
+            raise Exception("Number of points in greedy permutation is greater"
+                            + " than number of points in the point cloud")
         if distance_matrix:
             if sparse.issparse(X):
                 raise Exception("Greedy permutation is not supported for sparse distance matrices")
