@@ -136,3 +136,36 @@ class TestParams():
         assert(np.isinf(h0[0, 1]))
         assert(h0[1, 0] == 2)
         assert(h0[1, 1] == 3)
+
+    def test_greedyperm_dm_vs_pc(self):
+        """
+        Test that point cloud and distance matrix on point cloud
+        give the same persistence diagrams and bottleneck bound
+        """
+        np.random.seed(100)
+        X = np.random.randn(100, 3)
+        D = pairwise_distances(X, metric='euclidean')
+        dgms1 = ripser(X, n_perm=20)['dgms']
+        dgms2 = ripser(D, distance_matrix=True, n_perm=20)['dgms']
+        for I1, I2 in zip(dgms1, dgms2):
+            I1 = I1[np.argsort(I1[:, 0]-I1[:, 1]), :]
+            I2 = I2[np.argsort(I2[:, 0]-I2[:, 1]), :]
+            assert(np.allclose(I1, I2))
+
+    def test_greedyperm_circlebottleneck(self):
+        """
+        Test a relationship between the bottleneck
+        distance and the covering radius for a simple case
+        where computing the bottleneck distance is trivial
+        """
+        N = 200
+        np.random.seed(N)
+        t = 2*np.pi*np.random.rand(N)
+        X = np.array([np.cos(t), np.sin(t)]).T
+        res1 = ripser(X)
+        res2 = ripser(X, n_perm=10)
+        idx = res2['idx_perm']
+        h11 = res1['dgms'][1]
+        h12 = res2['dgms'][1]
+        assert(res2['r_cover'] > 0)
+        assert(np.max(np.abs(h11-h12)) <= 2*res2['r_cover'])

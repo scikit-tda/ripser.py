@@ -147,3 +147,20 @@ class TestParams():
         idx = np.argsort(I11[:, 0])
         I11 = I11[idx, :]
         assert np.allclose(I10, I11)
+
+    def test_greedyperm_circlebottleneck(self):
+        """
+        Test a relationship between the bottleneck
+        distance and the covering radius for a simple case
+        where computing the bottleneck distance is trivial
+        """
+        N = 200
+        np.random.seed(N)
+        t = 2*np.pi*np.random.rand(N)
+        X = np.array([np.cos(t), np.sin(t)]).T
+        rips1 = Rips(maxdim=1)
+        rips2 = Rips(maxdim=1, n_perm=10)
+        h11 = rips1.fit_transform(X)[1]
+        h12 = rips2.fit_transform(X)[1]
+        assert(rips2.r_cover_ > 0)
+        assert(np.max(np.abs(h11-h12)) <= 2*rips2.r_cover_)

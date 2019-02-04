@@ -37,6 +37,82 @@ from pyRipser import doRipsFiltrationDM as DRFDM
 from pyRipser import doRipsFiltrationDMSparse as DRFDMSparse
 
 
+def get_greedy_perm_pc(X, N = -1, metric="euclidean"):
+    """
+    Compute a furthest point sampling permutation of a set
+    of points
+    Parameters
+    ----------
+    X: ndarray(N, d)
+        Point cloud with N points in d dimensions
+    N: int
+        Number of points to take in the permutation
+    metric: string or callable
+        The metric to use when calculating distance between instances in a 
+        feature array. If metric is a string, it must be one of the options 
+        specified in PAIRED_DISTANCES, including "euclidean", "manhattan", 
+        or "cosine". Alternatively, if metric is a callable function, it is 
+        called on each pair of instances (rows) and the resulting value 
+        recorded. The callable should take two arrays from X as input and 
+        return a value indicating the distance between them.
+    Returns
+    -------
+    perm: ndarray(N)
+        Indices of points in the greedy permutation
+    lambdas: ndarray(N)
+        Covering radii at different points
+    """
+    if N == -1:
+        N = X.shape[0]
+    #By default, takes the first point in the list to be the
+    #first point in the permutation, but could be random
+    perm = np.zeros(N, dtype=np.int64)
+    lambdas = np.zeros(N)
+    ds = pairwise_distances(X, X[0, :][None, :], metric=metric)
+    for i in range(1, N):
+        idx = np.argmax(ds)
+        perm[i] = idx
+        lambdas[i-1] = ds[idx]
+        ds = np.minimum(ds, pairwise_distances(X, X[idx, :][None, :], metric=metric))
+    lambdas[-1] = np.max(ds)
+    return (perm, lambdas)
+
+
+
+def get_greedy_perm_dm(D, N = -1):
+    """
+    Compute a furthest point sampling permutation of a set
+    of points
+    Parameters
+    ----------
+    D: ndarray(N, N)
+        NxN distance matrix
+    N: int
+        Number of points to take in the permutation
+    Returns
+    -------
+    perm: ndarray(N)
+        Indices of points in the greedy permutation
+    lambdas: ndarray(N)
+        Covering radii at different points
+    """
+    if N == -1:
+        N = D.shape[0]
+    #By default, takes the first point in the list to be the
+    #first point in the permutation, but could be random
+    perm = np.zeros(N, dtype=np.int64)
+    lambdas = np.zeros(N)
+    ds = D[0, :]
+    for i in range(1, N):
+        idx = np.argmax(ds)
+        perm[i] = idx
+        lambdas[i-1] = ds[idx]
+        ds = np.minimum(ds, D[idx, :])
+    lambdas[-1] = np.max(ds)
+    return (perm, lambdas)
+
+
+
 def ripser(
     X,
     maxdim=1,
@@ -45,6 +121,7 @@ def ripser(
     distance_matrix=False,
     do_cocycles=False,
     metric="euclidean",
+    n_perm = -1,
 ):
     """Compute persistence diagrams for X data array. If X is not a distance matrix, it will be converted to a distance matrix using the chosen metric.
 
@@ -82,6 +159,14 @@ def ripser(
         called on each pair of instances (rows) and the resulting value 
         recorded. The callable should take two arrays from X as input and 
         return a value indicating the distance between them.
+    
+    n_perm: int
+        The number of points to subsample in a "greedy permutation,"
+        or a furthest point sampling of the points.  These points
+        will be used in lieu of the full point cloud for a faster
+        computation, at the expense of some accuracy, which can 
+        be bounded as a maximum bottleneck distance to all diagrams
+        on the original point set
 
     Returns
     -------
@@ -92,13 +177,25 @@ def ripser(
         than maxdim. Each diagram is an ndarray of size (n_pairs, 2) 
         with the first column representing the birth time and the 
         second column representing the death time of each pair.
-     'cocycles': list (size maxdim)
+     'cocycles': list (size maxdim) of list of ndarray
         A list of representative cocycles in each dimension.  The list 
-        in each dimension is parallel to the diagram in that dimension.
+        in each dimension is parallel to the diagram in that dimension;
+        that is, each entry of the list is a representative cocycle of
+        the corresponding point expressed as an ndarray(K, d+1), where K is
+        the number of nonzero values of the cocycle and d is the dimension
+        of the cocycle.  The first d columns of each array index into
+        the simplices of the (subsampled) point cloud, and the last column
+        is the value of the cocycle at that simplex
      'num_edges': int
         The number of edges added during the computation
      'dm': ndarray (n_samples, n_samples)
         The distance matrix used in the computation
+     'idx_perm': ndarray(n_perm) if n_perm > 0
+        Index into the original point cloud of the points used
+        as a subsample in the greedy permutation
+     'r_cover': float
+        Covering radius of the subsampled points.  
+        If n_perm <= 0, then the full point cloud was used and this is 0
     }
 
     Examples
@@ -113,7 +210,10 @@ def ripser(
         plot_dgms(dgms)
     """
 
-    if not distance_matrix:
+    if distance_matrix:
+        if not (X.shape[0] == X.shape[1]):
+            raise Exception("Distance matrix is not square")
+    else:
         if X.shape[0] == X.shape[1]:
             warnings.warn(
                 "The input matrix is square, but the distance_matrix "
@@ -125,11 +225,26 @@ def ripser(
                 "The input point cloud has more columns than rows; "
                 + "did you mean to transpose?"
             )
-        X = pairwise_distances(X, metric=metric)
 
-    if not (X.shape[0] == X.shape[1]):
-        raise Exception("Distance matrix is not square")
-    dm = X
+    idx_perm = np.arange(X.shape[0])
+    r_cover = 0.0
+    if n_perm > 0:
+        if distance_matrix:
+            if sparse.issparse(X):
+                raise Exception("Greedy permutation is not supported for sparse distance matrices")
+            idx_perm, lambdas = get_greedy_perm_dm(X, N=n_perm)
+            dm = X[idx_perm, :]
+            dm = dm[:, idx_perm]
+        else:
+            idx_perm, lambdas = get_greedy_perm_pc(X, N=n_perm, metric=metric)
+            dm = pairwise_distances(X[idx_perm, :], metric=metric)
+        r_cover = lambdas[-1]
+    else:
+        if distance_matrix:
+            dm = X
+        else:
+            dm = pairwise_distances(X, metric=metric)
+
     n_points = dm.shape[0]
     if not sparse.issparse(dm) and \
         np.sum(np.abs(dm.diagonal()) > 0) > 0:
@@ -172,7 +287,8 @@ def ripser(
             ccl = np.reshape(np.array(ccl, dtype=np.int64), [n, dim + 2])
             ccl[:, -1] = np.mod(ccl[:, -1], coeff)
             cocycles[dim].append(ccl)
-    ret = {"dgms": dgms, "cocycles": cocycles, "num_edges": res["num_edges"], "dm": dm}
+    ret = {"dgms": dgms, "cocycles": cocycles, "num_edges": res["num_edges"], \
+            "dm": dm, 'idx_perm': idx_perm, 'r_cover': r_cover}
     return ret
 
 def plot_dgms(
@@ -434,12 +550,56 @@ class Rips(TransformerMixin):
         Indicator of whether to compute cocycles, if so, we compute and store
         cocycles in the cocycles_ dictionary Rips member variable
 
+    n_perm: int
+        The number of points to subsample in a "greedy permutation,"
+        or a furthest point sampling of the points.  These points
+        will be used in lieu of the full point cloud for a faster
+        computation, at the expense of some accuracy, which can 
+        be bounded as a maximum bottleneck distance to all diagrams
+        on the original point set
+    
+    verbose: boolean
+        Whether to print out information about this object
+        as it is constructed
+
     Attributes
     ----------
     dgm_: list of ndarray, each shape (n_pairs, 2)
         After `transform`, dgm_ contains computed persistence diagrams in
         each dimension
+    
+    cocycles_: list (size maxdim) of list of ndarray
+        A list of representative cocycles in each dimension.  The list 
+        in each dimension is parallel to the diagram in that dimension;
+        that is, each entry of the list is a representative cocycle of
+        the corresponding point expressed as an ndarray(K, d+1), where K is
+        the number of nonzero values of the cocycle and d is the dimension
+        of the cocycle.  The first d columns of each array index into
+        the simplices of the (subsampled) point cloud, and the last column
+        is the value of the cocycle at that simplex
+    
+    dm_: ndarray(n_samples, n_samples)
+        The distance matrix used in the computation
+    
+    metric_: string or callable
+        The metric to use when calculating distance between instances in a 
+        feature array. If metric is a string, it must be one of the options 
+        specified in PAIRED_DISTANCES, including "euclidean", "manhattan", 
+        or "cosine". Alternatively, if metric is a callable function, it is 
+        called on each pair of instances (rows) and the resulting value 
+        recorded. The callable should take two arrays from X as input and 
+        return a value indicating the distance between them.
+    
+    num_edges: int
+        The number of edges added during the computation
+    
+    idx_perm: ndarray(n_perm) if n_perm > 0
+        Index into the original point cloud of the points used
+        as a subsample in the greedy permutation
 
+    r_cover: float
+        Covering radius of the subsampled points.  
+        If n_perm <= 0, then the full point cloud was used and this is 0
     Examples
     --------
      .. code:: python
@@ -453,12 +613,13 @@ class Rips(TransformerMixin):
     """
 
     def __init__(
-        self, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False, verbose=True
+        self, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False, n_perm=-1, verbose=True
     ):
         self.maxdim = maxdim
         self.thresh = thresh
         self.coeff = coeff
         self.do_cocycles = do_cocycles
+        self.n_perm = n_perm
         self.verbose = verbose
 
         # Internal variables
@@ -467,11 +628,13 @@ class Rips(TransformerMixin):
         self.dm_ = None  # Distance matrix
         self.metric_ = None
         self.num_edges_ = None  # Number of edges added
+        self.idx_perm_ = None
+        self.r_cover_ = 0.0
 
         if self.verbose:
             print(
-                "Rips(maxdim={}, thresh={}, coeff={}, do_cocycles={}, verbose={})".format(
-                    maxdim, thresh, coeff, do_cocycles, verbose
+                "Rips(maxdim={}, thresh={}, coeff={}, do_cocycles={}, n_perm = {}, verbose={})".format(
+                    maxdim, thresh, coeff, do_cocycles, n_perm, verbose
                 )
             )
 
@@ -484,11 +647,14 @@ class Rips(TransformerMixin):
             do_cocycles=self.do_cocycles,
             distance_matrix=distance_matrix,
             metric=metric,
+            n_perm=self.n_perm
         )
         self.dgms_ = result["dgms"]
         self.num_edges_ = result["num_edges"]
         self.dm_ = result["dm"]
         self.cocycles_ = result["cocycles"]
+        self.idx_perm_ = result["idx_perm"]
+        self.r_cover_ = result["r_cover"]
         return self.dgms_
 
     def fit_transform(self, X, distance_matrix=False, metric="euclidean"):
