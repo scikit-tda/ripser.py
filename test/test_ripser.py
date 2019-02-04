@@ -127,4 +127,12 @@ class TestParams():
         I2 = rips['dgms'][2]
         assert(I2.shape[0] == 1)
         assert(np.allclose(1.0, I2[0, 1]))
-        
+    
+    def test_full_nonzerobirths(self):
+        D = np.array([[1.0, 3.0], [3.0, 2.0]])
+        h0 = ripser(D, distance_matrix=True, maxdim=0)['dgms'][0]
+        h0 = h0[np.argsort(h0[:, 0]), :]
+        assert(h0[0, 0] == 1)
+        assert(np.isinf(h0[0, 1]))
+        assert(h0[1, 0] == 2)
+        assert(h0[1, 1] == 3)
