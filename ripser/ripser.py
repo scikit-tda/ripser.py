@@ -131,6 +131,13 @@ def ripser(
         raise Exception("Distance matrix is not square")
     dm = X
     n_points = dm.shape[0]
+    if not sparse.issparse(dm) and \
+        np.sum(np.abs(dm.diagonal()) > 0) > 0:
+        # If any of the diagonal elements are nonzero,
+        # convert to sparse format, because currently
+        # that's the only format that handles nonzero
+        # births
+        dm = sparse.coo_matrix(dm)
 
     if sparse.issparse(dm):
         coo = dm.tocoo()
