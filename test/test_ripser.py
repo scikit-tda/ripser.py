@@ -170,7 +170,7 @@ class TestParams():
         distance and the covering radius for a simple case
         where computing the bottleneck distance is trivial
         """
-        N = 200
+        N = 40
         np.random.seed(N)
         t = 2*np.pi*np.random.rand(N)
         X = np.array([np.cos(t), np.sin(t)]).T
