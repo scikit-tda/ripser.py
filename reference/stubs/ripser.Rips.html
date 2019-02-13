@@ -1,0 +1,310 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ripser.Rips &#8212; Ripser.py 0.3.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/better.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Representative Cocycles" href="../../notebooks/Representative Cocycles.html" />
+    <link rel="prev" title="ripser.plot_dgms" href="ripser.plot_dgms.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+      <link rel="stylesheet" href="../../_static/custom_style.css" type="text/css" />
+  </head><body>
+    <header id="pageheader">
+      <h1>
+        <a href="../../index.html ">
+          Ripser.py 0.3.1 documentation
+        </a>
+        <a id="headermeta" href="https://scikit-tda.org">
+            a scikit-tda project 
+        </a>
+      </h1> 
+  </header>
+  <div class="related top">
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="ripser.plot_dgms.html" title="Previous document">ripser.plot_dgms</a>
+        </li>
+        <li>
+          <a href="../../notebooks/Representative Cocycles.html" title="Next document">Representative Cocycles</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+  <nav id="breadcrumbs">
+    <ul>
+      <li><a href="../../index.html">Ripser.py</a></li>
+      <li>
+        <a href="../index.html">API Reference</a>
+      </li> 
+    </ul>
+  </nav>
+  </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ripser-rips">
+<h1>ripser.Rips<a class="headerlink" href="#ripser-rips" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="ripser.Rips">
+<em class="property">class </em><code class="descclassname">ripser.</code><code class="descname">Rips</code><span class="sig-paren">(</span><em>maxdim=1</em>, <em>thresh=inf</em>, <em>coeff=2</em>, <em>do_cocycles=False</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#Rips"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.Rips" title="Permalink to this definition">¶</a></dt>
+<dd><p>sklearn style class wrapper for <cite>ripser</cite> and <cite>plot_dgms</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>maxdim</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default 1</em>) – Maximum homology dimension computed. Will compute all dimensions
+lower than and equal to this value.
+For 1, H_0 and H_1 will be computed.</li>
+<li><strong>thresh</strong> (<em>float</em><em>, </em><em>default infinity</em>) – Maximum distances considered when constructing filtration.
+If infinity, compute the entire filtration.</li>
+<li><strong>coeff</strong> (<em>int prime</em><em>, </em><em>default 2</em>) – Compute homology with coefficients in the prime field Z/pZ for p=coeff.</li>
+<li><strong>do_cocycles</strong> (<em>bool</em>) – Indicator of whether to compute cocycles, if so, we compute and store
+cocycles in the <a href="#id1"><span class="problematic" id="id2">cocycles_</span></a> dictionary Rips member variable</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="ripser.Rips.dgm_">
+<code class="descname">dgm_</code><a class="headerlink" href="#ripser.Rips.dgm_" title="Permalink to this definition">¶</a></dt>
+<dd><p>After <cite>transform</cite>, <a href="#id3"><span class="problematic" id="id4">dgm_</span></a> contains computed persistence diagrams in
+each dimension</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list of ndarray, each shape (n_pairs, 2)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">110</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">rips</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
+<span class="n">rips</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">rips</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="ripser.Rips.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>maxdim=1</em>, <em>thresh=inf</em>, <em>coeff=2</em>, <em>do_cocycles=False</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#Rips.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.Rips.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#ripser.Rips.__init__" title="ripser.Rips.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([maxdim,&nbsp;thresh,&nbsp;coeff,&nbsp;…])</td>
+<td>Initialize self.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#ripser.Rips.fit_transform" title="ripser.Rips.fit_transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_transform</span></code></a>(X[,&nbsp;distance_matrix,&nbsp;metric])</td>
+<td>Compute persistence diagrams for X data array and return the diagrams.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#ripser.Rips.plot" title="ripser.Rips.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>([diagrams,&nbsp;plot_only,&nbsp;title,&nbsp;xy_range,&nbsp;…])</td>
+<td>A helper function to plot persistence diagrams.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>(X[,&nbsp;distance_matrix,&nbsp;metric])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="ripser.Rips.fit_transform">
+<code class="descname">fit_transform</code><span class="sig-paren">(</span><em>X</em>, <em>distance_matrix=False</em>, <em>metric='euclidean'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#Rips.fit_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.Rips.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute persistence diagrams for X data array and return the diagrams.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>ndarray</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – A numpy array of either data or distance matrix.</li>
+<li><strong>distance_matrix</strong> (<em>bool</em>) – Indicator that X is a distance matrix, if not we compute a
+distance matrix from X using the chosen metric.</li>
+<li><strong>metric</strong> (<em>string</em><em> or </em><em>callable</em>) – The metric to use when calculating distance between instances in a
+feature array. If metric is a string, it must be one of the options
+specified in PAIRED_DISTANCES, including “euclidean”, “manhattan”,
+or “cosine”. Alternatively, if metric is a callable function, it is
+called on each pair of instances (rows) and the resulting value
+recorded. The callable should take two arrays from X as input and
+return a value indicating the distance between them.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>dgms</strong> (<em>list (size maxdim) of ndarray (n_pairs, 2)</em>) – A list of persistence diagrams, one for each dimension less
+than maxdim. Each diagram is an ndarray of size (n_pairs, 2) with
+the first column representing the birth time and the second column
+representing the death time of each pair.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ripser.Rips.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>diagrams=None</em>, <em>plot_only=None</em>, <em>title=None</em>, <em>xy_range=None</em>, <em>labels=None</em>, <em>colormap='default'</em>, <em>size=20</em>, <em>ax_color=array([0.</em>, <em>0.</em>, <em>0.])</em>, <em>diagonal=True</em>, <em>lifetime=False</em>, <em>legend=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#Rips.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.Rips.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper function to plot persistence diagrams.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>diagrams</strong> (<em>ndarray</em><em> (</em><em>n_pairs</em><em>, </em><em>2</em><em>) or </em><em>list of diagrams</em>) – A diagram or list of diagrams as returned from self.fit.
+If diagram is None, we use <a href="#id5"><span class="problematic" id="id6">self.dgm_</span></a> for plotting.
+If diagram is a list of diagrams, then plot all on the same plot
+using different colors.</li>
+<li><strong>plot_only</strong> (<em>list of numeric</em>) – If specified, an array of only the diagrams that should be plotted.</li>
+<li><strong>title</strong> (<em>string</em><em>, </em><em>default is None</em>) – If title is defined, add it as title of the plot.</li>
+<li><strong>xy_range</strong> (<em>list of numeric</em><em> [</em><em>xmin</em><em>, </em><em>xmax</em><em>, </em><em>ymin</em><em>, </em><em>ymax</em><em>]</em>) – User provided range of axes. This is useful for comparing
+multiple persistence diagrams.</li>
+<li><strong>labels</strong> (<em>string</em><em> or </em><em>list of strings</em>) – Legend labels for each diagram.
+If none are specified, we use H_0, H_1, H_2,… by default.</li>
+<li><strong>colormap</strong> (<em>string</em><em>, </em><em>default is 'default'</em>) – <p>Any of matplotlib color palettes.
+Some options are ‘default’, ‘seaborn’, ‘sequential’.
+See all available styles with</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
+<span class="k">print</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">available</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><strong>size</strong> (<em>numeric</em><em>, </em><em>default is 20</em>) – Pixel size of each point plotted.</li>
+<li><strong>ax_color</strong> (<em>any valid matplitlib color type.</em>) – See [<a class="reference external" href="https://matplotlib.org/api/colors_api.html](https://matplotlib.org/api/colors_api.html">https://matplotlib.org/api/colors_api.html](https://matplotlib.org/api/colors_api.html</a>) for complete API.</li>
+<li><strong>diagonal</strong> (<em>bool</em><em>, </em><em>default is True</em>) – Plot the diagonal x=y line.</li>
+<li><strong>lifetime</strong> (<em>bool</em><em>, </em><em>default is False. If True</em><em>, </em><em>diagonal is turned to False.</em>) – Plot life time of each point instead of birth and death.
+Essentially, visualize (x, y-x).</li>
+<li><strong>legend</strong> (<em>bool</em><em>, </em><em>default is True</em>) – If true, show the legend.</li>
+<li><strong>show</strong> (<em>bool</em><em>, </em><em>default is True</em>) – Call plt.show() after plotting.
+If you are using self.plot() as part of a subplot,
+set show=False and call plt.show() only once at the end.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../../index.html">Table of Contents</a></h3>
+  <p class="caption"><span class="caption-text">Background</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Basic Usage.html">Ripser demonstration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ripser.ripser.html">ripser.ripser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ripser.plot_dgms.html">ripser.plot_dgms</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ripser.Rips</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Representative Cocycles.html">Representative Cocycles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Approximate Sparse Filtrations.html">Approximate Sparse Filtrations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Sparse Distance Matrices.html">Sparse Distance Matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Lower Star Time Series.html">Lower Star Time Series</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Lower Star Image Filtrations.html">Lower Star Image Filtrations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Moebius Strip And The Field of Coefficients.html">Moebius Strip And The Field of Coefficients</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/reference/stubs/ripser.Rips.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<form class="search" action="../../search.html" method="get">
+  <input type="text" name="q"
+   placeholder="type to search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="related bottom">
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="ripser.plot_dgms.html" title="Previous document">ripser.plot_dgms</a>
+        </li>
+        <li>
+          <a href="../../notebooks/Representative Cocycles.html" title="Next document">Representative Cocycles</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+  <nav id="breadcrumbs">
+    <ul>
+      <li><a href="../../index.html">Ripser.py</a></li>
+      <li>
+        <a href="../index.html">API Reference</a>
+      </li> 
+    </ul>
+  </nav>
+  </div>
+  <footer id="pagefooter">&copy; 2019, Christopher Tralie and Nathaniel Saul.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+      1.8.4
+        with the <a href="http://github.com/irskep/sphinx-better-theme">
+          better</a> theme.
+
+  </footer>
+
+  
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-124965309-2', '');
+      ga('send', 'pageview');
+    </script>
+  
+  </body>
+</html>

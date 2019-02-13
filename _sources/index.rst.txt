@@ -44,24 +44,20 @@ Example Usage
     :caption: Background
 
     about
-    Basic Usage
+    notebooks/Basic Usage
+    reference/index
 
 .. toctree::
     :maxdepth: 2
     :caption: Tutorials
 
-    Representative Cocycles
-    Approximate Sparse Filtrations
-    parse Distance Matrices
-    Lower Star Time Series
-    Lower Star Image Filtrations
-    Moebius Strip And The Field of Coefficients
+    notebooks/Representative Cocycles
+    notebooks/Approximate Sparse Filtrations
+    notebooks/Sparse Distance Matrices
+    notebooks/Lower Star Time Series
+    notebooks/Lower Star Image Filtrations
+    notebooks/Moebius Strip And The Field of Coefficients
 
-.. toctree::
-    :maxdepth: 2
-    :caption: API Reference
-    
-    reference
 
 
 .. |PyPI version| image:: https://badge.fury.io/py/ripser.svg
