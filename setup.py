@@ -98,5 +98,17 @@ setup(
         'matplotlib',
         'scikit-learn'
     ],
+    extras_require={
+        'testing': [ # `pip install -e ".[testing]"``
+            'pytest'  
+        ],
+        'docs': [ # `pip install -e ".[docs]"``
+            'sphinx',
+            'nbsphinx',
+            'sphinx-better-theme',
+            'sphinxcontrib-fulltoc',
+            'ipython'
+        ]
+    },
     cmdclass={'build_ext': CustomBuildExtCommand},
 )

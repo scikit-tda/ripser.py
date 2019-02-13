@@ -3,11 +3,11 @@
 gh-pages:
 	echo "Make gh-pages"
 	# move notebooks to where sphinx can see them
-	cp notebooks/* docs/.
+	# cp notebooks/* docs/.
 
 	cd docs; make html
 	git checkout gh-pages
-	rm -rf _sources _static _modules _images
+	rm -rf _sources _static _modules _images notebooks
 	mv -fv docs/_build/html/* .
 	rm -rf docs
 	git add -A
