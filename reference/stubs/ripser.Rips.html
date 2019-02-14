@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Representative Cocycles" href="../../notebooks/Representative Cocycles.html" />
-    <link rel="prev" title="ripser.plot_dgms" href="ripser.plot_dgms.html" />
+    <link rel="prev" title="ripser.ripser" href="ripser.ripser.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
       <link rel="stylesheet" href="../../_static/custom_style.css" type="text/css" />
   </head><body>
@@ -39,7 +39,7 @@
     <ul>
         <li>
           &larr;
-          <a href="ripser.plot_dgms.html" title="Previous document">ripser.plot_dgms</a>
+          <a href="ripser.ripser.html" title="Previous document">ripser.ripser</a>
         </li>
         <li>
           <a href="../../notebooks/Representative Cocycles.html" title="Next document">Representative Cocycles</a>
@@ -67,7 +67,7 @@
 <dl class="class">
 <dt id="ripser.Rips">
 <em class="property">class </em><code class="descclassname">ripser.</code><code class="descname">Rips</code><span class="sig-paren">(</span><em>maxdim=1</em>, <em>thresh=inf</em>, <em>coeff=2</em>, <em>do_cocycles=False</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#Rips"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.Rips" title="Permalink to this definition">¶</a></dt>
-<dd><p>sklearn style class wrapper for <cite>ripser</cite> and <cite>plot_dgms</cite>.</p>
+<dd><p>sklearn style class interface for <code class="code docutils literal notranslate"><span class="pre">ripser</span></code> with <code class="code docutils literal notranslate"><span class="pre">fit</span></code> and <code class="code docutils literal notranslate"><span class="pre">transform</span></code> methods..</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -80,16 +80,16 @@ For 1, H_0 and H_1 will be computed.</li>
 If infinity, compute the entire filtration.</li>
 <li><strong>coeff</strong> (<em>int prime</em><em>, </em><em>default 2</em>) – Compute homology with coefficients in the prime field Z/pZ for p=coeff.</li>
 <li><strong>do_cocycles</strong> (<em>bool</em>) – Indicator of whether to compute cocycles, if so, we compute and store
-cocycles in the <a href="#id1"><span class="problematic" id="id2">cocycles_</span></a> dictionary Rips member variable</li>
+cocycles in the <cite>cocycles_</cite> dictionary Rips member variable</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="ripser.Rips.dgm_">
-<code class="descname">dgm_</code><a class="headerlink" href="#ripser.Rips.dgm_" title="Permalink to this definition">¶</a></dt>
-<dd><p>After <cite>transform</cite>, <a href="#id3"><span class="problematic" id="id4">dgm_</span></a> contains computed persistence diagrams in
+<dt>
+<code class="descname">`dgm_`</code></dt>
+<dd><p>After <cite>transform</cite>, <cite>dgm_</cite> contains computed persistence diagrams in
 each dimension</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -103,8 +103,9 @@ each dimension</p>
 
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">110</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="kn">import</span> <span class="nn">tadasets</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">tadasets</span><span class="o">.</span><span class="n">dsphere</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">110</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">rips</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
 <span class="n">rips</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="n">rips</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -129,7 +130,7 @@ each dimension</p>
 <tr class="row-even"><td><a class="reference internal" href="#ripser.Rips.fit_transform" title="ripser.Rips.fit_transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_transform</span></code></a>(X[,&nbsp;distance_matrix,&nbsp;metric])</td>
 <td>Compute persistence diagrams for X data array and return the diagrams.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#ripser.Rips.plot" title="ripser.Rips.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>([diagrams,&nbsp;plot_only,&nbsp;title,&nbsp;xy_range,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#ripser.Rips.plot" title="ripser.Rips.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>([diagrams])</td>
 <td>A helper function to plot persistence diagrams.</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>(X[,&nbsp;distance_matrix,&nbsp;metric])</td>
@@ -171,7 +172,7 @@ representing the death time of each pair.</p>
 
 <dl class="method">
 <dt id="ripser.Rips.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>diagrams=None</em>, <em>plot_only=None</em>, <em>title=None</em>, <em>xy_range=None</em>, <em>labels=None</em>, <em>colormap='default'</em>, <em>size=20</em>, <em>ax_color=array([0.</em>, <em>0.</em>, <em>0.])</em>, <em>diagonal=True</em>, <em>lifetime=False</em>, <em>legend=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#Rips.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.Rips.plot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>diagrams=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#Rips.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.Rips.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A helper function to plot persistence diagrams.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -179,7 +180,7 @@ representing the death time of each pair.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>diagrams</strong> (<em>ndarray</em><em> (</em><em>n_pairs</em><em>, </em><em>2</em><em>) or </em><em>list of diagrams</em>) – A diagram or list of diagrams as returned from self.fit.
-If diagram is None, we use <a href="#id5"><span class="problematic" id="id6">self.dgm_</span></a> for plotting.
+If diagram is None, we use <cite>self.dgm_</cite> for plotting.
 If diagram is a list of diagrams, then plot all on the same plot
 using different colors.</li>
 <li><strong>plot_only</strong> (<em>list of numeric</em>) – If specified, an array of only the diagrams that should be plotted.</li>
@@ -232,7 +233,6 @@ set show=False and call plt.show() only once at the end.</li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Basic Usage.html">Ripser demonstration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="ripser.ripser.html">ripser.ripser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ripser.plot_dgms.html">ripser.plot_dgms</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">ripser.Rips</a></li>
 </ul>
 </li>
@@ -270,7 +270,7 @@ set show=False and call plt.show() only once at the end.</li>
     <ul>
         <li>
           &larr;
-          <a href="ripser.plot_dgms.html" title="Previous document">ripser.plot_dgms</a>
+          <a href="ripser.ripser.html" title="Previous document">ripser.ripser</a>
         </li>
         <li>
           <a href="../../notebooks/Representative Cocycles.html" title="Next document">Representative Cocycles</a>

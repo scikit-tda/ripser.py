@@ -88,6 +88,8 @@
 <span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">TransformerMixin</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="k">import</span> <span class="n">pairwise_distances</span>
 
+<span class="kn">import</span> <span class="nn">persim</span>
+
 <span class="kn">from</span> <span class="nn">pyRipser</span> <span class="k">import</span> <span class="n">doRipsFiltrationDM</span> <span class="k">as</span> <span class="n">DRFDM</span>
 <span class="kn">from</span> <span class="nn">pyRipser</span> <span class="k">import</span> <span class="n">doRipsFiltrationDMSparse</span> <span class="k">as</span> <span class="n">DRFDMSparse</span>
 
@@ -127,7 +129,7 @@
 
 <span class="sd">    do_cocycles: bool</span>
 <span class="sd">        Indicator of whether to compute cocycles, if so, we compute and store</span>
-<span class="sd">        cocycles in the cocycles_ dictionary Rips member variable</span>
+<span class="sd">        cocycles in the `cocycles_` dictionary Rips member variable</span>
 
 <span class="sd">    metric: string or callable</span>
 <span class="sd">        The metric to use when calculating distance between instances in a </span>
@@ -286,7 +288,7 @@
 
 
 <div class="viewcode-block" id="Rips"><a class="viewcode-back" href="../../reference/stubs/ripser.Rips.html#ripser.Rips">[docs]</a><span class="k">class</span> <span class="nc">Rips</span><span class="p">(</span><span class="n">TransformerMixin</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; sklearn style class wrapper for `ripser` and `plot_dgms`.</span>
+    <span class="sd">&quot;&quot;&quot; sklearn style class interface for :code:`ripser` with :code:`fit` and :code:`transform` methods..</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -304,12 +306,12 @@
 
 <span class="sd">    do_cocycles: bool</span>
 <span class="sd">        Indicator of whether to compute cocycles, if so, we compute and store</span>
-<span class="sd">        cocycles in the cocycles_ dictionary Rips member variable</span>
+<span class="sd">        cocycles in the `cocycles_` dictionary Rips member variable</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    dgm_: list of ndarray, each shape (n_pairs, 2)</span>
-<span class="sd">        After `transform`, dgm_ contains computed persistence diagrams in</span>
+<span class="sd">    `dgm_`: list of ndarray, each shape (n_pairs, 2)</span>
+<span class="sd">        After `transform`, `dgm_` contains computed persistence diagrams in</span>
 <span class="sd">        each dimension</span>
 
 <span class="sd">    Examples</span>
@@ -317,8 +319,9 @@
 <span class="sd">     .. code:: python</span>
 
 <span class="sd">        from ripser import Rips</span>
-<span class="sd">        from sklearn import datasets</span>
-<span class="sd">        data = datasets.make_circles(n_samples=110)[0]</span>
+<span class="sd">        import tadasets</span>
+
+<span class="sd">        data = tadasets.dsphere(n=110, d=2)[0]</span>
 <span class="sd">        rips = Rips()</span>
 <span class="sd">        rips.transform(data)</span>
 <span class="sd">        rips.plot()</span>
@@ -399,17 +402,8 @@
 <div class="viewcode-block" id="Rips.plot"><a class="viewcode-back" href="../../reference/stubs/ripser.Rips.html#ripser.Rips.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">diagrams</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">plot_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">xy_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-        <span class="n">ax_color</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]),</span>
-        <span class="n">diagonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">lifetime</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;A helper function to plot persistence diagrams. </span>
 
@@ -417,7 +411,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        diagrams: ndarray (n_pairs, 2) or list of diagrams</span>
 <span class="sd">            A diagram or list of diagrams as returned from self.fit. </span>
-<span class="sd">            If diagram is None, we use self.dgm_ for plotting. </span>
+<span class="sd">            If diagram is None, we use `self.dgm_` for plotting. </span>
 <span class="sd">            If diagram is a list of diagrams, then plot all on the same plot </span>
 <span class="sd">            using different colors.</span>
 
@@ -470,19 +464,11 @@
         <span class="k">if</span> <span class="n">diagrams</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Allow using transformed diagrams as default</span>
             <span class="n">diagrams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span>
-        <span class="n">plot_dgms</span><span class="p">(</span>
+
+        <span class="n">persim</span><span class="o">.</span><span class="n">plot_diagrams</span><span class="p">(</span>
             <span class="n">diagrams</span><span class="p">,</span>
-            <span class="n">plot_only</span><span class="o">=</span><span class="n">plot_only</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-            <span class="n">xy_range</span><span class="o">=</span><span class="n">xy_range</span><span class="p">,</span>
-            <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
-            <span class="n">colormap</span><span class="o">=</span><span class="n">colormap</span><span class="p">,</span>
-            <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
-            <span class="n">ax_color</span><span class="o">=</span><span class="n">ax_color</span><span class="p">,</span>
-            <span class="n">diagonal</span><span class="o">=</span><span class="n">diagonal</span><span class="p">,</span>
-            <span class="n">lifetime</span><span class="o">=</span><span class="n">lifetime</span><span class="p">,</span>
-            <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span>
-            <span class="n">show</span><span class="o">=</span><span class="n">show</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span></div></div>
 
 
