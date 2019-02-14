@@ -95,8 +95,8 @@ setup(
         'Cython',
         'numpy',
         'scipy',
-        'matplotlib',
-        'scikit-learn'
+        'scikit-learn',
+        'persim'
     ],
     extras_require={
         'testing': [ # `pip install -e ".[testing]"``
@@ -108,6 +108,12 @@ setup(
             'sphinx-better-theme',
             'sphinxcontrib-fulltoc',
             'ipython'
+        ],
+        'examples': [
+            'persim',
+            'tadasets',
+            'jupyter',
+            'pillow'
         ]
     },
     cmdclass={'build_ext': CustomBuildExtCommand},

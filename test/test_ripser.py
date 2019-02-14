@@ -25,7 +25,7 @@ class TestLibrary():
     # Does the library install in scope? Are the objects in scope?
     def test_import(self):
         import ripser
-        from ripser import ripser, plot_dgms
+        from ripser import ripser, Rips
         assert 1
 
 

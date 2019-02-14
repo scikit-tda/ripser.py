@@ -2,6 +2,10 @@
     width:100%; 
 }
 
+img {
+    max-width: 100%
+}
+
 #headermeta {
     float:right;
 }
