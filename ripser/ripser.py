@@ -33,6 +33,8 @@ import numpy as np
 from sklearn.base import TransformerMixin
 from sklearn.metrics.pairwise import pairwise_distances
 
+import persim
+
 from pyRipser import doRipsFiltrationDM as DRFDM
 from pyRipser import doRipsFiltrationDMSparse as DRFDMSparse
 
@@ -72,7 +74,7 @@ def ripser(
 
     do_cocycles: bool
         Indicator of whether to compute cocycles, if so, we compute and store
-        cocycles in the cocycles_ dictionary Rips member variable
+        cocycles in the `cocycles_` dictionary Rips member variable
 
     metric: string or callable
         The metric to use when calculating distance between instances in a 
@@ -231,7 +233,7 @@ def lower_star_img(img):
 
 
 class Rips(TransformerMixin):
-    """ sklearn style class wrapper for `ripser` and `plot_dgms`.
+    """ sklearn style class interface for :code:`ripser` with :code:`fit` and :code:`transform` methods..
 
     Parameters
     ----------
@@ -249,12 +251,12 @@ class Rips(TransformerMixin):
 
     do_cocycles: bool
         Indicator of whether to compute cocycles, if so, we compute and store
-        cocycles in the cocycles_ dictionary Rips member variable
+        cocycles in the `cocycles_` dictionary Rips member variable
 
     Attributes
     ----------
-    dgm_: list of ndarray, each shape (n_pairs, 2)
-        After `transform`, dgm_ contains computed persistence diagrams in
+    `dgm_`: list of ndarray, each shape (n_pairs, 2)
+        After `transform`, `dgm_` contains computed persistence diagrams in
         each dimension
 
     Examples
@@ -262,8 +264,9 @@ class Rips(TransformerMixin):
      .. code:: python
 
         from ripser import Rips
-        from sklearn import datasets
-        data = datasets.make_circles(n_samples=110)[0]
+        import tadasets
+
+        data = tadasets.dsphere(n=110, d=2)[0]
         rips = Rips()
         rips.transform(data)
         rips.plot()
@@ -344,17 +347,8 @@ class Rips(TransformerMixin):
     def plot(
         self,
         diagrams=None,
-        plot_only=None,
-        title=None,
-        xy_range=None,
-        labels=None,
-        colormap="default",
-        size=20,
-        ax_color=np.array([0.0, 0.0, 0.0]),
-        diagonal=True,
-        lifetime=False,
-        legend=True,
-        show=True,
+        *args,
+        **kwargs
     ):
         """A helper function to plot persistence diagrams. 
 
@@ -362,7 +356,7 @@ class Rips(TransformerMixin):
         ----------
         diagrams: ndarray (n_pairs, 2) or list of diagrams
             A diagram or list of diagrams as returned from self.fit. 
-            If diagram is None, we use self.dgm_ for plotting. 
+            If diagram is None, we use `self.dgm_` for plotting. 
             If diagram is a list of diagrams, then plot all on the same plot 
             using different colors.
 
@@ -415,19 +409,11 @@ class Rips(TransformerMixin):
         if diagrams is None:
             # Allow using transformed diagrams as default
             diagrams = self.dgms_
-        plot_dgms(
+
+        persim.plot_diagrams(
             diagrams,
-            plot_only=plot_only,
-            title=title,
-            xy_range=xy_range,
-            labels=labels,
-            colormap=colormap,
-            size=size,
-            ax_color=ax_color,
-            diagonal=diagonal,
-            lifetime=lifetime,
-            legend=legend,
-            show=show,
+            *args,
+            **kwargs
         )
 
 

@@ -6,6 +6,5 @@ API Reference
     :nosignatures:
 
     ripser.ripser
-    ripser.plot_dgms
     ripser.Rips
 
