@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Moebius Strip And The Field of Coefficients &#8212; Ripser.py 0.3.1 documentation</title>
+    <title>Moebius Strip And The Field of Coefficients &#8212; Ripser.py 0.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/better.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -26,7 +26,7 @@
     <header id="pageheader">
       <h1>
         <a href="../index.html ">
-          Ripser.py 0.3.1 documentation
+          Ripser.py 0.3.2 documentation
         </a>
         <a id="headermeta" href="https://scikit-tda.org">
             a scikit-tda project 
@@ -264,10 +264,10 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="c1"># %matplotlib notebook</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
-<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span><span class="p">,</span> <span class="n">plot_dgms</span>
+<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span>
+<span class="kn">from</span> <span class="nn">persim</span> <span class="kn">import</span> <span class="n">plot_diagrams</span>
 </pre></div>
 </div>
 </div>
@@ -277,7 +277,7 @@ div.rendered_html tbody tr:hover {
 <p><span class="math notranslate nohighlight">\(z(t) = r \sin(2t)\)</span></p>
 <p>We then compute persistent homology using both <span class="math notranslate nohighlight">\(\mathbb{Z} / 2\)</span> and <span class="math notranslate nohighlight">\(\mathbb{Z} / 3\)</span> coefficients</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -301,10 +301,10 @@ div.rendered_html tbody tr:hover {
 <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Generated Loop&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgms2</span><span class="p">)</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">dgms2</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$\mathbb{Z} / 2$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgms3</span><span class="p">)</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">dgms3</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$\mathbb{Z} / 3$&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -325,7 +325,7 @@ div.rendered_html tbody tr:hover {
 <p><span class="math notranslate nohighlight">\(y(t) = (R + r \cos(t)) \sin(2t)\)</span></p>
 <p><span class="math notranslate nohighlight">\(z(t) = r \sin(t)\)</span></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -343,10 +343,10 @@ div.rendered_html tbody tr:hover {
 <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Generated Loop&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgms2</span><span class="p">)</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">dgms2</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$\mathbb{Z} / 2$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgms3</span><span class="p">)</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">dgms3</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;$\mathbb{Z} / 3$&quot;</span><span class="p">)</span>
 
 
@@ -365,15 +365,6 @@ div.rendered_html tbody tr:hover {
 from <span class="math notranslate nohighlight">\([0, r+R)\)</span> into two bars: <span class="math notranslate nohighlight">\([0, r)\)</span> and <span class="math notranslate nohighlight">\([r, r+R)\)</span>.</p>
 <p>Geometrically, what’s happening in this case is that the loop we have parameterized is <em>the boundary of a Moebius strip</em>, whose strip width is <span class="math notranslate nohighlight">\(r\)</span>. For <span class="math notranslate nohighlight">\(\mathbb{Z}/2\)</span> coefficients, a class is born at <span class="math notranslate nohighlight">\(0\)</span> but is bounded when the strip width fills in at <span class="math notranslate nohighlight">\(r\)</span>, at which point another class is born which is not topologically equivalent to the original class. By contrast, with <span class="math notranslate nohighlight">\(\mathbb{Z} / 3\)</span> coefficients, the curve is not bounded when the strip is filled in at <span class="math notranslate nohighlight">\(r\)</span>;
 it is only bounded at the end when the entire torus fills in.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 </div>
 
 

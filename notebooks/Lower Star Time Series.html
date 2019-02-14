@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Lower Star Time Series &#8212; Ripser.py 0.3.1 documentation</title>
+    <title>Lower Star Time Series &#8212; Ripser.py 0.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/better.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -27,7 +27,7 @@
     <header id="pageheader">
       <h1>
         <a href="../index.html ">
-          Ripser.py 0.3.1 documentation
+          Ripser.py 0.3.2 documentation
         </a>
         <a id="headermeta" href="https://scikit-tda.org">
             a scikit-tda project 
@@ -269,11 +269,13 @@ show how using nonzero elements along the diagonal of a sparse distance matrix c
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span><span class="p">,</span> <span class="n">plot_dgms</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">sparse</span>
 <span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span>
+<span class="kn">from</span> <span class="nn">persim</span> <span class="kn">import</span> <span class="n">plot_diagrams</span>
 </pre></div>
 </div>
 </div>
@@ -298,7 +300,7 @@ show how using nonzero elements along the diagonal of a sparse distance matrix c
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Text(0.5,0,&#39;t&#39;)
+<span></span>Text(0.5, 0, &#39;t&#39;)
 </pre></div>
 </div>
 </div>
@@ -353,7 +355,7 @@ show how using nonzero elements along the diagonal of a sparse distance matrix c
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">ylims</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgm0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">dgm0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Persistence Diagram&quot;</span><span class="p">)</span>
 
 
@@ -369,15 +371,6 @@ show how using nonzero elements along the diagonal of a sparse distance matrix c
 </div>
 </div>
 <p>Notice how the birth times correspond to local mins and the death times correspond to local maxes</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 </div>
 
 

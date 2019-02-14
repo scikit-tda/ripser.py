@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Lower Star Image Filtrations &#8212; Ripser.py 0.3.1 documentation</title>
+    <title>Lower Star Image Filtrations &#8212; Ripser.py 0.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/better.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -27,7 +27,7 @@
     <header id="pageheader">
       <h1>
         <a href="../index.html ">
-          Ripser.py 0.3.1 documentation
+          Ripser.py 0.3.2 documentation
         </a>
         <a id="headermeta" href="https://scikit-tda.org">
             a scikit-tda project 
@@ -273,7 +273,8 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span>
 <span class="kn">import</span> <span class="nn">PIL</span>
 
-<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span><span class="p">,</span> <span class="n">plot_dgms</span><span class="p">,</span> <span class="n">lower_star_img</span>
+<span class="kn">from</span> <span class="nn">persim</span> <span class="kn">import</span> <span class="n">plot_diagrams</span>
+<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span><span class="p">,</span> <span class="n">lower_star_img</span>
 </pre></div>
 </div>
 </div>
@@ -317,7 +318,7 @@ div.rendered_html tbody tr:hover {
 <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Test Image&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgm</span><span class="p">)</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">dgm</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;0-D Persistence Diagram&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -373,7 +374,7 @@ div.rendered_html tbody tr:hover {
 <span></span><span class="n">dgm</span> <span class="o">=</span> <span class="n">lower_star_img</span><span class="p">(</span><span class="o">-</span><span class="n">cells_grey</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgm</span><span class="p">,</span> <span class="n">lifetime</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">dgm</span><span class="p">,</span> <span class="n">lifetime</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -422,7 +423,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">dgm</span> <span class="o">=</span> <span class="n">lower_star_img</span><span class="p">(</span><span class="o">-</span><span class="n">smoothed</span><span class="p">)</span>
-<span class="n">plot_dgms</span><span class="p">(</span><span class="n">dgm</span><span class="p">,</span> <span class="n">lifetime</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">dgm</span><span class="p">,</span> <span class="n">lifetime</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -467,15 +468,6 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <p>The threshold can certainly be tuned, but we see reasonably good results even with these choices. There is about one max per cell; some have duplicates, and others are missing. Overall this naive approach does a good job of identifying the cells even though they have very different shapes.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 </div>
 </div>
 

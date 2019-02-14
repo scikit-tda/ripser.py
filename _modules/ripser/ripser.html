@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>ripser.ripser &#8212; Ripser.py 0.3.1 documentation</title>
+    <title>ripser.ripser &#8212; Ripser.py 0.3.2 documentation</title>
     <link rel="stylesheet" href="../../_static/better.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -25,7 +25,7 @@
     <header id="pageheader">
       <h1>
         <a href="../../index.html ">
-          Ripser.py 0.3.1 documentation
+          Ripser.py 0.3.2 documentation
         </a>
         <a id="headermeta" href="https://scikit-tda.org">
             a scikit-tda project 
@@ -229,189 +229,6 @@
             <span class="n">cocycles</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ccl</span><span class="p">)</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dgms&quot;</span><span class="p">:</span> <span class="n">dgms</span><span class="p">,</span> <span class="s2">&quot;cocycles&quot;</span><span class="p">:</span> <span class="n">cocycles</span><span class="p">,</span> <span class="s2">&quot;num_edges&quot;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;num_edges&quot;</span><span class="p">],</span> <span class="s2">&quot;dm&quot;</span><span class="p">:</span> <span class="n">dm</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">ret</span></div>
-
-<div class="viewcode-block" id="plot_dgms"><a class="viewcode-back" href="../../reference/stubs/ripser.plot_dgms.html#ripser.plot_dgms">[docs]</a><span class="k">def</span> <span class="nf">plot_dgms</span><span class="p">(</span>
-    <span class="n">diagrams</span><span class="p">,</span>
-    <span class="n">plot_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">xy_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
-    <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">ax_color</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]),</span>
-    <span class="n">diagonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">lifetime</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A helper function to plot persistence diagrams. </span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-
-<span class="sd">    diagrams: ndarray (n_pairs, 2) or list of diagrams</span>
-<span class="sd">        A diagram or list of diagrams. If diagram is a list of diagrams, </span>
-<span class="sd">        then plot all on the same plot using different colors.</span>
-
-<span class="sd">    plot_only: list of numeric</span>
-<span class="sd">        If specified, an array of only the diagrams that should be plotted.</span>
-
-<span class="sd">    title: string, default is None</span>
-<span class="sd">        If title is defined, add it as title of the plot.</span>
-
-<span class="sd">    xy_range: list of numeric [xmin, xmax, ymin, ymax]</span>
-<span class="sd">        User provided range of axes. This is useful for comparing </span>
-<span class="sd">        multiple persistence diagrams.</span>
-
-<span class="sd">    labels: string or list of strings</span>
-<span class="sd">        Legend labels for each diagram. </span>
-<span class="sd">        If none are specified, we use H_0, H_1, H_2,... by default.</span>
-
-<span class="sd">    colormap: string, default is &#39;default&#39;</span>
-<span class="sd">        Any of matplotlib color palettes. </span>
-<span class="sd">        Some options are &#39;default&#39;, &#39;seaborn&#39;, &#39;sequential&#39;. </span>
-<span class="sd">        See all available styles with</span>
-<span class="sd">        </span>
-<span class="sd">        .. code:: python</span>
-
-<span class="sd">            import matplotlib as mpl</span>
-<span class="sd">            print(mpl.styles.available)</span>
-
-<span class="sd">    size: numeric, default is 20</span>
-<span class="sd">        Pixel size of each point plotted.</span>
-
-<span class="sd">    ax_color: any valid matplotlib color type. </span>
-<span class="sd">        See [https://matplotlib.org/api/colors_api.html](https://matplotlib.org/api/colors_api.html) for complete API.</span>
-
-<span class="sd">    diagonal: bool, default is True</span>
-<span class="sd">        Plot the diagonal x=y line.</span>
-
-<span class="sd">    lifetime: bool, default is False. If True, diagonal is turned to False.</span>
-<span class="sd">        Plot life time of each point instead of birth and death. </span>
-<span class="sd">        Essentially, visualize (x, y-x).</span>
-
-<span class="sd">    legend: bool, default is True</span>
-<span class="sd">        If true, show the legend.</span>
-
-<span class="sd">    show: bool, default is False</span>
-<span class="sd">        Call plt.show() after plotting. If you are using self.plot() as part </span>
-<span class="sd">        of a subplot, set show=False and call plt.show() only once at the end.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span> <span class="ow">or</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-    <span class="n">mpl</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">colormap</span><span class="p">)</span>
-
-    <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Birth&quot;</span><span class="p">,</span> <span class="s2">&quot;Death&quot;</span>
-
-    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># Provide default labels for diagrams if using self.dgm_</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;$H_0$&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$H_1$&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$H_2$&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$H_3$&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$H_4$&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$H_5$&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$H_6$&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$H_7$&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$H_8$&quot;</span><span class="p">,</span>
-        <span class="p">]</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">diagrams</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="c1"># Must have diagrams as a list for processing downstream</span>
-        <span class="n">diagrams</span> <span class="o">=</span> <span class="p">[</span><span class="n">diagrams</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="n">plot_only</span><span class="p">:</span>
-        <span class="n">diagrams</span> <span class="o">=</span> <span class="p">[</span><span class="n">diagrams</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plot_only</span><span class="p">]</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plot_only</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">diagrams</span><span class="p">)</span>
-
-    <span class="c1"># Construct copy with proper type of each diagram</span>
-    <span class="c1"># so we can freely edit them.</span>
-    <span class="n">diagrams</span> <span class="o">=</span> <span class="p">[</span><span class="n">dgm</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">dgm</span> <span class="ow">in</span> <span class="n">diagrams</span><span class="p">]</span>
-
-    <span class="c1"># find min and max of all visible diagrams</span>
-    <span class="n">concat_dgms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">diagrams</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">has_inf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">concat_dgms</span><span class="p">))</span>
-    <span class="n">finite_dgms</span> <span class="o">=</span> <span class="n">concat_dgms</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">concat_dgms</span><span class="p">)]</span>
-
-    <span class="c1"># clever bounding boxes of the diagram</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">xy_range</span><span class="p">:</span>
-        <span class="c1"># define bounds of diagram</span>
-        <span class="n">ax_min</span><span class="p">,</span> <span class="n">ax_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">finite_dgms</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">finite_dgms</span><span class="p">)</span>
-        <span class="n">x_r</span> <span class="o">=</span> <span class="n">ax_max</span> <span class="o">-</span> <span class="n">ax_min</span>
-
-        <span class="c1"># Give plot a nice buffer on all sides.</span>
-        <span class="c1"># ax_range=0 when only one point,</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">xy_range</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">x_r</span> <span class="o">/</span> <span class="mi">5</span>
-
-        <span class="n">x_down</span> <span class="o">=</span> <span class="n">ax_min</span> <span class="o">-</span> <span class="n">buffer</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">x_up</span> <span class="o">=</span> <span class="n">ax_max</span> <span class="o">+</span> <span class="n">buffer</span>
-
-        <span class="n">y_down</span><span class="p">,</span> <span class="n">y_up</span> <span class="o">=</span> <span class="n">x_down</span><span class="p">,</span> <span class="n">x_up</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">x_down</span><span class="p">,</span> <span class="n">x_up</span><span class="p">,</span> <span class="n">y_down</span><span class="p">,</span> <span class="n">y_up</span> <span class="o">=</span> <span class="n">xy_range</span>
-
-    <span class="n">yr</span> <span class="o">=</span> <span class="n">y_up</span> <span class="o">-</span> <span class="n">y_down</span>
-
-    <span class="k">if</span> <span class="n">lifetime</span><span class="p">:</span>
-
-        <span class="c1"># Don&#39;t plot landscape and diagonal at the same time.</span>
-        <span class="n">diagonal</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="c1"># reset y axis so it doesn&#39;t go much below zero</span>
-        <span class="n">y_down</span> <span class="o">=</span> <span class="o">-</span><span class="n">yr</span> <span class="o">*</span> <span class="mf">0.05</span>
-        <span class="n">y_up</span> <span class="o">=</span> <span class="n">y_down</span> <span class="o">+</span> <span class="n">yr</span>
-
-        <span class="c1"># set custom ylabel</span>
-        <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Lifetime&quot;</span>
-
-        <span class="c1"># set diagrams to be (x, y-x)</span>
-        <span class="k">for</span> <span class="n">dgm</span> <span class="ow">in</span> <span class="n">diagrams</span><span class="p">:</span>
-            <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-=</span> <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-
-        <span class="c1"># plot horizon line</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x_down</span><span class="p">,</span> <span class="n">x_up</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="n">ax_color</span><span class="p">)</span>
-
-    <span class="c1"># Plot diagonal</span>
-    <span class="k">if</span> <span class="n">diagonal</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x_down</span><span class="p">,</span> <span class="n">x_up</span><span class="p">],</span> <span class="p">[</span><span class="n">x_down</span><span class="p">,</span> <span class="n">x_up</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">ax_color</span><span class="p">)</span>
-
-    <span class="c1"># Plot inf line</span>
-    <span class="k">if</span> <span class="n">has_inf</span><span class="p">:</span>
-        <span class="c1"># put inf line slightly below top</span>
-        <span class="n">b_inf</span> <span class="o">=</span> <span class="n">y_down</span> <span class="o">+</span> <span class="n">yr</span> <span class="o">*</span> <span class="mf">0.95</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x_down</span><span class="p">,</span> <span class="n">x_up</span><span class="p">],</span> <span class="p">[</span><span class="n">b_inf</span><span class="p">,</span> <span class="n">b_inf</span><span class="p">],</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\infty$&quot;</span><span class="p">)</span>
-
-        <span class="c1"># convert each inf in each diagram with b_inf</span>
-        <span class="k">for</span> <span class="n">dgm</span> <span class="ow">in</span> <span class="n">diagrams</span><span class="p">:</span>
-            <span class="n">dgm</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">dgm</span><span class="p">)]</span> <span class="o">=</span> <span class="n">b_inf</span>
-
-    <span class="c1"># Plot each diagram</span>
-    <span class="k">for</span> <span class="n">dgm</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">diagrams</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-
-        <span class="c1"># plot persistence pairs</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">dgm</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dgm</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">x_down</span><span class="p">,</span> <span class="n">x_up</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">y_down</span><span class="p">,</span> <span class="n">y_up</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="s1">&#39;box&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">legend</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">show</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
 <span class="k">def</span> <span class="nf">lower_star_img</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
@@ -669,7 +486,7 @@
         <span class="p">)</span></div></div>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Rips&quot;</span><span class="p">,</span> <span class="s2">&quot;ripser&quot;</span><span class="p">,</span> <span class="s2">&quot;plot_dgms&quot;</span><span class="p">,</span> <span class="s2">&quot;lower_star_img&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Rips&quot;</span><span class="p">,</span> <span class="s2">&quot;ripser&quot;</span><span class="p">,</span> <span class="s2">&quot;lower_star_img&quot;</span><span class="p">]</span>
 </pre></div>
 
           </div>
