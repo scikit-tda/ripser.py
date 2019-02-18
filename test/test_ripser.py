@@ -43,14 +43,20 @@ class TestTransform():
     def test_non_square_dist_matrix(self):
         data = np.random.random((3, 10))
 
-        with pytest.raises(Exception):
+        with pytest.raises(Exception, match='Distance matrix is not square'):
             ripser(data, distance_matrix=True)
     
     def test_too_many_perm(self):
         X = np.zeros((10, 2))
 
-        with pytest.raises(Exception):
+        with pytest.raises(Exception, match='points in greedy permutation is greater'):
             ripser(X, n_perm = 11)
+    
+    def test_too_few_perm(self):
+        X = np.zeros((10, 2))
+
+        with pytest.raises(Exception, match='Should be a strictly positive number'):
+            ripser(X, n_perm = -1)
 
     def test_sparse_greedyperm(self):
         D = np.zeros((4, 4))
