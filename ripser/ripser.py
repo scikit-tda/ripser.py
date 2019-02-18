@@ -55,7 +55,8 @@ def dpoint2pointcloud(X, i, metric):
     ds[i] = 0
     return ds
 
-def get_greedy_perm(X, n_perm = None, distance_matrix=False, metric="euclidean"):
+
+def get_greedy_perm(X, n_perm=None, distance_matrix=False, metric="euclidean"):
     """
     Compute a furthest point sampling permutation of a set of points
     Parameters
@@ -82,8 +83,8 @@ def get_greedy_perm(X, n_perm = None, distance_matrix=False, metric="euclidean")
     """
     if not n_perm:
         n_perm = X.shape[0]
-    #By default, takes the first point in the list to be the
-    #first point in the permutation, but could be random
+    # By default, takes the first point in the list to be the
+    # first point in the permutation, but could be random
     idx_perm = np.zeros(n_perm, dtype=np.int64)
     lambdas = np.zeros(n_perm)
     if distance_matrix:
@@ -95,13 +96,12 @@ def get_greedy_perm(X, n_perm = None, distance_matrix=False, metric="euclidean")
     for i in range(1, n_perm):
         idx = np.argmax(ds)
         idx_perm[i] = idx
-        lambdas[i-1] = ds[idx]
+        lambdas[i - 1] = ds[idx]
         dperm2all.append(dpoint2all(idx))
         ds = np.minimum(ds, dperm2all[-1])
     lambdas[-1] = np.max(ds)
     dperm2all = np.array(dperm2all)
     return (idx_perm, lambdas, dperm2all)
-
 
 
 def ripser(
@@ -112,7 +112,7 @@ def ripser(
     distance_matrix=False,
     do_cocycles=False,
     metric="euclidean",
-    n_perm = None,
+    n_perm=None,
 ):
     """Compute persistence diagrams for X data array. If X is not a distance matrix, it will be converted to a distance matrix using the chosen metric.
 
@@ -220,17 +220,25 @@ def ripser(
             )
 
     if n_perm and distance_matrix and sparse.issparse(X):
-        raise Exception("Greedy permutation is not supported for sparse distance matrices")
+        raise Exception(
+            "Greedy permutation is not supported for sparse distance matrices"
+        )
     if n_perm and n_perm > X.shape[0]:
-        raise Exception("Number of points in greedy permutation is greater"
-                        + " than number of points in the point cloud")
+        raise Exception(
+            "Number of points in greedy permutation is greater"
+            + " than number of points in the point cloud"
+        )
     if n_perm and n_perm < 0:
-        raise Exception("Should be a strictly positive number of points in the greedy permutation")
+        raise Exception(
+            "Should be a strictly positive number of points in the greedy permutation"
+        )
 
     idx_perm = np.arange(X.shape[0])
     r_cover = 0.0
     if n_perm:
-        idx_perm, lambdas, dperm2all = get_greedy_perm(X, n_perm=n_perm, distance_matrix=distance_matrix, metric=metric)
+        idx_perm, lambdas, dperm2all = get_greedy_perm(
+            X, n_perm=n_perm, distance_matrix=distance_matrix, metric=metric
+        )
         r_cover = lambdas[-1]
         dm = dperm2all[:, idx_perm]
     else:
@@ -241,8 +249,7 @@ def ripser(
         dperm2all = dm
 
     n_points = dm.shape[0]
-    if not sparse.issparse(dm) and \
-        np.sum(np.abs(dm.diagonal()) > 0) > 0:
+    if not sparse.issparse(dm) and np.sum(np.abs(dm.diagonal()) > 0) > 0:
         # If any of the diagonal elements are nonzero,
         # convert to sparse format, because currently
         # that's the only format that handles nonzero
@@ -282,9 +289,16 @@ def ripser(
             ccl = np.reshape(np.array(ccl, dtype=np.int64), [n, dim + 2])
             ccl[:, -1] = np.mod(ccl[:, -1], coeff)
             cocycles[dim].append(ccl)
-    ret = {"dgms": dgms, "cocycles": cocycles, "num_edges": res["num_edges"], \
-            "dperm2all": dperm2all, 'idx_perm': idx_perm, 'r_cover': r_cover}
+    ret = {
+        "dgms": dgms,
+        "cocycles": cocycles,
+        "num_edges": res["num_edges"],
+        "dperm2all": dperm2all,
+        "idx_perm": idx_perm,
+        "r_cover": r_cover,
+    }
     return ret
+
 
 def plot_dgms(
     diagrams,
@@ -299,7 +313,7 @@ def plot_dgms(
     lifetime=False,
     legend=True,
     show=False,
-    ax=None
+    ax=None,
 ):
     """A helper function to plot persistence diagrams. 
 
@@ -458,7 +472,7 @@ def plot_dgms(
 
     ax.set_xlim([x_down, x_up])
     ax.set_ylim([y_down, y_up])
-    ax.set_aspect('equal', 'box')
+    ax.set_aspect("equal", "box")
 
     if title is not None:
         ax.set_title(title)
@@ -610,7 +624,13 @@ class Rips(TransformerMixin):
     """
 
     def __init__(
-        self, maxdim=1, thresh=np.inf, coeff=2, do_cocycles=False, n_perm=None, verbose=True
+        self,
+        maxdim=1,
+        thresh=np.inf,
+        coeff=2,
+        do_cocycles=False,
+        n_perm=None,
+        verbose=True,
     ):
         self.maxdim = maxdim
         self.thresh = thresh
@@ -644,7 +664,7 @@ class Rips(TransformerMixin):
             do_cocycles=self.do_cocycles,
             distance_matrix=distance_matrix,
             metric=metric,
-            n_perm=self.n_perm
+            n_perm=self.n_perm,
         )
         self.dgms_ = result["dgms"]
         self.num_edges_ = result["num_edges"]
