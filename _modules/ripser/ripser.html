@@ -94,6 +94,73 @@
 <span class="kn">from</span> <span class="nn">pyRipser</span> <span class="k">import</span> <span class="n">doRipsFiltrationDMSparse</span> <span class="k">as</span> <span class="n">DRFDMSparse</span>
 
 
+<span class="k">def</span> <span class="nf">dpoint2pointcloud</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the distance from the ith point in a Euclidean point cloud</span>
+<span class="sd">    to the rest of the points</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: ndarray (n_samples, n_features)</span>
+<span class="sd">        A numpy array of data </span>
+<span class="sd">    i: int</span>
+<span class="sd">        The index of the point from which to return all distances</span>
+<span class="sd">    metric: string or callable</span>
+<span class="sd">        The metric to use when calculating distance between instances in a </span>
+<span class="sd">        feature array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">pairwise_distances</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">ds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">ds</span>
+
+
+<span class="k">def</span> <span class="nf">get_greedy_perm</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_perm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute a furthest point sampling permutation of a set of points</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: ndarray (n_samples, n_features)</span>
+<span class="sd">        A numpy array of either data or distance matrix</span>
+<span class="sd">    distance_matrix: bool</span>
+<span class="sd">        Indicator that X is a distance matrix, if not we compute </span>
+<span class="sd">        distances in X using the chosen metric.</span>
+<span class="sd">    n_perm: int</span>
+<span class="sd">        Number of points to take in the permutation</span>
+<span class="sd">    metric: string or callable</span>
+<span class="sd">        The metric to use when calculating distance between instances in a </span>
+<span class="sd">        feature array</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    idx_perm: ndarray(n_perm)</span>
+<span class="sd">        Indices of points in the greedy permutation</span>
+<span class="sd">    lambdas: ndarray(n_perm)</span>
+<span class="sd">        Covering radii at different points</span>
+<span class="sd">    dperm2all: ndarray(n_perm, n_samples)</span>
+<span class="sd">        Distances from points in the greedy permutation to points</span>
+<span class="sd">        in the original point set</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">n_perm</span><span class="p">:</span>
+        <span class="n">n_perm</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># By default, takes the first point in the list to be the</span>
+    <span class="c1"># first point in the permutation, but could be random</span>
+    <span class="n">idx_perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_perm</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">lambdas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_perm</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">distance_matrix</span><span class="p">:</span>
+        <span class="n">dpoint2all</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dpoint2all</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">dpoint2pointcloud</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">metric</span><span class="p">)</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">dpoint2all</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dperm2all</span> <span class="o">=</span> <span class="p">[</span><span class="n">ds</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_perm</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">idx_perm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span>
+        <span class="n">lambdas</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">dperm2all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dpoint2all</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">dperm2all</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">lambdas</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+    <span class="n">dperm2all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dperm2all</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">idx_perm</span><span class="p">,</span> <span class="n">lambdas</span><span class="p">,</span> <span class="n">dperm2all</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="ripser"><a class="viewcode-back" href="../../reference/stubs/ripser.ripser.html#ripser.ripser">[docs]</a><span class="k">def</span> <span class="nf">ripser</span><span class="p">(</span>
     <span class="n">X</span><span class="p">,</span>
     <span class="n">maxdim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -102,6 +169,7 @@
     <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">do_cocycles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
+    <span class="n">n_perm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute persistence diagrams for X data array. If X is not a distance matrix, it will be converted to a distance matrix using the chosen metric.</span>
 
@@ -134,11 +202,19 @@
 <span class="sd">    metric: string or callable</span>
 <span class="sd">        The metric to use when calculating distance between instances in a </span>
 <span class="sd">        feature array. If metric is a string, it must be one of the options </span>
-<span class="sd">        specified in PAIRED_DISTANCES, including &quot;euclidean&quot;, &quot;manhattan&quot;, </span>
+<span class="sd">        specified in pairwise_distances, including &quot;euclidean&quot;, &quot;manhattan&quot;, </span>
 <span class="sd">        or &quot;cosine&quot;. Alternatively, if metric is a callable function, it is </span>
 <span class="sd">        called on each pair of instances (rows) and the resulting value </span>
 <span class="sd">        recorded. The callable should take two arrays from X as input and </span>
 <span class="sd">        return a value indicating the distance between them.</span>
+<span class="sd">    </span>
+<span class="sd">    n_perm: int</span>
+<span class="sd">        The number of points to subsample in a &quot;greedy permutation,&quot;</span>
+<span class="sd">        or a furthest point sampling of the points.  These points</span>
+<span class="sd">        will be used in lieu of the full point cloud for a faster</span>
+<span class="sd">        computation, at the expense of some accuracy, which can </span>
+<span class="sd">        be bounded as a maximum bottleneck distance to all diagrams</span>
+<span class="sd">        on the original point set</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -149,13 +225,27 @@
 <span class="sd">        than maxdim. Each diagram is an ndarray of size (n_pairs, 2) </span>
 <span class="sd">        with the first column representing the birth time and the </span>
 <span class="sd">        second column representing the death time of each pair.</span>
-<span class="sd">     &#39;cocycles&#39;: list (size maxdim)</span>
+<span class="sd">     &#39;cocycles&#39;: list (size maxdim) of list of ndarray</span>
 <span class="sd">        A list of representative cocycles in each dimension.  The list </span>
-<span class="sd">        in each dimension is parallel to the diagram in that dimension.</span>
+<span class="sd">        in each dimension is parallel to the diagram in that dimension;</span>
+<span class="sd">        that is, each entry of the list is a representative cocycle of</span>
+<span class="sd">        the corresponding point expressed as an ndarray(K, d+1), where K is</span>
+<span class="sd">        the number of nonzero values of the cocycle and d is the dimension</span>
+<span class="sd">        of the cocycle.  The first d columns of each array index into</span>
+<span class="sd">        the simplices of the (subsampled) point cloud, and the last column</span>
+<span class="sd">        is the value of the cocycle at that simplex</span>
 <span class="sd">     &#39;num_edges&#39;: int</span>
 <span class="sd">        The number of edges added during the computation</span>
-<span class="sd">     &#39;dm&#39;: ndarray (n_samples, n_samples)</span>
-<span class="sd">        The distance matrix used in the computation</span>
+<span class="sd">     &#39;dperm2all&#39;: ndarray(n_samples, n_samples) or ndarray (n_perm, n_samples) if n_perm</span>
+<span class="sd">        The distance matrix used in the computation if n_perm is none.</span>
+<span class="sd">        Otherwise, the distance from all points in the permutation to</span>
+<span class="sd">        all points in the dataset</span>
+<span class="sd">     &#39;idx_perm&#39;: ndarray(n_perm) if n_perm &gt; 0</span>
+<span class="sd">        Index into the original point cloud of the points used</span>
+<span class="sd">        as a subsample in the greedy permutation</span>
+<span class="sd">     &#39;r_cover&#39;: float</span>
+<span class="sd">        Covering radius of the subsampled points.  </span>
+<span class="sd">        If n_perm &lt;= 0, then the full point cloud was used and this is 0</span>
 <span class="sd">    }</span>
 
 <span class="sd">    Examples</span>
@@ -170,7 +260,10 @@
 <span class="sd">        plot_dgms(dgms)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">distance_matrix</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">distance_matrix</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Distance matrix is not square&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;The input matrix is square, but the distance_matrix &quot;</span>
@@ -182,14 +275,38 @@
                 <span class="s2">&quot;The input point cloud has more columns than rows; &quot;</span>
                 <span class="o">+</span> <span class="s2">&quot;did you mean to transpose?&quot;</span>
             <span class="p">)</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="n">pairwise_distances</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Distance matrix is not square&quot;</span><span class="p">)</span>
-    <span class="n">dm</span> <span class="o">=</span> <span class="n">X</span>
+    <span class="k">if</span> <span class="n">n_perm</span> <span class="ow">and</span> <span class="n">distance_matrix</span> <span class="ow">and</span> <span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">&quot;Greedy permutation is not supported for sparse distance matrices&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_perm</span> <span class="ow">and</span> <span class="n">n_perm</span> <span class="o">&gt;</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">&quot;Number of points in greedy permutation is greater&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot; than number of points in the point cloud&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_perm</span> <span class="ow">and</span> <span class="n">n_perm</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">&quot;Should be a strictly positive number of points in the greedy permutation&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">idx_perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">r_cover</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">if</span> <span class="n">n_perm</span><span class="p">:</span>
+        <span class="n">idx_perm</span><span class="p">,</span> <span class="n">lambdas</span><span class="p">,</span> <span class="n">dperm2all</span> <span class="o">=</span> <span class="n">get_greedy_perm</span><span class="p">(</span>
+            <span class="n">X</span><span class="p">,</span> <span class="n">n_perm</span><span class="o">=</span><span class="n">n_perm</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span>
+        <span class="p">)</span>
+        <span class="n">r_cover</span> <span class="o">=</span> <span class="n">lambdas</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dm</span> <span class="o">=</span> <span class="n">dperm2all</span><span class="p">[:,</span> <span class="n">idx_perm</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">distance_matrix</span><span class="p">:</span>
+            <span class="n">dm</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dm</span> <span class="o">=</span> <span class="n">pairwise_distances</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">)</span>
+        <span class="n">dperm2all</span> <span class="o">=</span> <span class="n">dm</span>
+
     <span class="n">n_points</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span> <span class="ow">and</span> \
-        <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">dm</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># If any of the diagonal elements are nonzero,</span>
         <span class="c1"># convert to sparse format, because currently</span>
         <span class="c1"># that&#39;s the only format that handles nonzero</span>
@@ -229,7 +346,14 @@
             <span class="n">ccl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ccl</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="n">dim</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
             <span class="n">ccl</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">ccl</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">coeff</span><span class="p">)</span>
             <span class="n">cocycles</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ccl</span><span class="p">)</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dgms&quot;</span><span class="p">:</span> <span class="n">dgms</span><span class="p">,</span> <span class="s2">&quot;cocycles&quot;</span><span class="p">:</span> <span class="n">cocycles</span><span class="p">,</span> <span class="s2">&quot;num_edges&quot;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;num_edges&quot;</span><span class="p">],</span> <span class="s2">&quot;dm&quot;</span><span class="p">:</span> <span class="n">dm</span><span class="p">}</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;dgms&quot;</span><span class="p">:</span> <span class="n">dgms</span><span class="p">,</span>
+        <span class="s2">&quot;cocycles&quot;</span><span class="p">:</span> <span class="n">cocycles</span><span class="p">,</span>
+        <span class="s2">&quot;num_edges&quot;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;num_edges&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;dperm2all&quot;</span><span class="p">:</span> <span class="n">dperm2all</span><span class="p">,</span>
+        <span class="s2">&quot;idx_perm&quot;</span><span class="p">:</span> <span class="n">idx_perm</span><span class="p">,</span>
+        <span class="s2">&quot;r_cover&quot;</span><span class="p">:</span> <span class="n">r_cover</span><span class="p">,</span>
+    <span class="p">}</span>
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
@@ -308,12 +432,58 @@
 <span class="sd">        Indicator of whether to compute cocycles, if so, we compute and store</span>
 <span class="sd">        cocycles in the `cocycles_` dictionary Rips member variable</span>
 
+<span class="sd">    n_perm: int</span>
+<span class="sd">        The number of points to subsample in a &quot;greedy permutation,&quot;</span>
+<span class="sd">        or a furthest point sampling of the points.  These points</span>
+<span class="sd">        will be used in lieu of the full point cloud for a faster</span>
+<span class="sd">        computation, at the expense of some accuracy, which can </span>
+<span class="sd">        be bounded as a maximum bottleneck distance to all diagrams</span>
+<span class="sd">        on the original point set</span>
+<span class="sd">    </span>
+<span class="sd">    verbose: boolean</span>
+<span class="sd">        Whether to print out information about this object</span>
+<span class="sd">        as it is constructed</span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    `dgm_`: list of ndarray, each shape (n_pairs, 2)</span>
 <span class="sd">        After `transform`, `dgm_` contains computed persistence diagrams in</span>
 <span class="sd">        each dimension</span>
+<span class="sd">    </span>
+<span class="sd">    cocycles_: list (size maxdim) of list of ndarray</span>
+<span class="sd">        A list of representative cocycles in each dimension.  The list </span>
+<span class="sd">        in each dimension is parallel to the diagram in that dimension;</span>
+<span class="sd">        that is, each entry of the list is a representative cocycle of</span>
+<span class="sd">        the corresponding point expressed as an ndarray(K, d+1), where K is</span>
+<span class="sd">        the number of nonzero values of the cocycle and d is the dimension</span>
+<span class="sd">        of the cocycle.  The first d columns of each array index into</span>
+<span class="sd">        the simplices of the (subsampled) point cloud, and the last column</span>
+<span class="sd">        is the value of the cocycle at that simplex</span>
+<span class="sd">    </span>
+<span class="sd">    dperm2all_: ndarray(n_samples, n_samples) or ndarray (n_perm, n_samples) if n_perm</span>
+<span class="sd">        The distance matrix used in the computation if n_perm is none.</span>
+<span class="sd">        Otherwise, the distance from all points in the permutation to</span>
+<span class="sd">        all points in the dataset</span>
+<span class="sd">    </span>
+<span class="sd">    metric_: string or callable</span>
+<span class="sd">        The metric to use when calculating distance between instances in a </span>
+<span class="sd">        feature array. If metric is a string, it must be one of the options </span>
+<span class="sd">        specified in pairwise_distances, including &quot;euclidean&quot;, &quot;manhattan&quot;, </span>
+<span class="sd">        or &quot;cosine&quot;. Alternatively, if metric is a callable function, it is </span>
+<span class="sd">        called on each pair of instances (rows) and the resulting value </span>
+<span class="sd">        recorded. The callable should take two arrays from X as input and </span>
+<span class="sd">        return a value indicating the distance between them.</span>
+<span class="sd">    </span>
+<span class="sd">    num_edges: int</span>
+<span class="sd">        The number of edges added during the computation</span>
+<span class="sd">    </span>
+<span class="sd">    idx_perm: ndarray(n_perm) if n_perm &gt; 0</span>
+<span class="sd">        Index into the original point cloud of the points used</span>
+<span class="sd">        as a subsample in the greedy permutation</span>
 
+<span class="sd">    r_cover: float</span>
+<span class="sd">        Covering radius of the subsampled points.  </span>
+<span class="sd">        If n_perm &lt;= 0, then the full point cloud was used and this is 0</span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">     .. code:: python</span>
@@ -328,25 +498,34 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Rips.__init__"><a class="viewcode-back" href="../../reference/stubs/ripser.Rips.html#ripser.Rips.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">maxdim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">do_cocycles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">maxdim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">thresh</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
+        <span class="n">coeff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">do_cocycles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_perm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maxdim</span> <span class="o">=</span> <span class="n">maxdim</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">thresh</span> <span class="o">=</span> <span class="n">thresh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeff</span> <span class="o">=</span> <span class="n">coeff</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">do_cocycles</span> <span class="o">=</span> <span class="n">do_cocycles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_perm</span> <span class="o">=</span> <span class="n">n_perm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 
         <span class="c1"># Internal variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cocycles_</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dm_</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Distance matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dperm2all_</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Distance matrix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metric_</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_edges_</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Number of edges added</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_perm_</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_cover_</span> <span class="o">=</span> <span class="mf">0.0</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;Rips(maxdim=</span><span class="si">{}</span><span class="s2">, thresh=</span><span class="si">{}</span><span class="s2">, coeff=</span><span class="si">{}</span><span class="s2">, do_cocycles=</span><span class="si">{}</span><span class="s2">, verbose=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">maxdim</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">do_cocycles</span><span class="p">,</span> <span class="n">verbose</span>
+                <span class="s2">&quot;Rips(maxdim=</span><span class="si">{}</span><span class="s2">, thresh=</span><span class="si">{}</span><span class="s2">, coeff=</span><span class="si">{}</span><span class="s2">, do_cocycles=</span><span class="si">{}</span><span class="s2">, n_perm = </span><span class="si">{}</span><span class="s2">, verbose=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">maxdim</span><span class="p">,</span> <span class="n">thresh</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">do_cocycles</span><span class="p">,</span> <span class="n">n_perm</span><span class="p">,</span> <span class="n">verbose</span>
                 <span class="p">)</span>
             <span class="p">)</span></div>
 
@@ -359,11 +538,14 @@
             <span class="n">do_cocycles</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">do_cocycles</span><span class="p">,</span>
             <span class="n">distance_matrix</span><span class="o">=</span><span class="n">distance_matrix</span><span class="p">,</span>
             <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
+            <span class="n">n_perm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_perm</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;dgms&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_edges_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;num_edges&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dm_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;dm&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dperm2all_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;dperm2all&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx_perm_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;idx_perm&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cocycles_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;cocycles&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r_cover_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;r_cover&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dgms_</span>
 
 <div class="viewcode-block" id="Rips.fit_transform"><a class="viewcode-back" href="../../reference/stubs/ripser.Rips.html#ripser.Rips.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">):</span>
@@ -382,7 +564,7 @@
 <span class="sd">        metric: string or callable</span>
 <span class="sd">            The metric to use when calculating distance between instances in a </span>
 <span class="sd">            feature array. If metric is a string, it must be one of the options </span>
-<span class="sd">            specified in PAIRED_DISTANCES, including &quot;euclidean&quot;, &quot;manhattan&quot;, </span>
+<span class="sd">            specified in pairwise_distances, including &quot;euclidean&quot;, &quot;manhattan&quot;, </span>
 <span class="sd">            or &quot;cosine&quot;. Alternatively, if metric is a callable function, it is </span>
 <span class="sd">            called on each pair of instances (rows) and the resulting value </span>
 <span class="sd">            recorded. The callable should take two arrays from X as input and </span>
@@ -498,6 +680,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Lower Star Time Series.html">Lower Star Time Series</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Lower Star Image Filtrations.html">Lower Star Image Filtrations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Moebius Strip And The Field of Coefficients.html">Moebius Strip And The Field of Coefficients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Greedy Subsampling for Fast Approximate Computation.html">Greedy Permutation</a></li>
 </ul>
 
 <form class="search" action="../../search.html" method="get">

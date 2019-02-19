@@ -66,7 +66,7 @@
 <h1>ripser.ripser<a class="headerlink" href="#ripser-ripser" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="ripser.ripser">
-<code class="descclassname">ripser.</code><code class="descname">ripser</code><span class="sig-paren">(</span><em>X</em>, <em>maxdim=1</em>, <em>thresh=inf</em>, <em>coeff=2</em>, <em>distance_matrix=False</em>, <em>do_cocycles=False</em>, <em>metric='euclidean'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#ripser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.ripser" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ripser.</code><code class="descname">ripser</code><span class="sig-paren">(</span><em>X</em>, <em>maxdim=1</em>, <em>thresh=inf</em>, <em>coeff=2</em>, <em>distance_matrix=False</em>, <em>do_cocycles=False</em>, <em>metric='euclidean'</em>, <em>n_perm=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#ripser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.ripser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute persistence diagrams for X data array. If X is not a distance matrix, it will be converted to a distance matrix using the chosen metric.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -87,11 +87,17 @@ distance matrix from X using the chosen metric.</li>
 cocycles in the <cite>cocycles_</cite> dictionary Rips member variable</li>
 <li><strong>metric</strong> (<em>string</em><em> or </em><em>callable</em>) – The metric to use when calculating distance between instances in a
 feature array. If metric is a string, it must be one of the options
-specified in PAIRED_DISTANCES, including “euclidean”, “manhattan”,
+specified in pairwise_distances, including “euclidean”, “manhattan”,
 or “cosine”. Alternatively, if metric is a callable function, it is
 called on each pair of instances (rows) and the resulting value
 recorded. The callable should take two arrays from X as input and
 return a value indicating the distance between them.</li>
+<li><strong>n_perm</strong> (<em>int</em>) – The number of points to subsample in a “greedy permutation,”
+or a furthest point sampling of the points.  These points
+will be used in lieu of the full point cloud for a faster
+computation, at the expense of some accuracy, which can
+be bounded as a maximum bottleneck distance to all diagrams
+on the original point set</li>
 </ul>
 </td>
 </tr>
@@ -102,13 +108,27 @@ return a value indicating the distance between them.</li>
 <dd>than maxdim. Each diagram is an ndarray of size (n_pairs, 2)
 with the first column representing the birth time and the
 second column representing the death time of each pair.</dd>
-<dt>’cocycles’: list (size maxdim)</dt>
+<dt>’cocycles’: list (size maxdim) of list of ndarray</dt>
 <dd>A list of representative cocycles in each dimension.  The list
-in each dimension is parallel to the diagram in that dimension.</dd>
+in each dimension is parallel to the diagram in that dimension;
+that is, each entry of the list is a representative cocycle of
+the corresponding point expressed as an ndarray(K, d+1), where K is
+the number of nonzero values of the cocycle and d is the dimension
+of the cocycle.  The first d columns of each array index into
+the simplices of the (subsampled) point cloud, and the last column
+is the value of the cocycle at that simplex</dd>
 <dt>’num_edges’: int</dt>
 <dd>The number of edges added during the computation</dd>
-<dt>’dm’: ndarray (n_samples, n_samples)</dt>
-<dd>The distance matrix used in the computation</dd>
+<dt>’dperm2all’: ndarray(n_samples, n_samples) or ndarray (n_perm, n_samples) if n_perm</dt>
+<dd>The distance matrix used in the computation if n_perm is none.
+Otherwise, the distance from all points in the permutation to
+all points in the dataset</dd>
+<dt>’idx_perm’: ndarray(n_perm) if n_perm &gt; 0</dt>
+<dd>Index into the original point cloud of the points used
+as a subsample in the greedy permutation</dd>
+<dt>’r_cover’: float</dt>
+<dd>Covering radius of the subsampled points.
+If n_perm &lt;= 0, then the full point cloud was used and this is 0</dd>
 </dl>
 </li>
 <li><em>}</em></li>
@@ -159,6 +179,7 @@ in each dimension is parallel to the diagram in that dimension.</dd>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Lower Star Time Series.html">Lower Star Time Series</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Lower Star Image Filtrations.html">Lower Star Image Filtrations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/Moebius Strip And The Field of Coefficients.html">Moebius Strip And The Field of Coefficients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/Greedy Subsampling for Fast Approximate Computation.html">Greedy Permutation</a></li>
 </ul>
 
   <div role="note" aria-label="source link">
