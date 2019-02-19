@@ -31,8 +31,8 @@ Dependencies:
 - Cython
 - numpy
 - scipy
-- matplotlib
 - scikit-learn
+- persim
 
 **Windows users:** If you are using a Windows machine, you will also need to install [MinGW](http://www.mingw.org) on your system.
 
@@ -52,11 +52,12 @@ The interface is as simple as can be:
 
 ```
 import numpy as np
-from ripser import ripser, plot_dgms
+from ripser import ripser
+from persim import plot_diagrams
 
 data = np.random.random((100,2))
 diagrams = ripser(data)['dgms']
-plot_dgms(diagrams)
+plot_diagrams(diagrams)
 ```
 
 We also supply a Scikit-learn transformer style object if you would prefer to use that:
