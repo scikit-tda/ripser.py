@@ -57,7 +57,7 @@ Example Usage
     notebooks/Lower Star Time Series
     notebooks/Lower Star Image Filtrations
     notebooks/Moebius Strip And The Field of Coefficients
-
+    notebooks/Greedy Subsampling for Fast Approximate Computation
 
 
 .. |PyPI version| image:: https://badge.fury.io/py/ripser.svg
