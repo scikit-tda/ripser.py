@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 
-|PyPI version| |Travis-CI| |Appveyor| |Codecov| |License: MIT|
+|PyPI version| |Downloads| |Travis-CI| |Appveyor| |Codecov| |License: MIT|
 
 Ripser.py
 ==========
@@ -59,6 +59,10 @@ Example Usage
     notebooks/Moebius Strip And The Field of Coefficients
     notebooks/Greedy Subsampling for Fast Approximate Computation
 
+
+
+.. |Downloads| image:: https://pypip.in/download/ripser/badge.svg
+    :target: https://pypi.python.org/pypi/ripser/
 
 .. |PyPI version| image:: https://badge.fury.io/py/ripser.svg
    :target: https://badge.fury.io/py/ripser
