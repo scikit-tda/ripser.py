@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 
-|PyPI version| |Downloads| |Travis-CI| |Appveyor| |Codecov| |License: MIT|
+|DOI| |PyPI version| |Downloads| |Travis-CI| |Appveyor| |Codecov| |License: MIT|
 
 Ripser.py
 ==========
@@ -60,6 +60,10 @@ Example Usage
     notebooks/Greedy Subsampling for Fast Approximate Computation
 
 
+
+
+.. |DOI| image:: http://joss.theoj.org/papers/10.21105/joss.00925/status.svg
+    :target: https://doi.org/10.21105/joss.00925
 
 .. |Downloads| image:: https://pypip.in/download/ripser/badge.svg
     :target: https://pypi.python.org/pypi/ripser/
