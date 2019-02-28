@@ -1,6 +1,6 @@
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00925/status.svg)](https://doi.org/10.21105/joss.00925)
 [![PyPI version](https://badge.fury.io/py/ripser.svg)](https://badge.fury.io/py/ripser)
-[![Downloads](https://pypip.in/download/changelog/badge.svg)](https://pypi.python.org/pypi/changelog/)
+[![Downloads](https://pypip.in/download/ripser/badge.svg)](https://pypi.python.org/pypi/ripser/)
 [![Build Status](https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master)](https://travis-ci.org/scikit-tda/ripser.py)
 [![Build status](https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true)](https://ci.appveyor.com/project/sauln/ripser-py)
 [![codecov](https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-tda/ripser.py)
@@ -32,8 +32,8 @@ Dependencies:
 - Cython
 - numpy
 - scipy
-- matplotlib
 - scikit-learn
+- persim
 
 **Windows users:** If you are using a Windows machine, you will also need to install [MinGW](http://www.mingw.org) on your system.
 
@@ -53,11 +53,12 @@ The interface is as simple as can be:
 
 ```
 import numpy as np
-from ripser import ripser, plot_dgms
+from ripser import ripser
+from persim import plot_diagrams
 
 data = np.random.random((100,2))
 diagrams = ripser(data)['dgms']
-plot_dgms(diagrams)
+plot_diagrams(diagrams)
 ```
 
 We also supply a Scikit-learn transformer style object if you would prefer to use that:
