@@ -15,6 +15,7 @@ html_theme_options.update({
   # Google Analytics info
   'ga_ua': 'UA-124965309-2',
   'ga_domain': '',
+  'gh_url': 'scikit-tda/ripser.py'
 })
 
 html_short_title = project
