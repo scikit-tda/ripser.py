@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Ripser.py &#8212; Ripser.py 0.3.2 documentation</title>
+    <title>Setup &#8212; Ripser.py 0.3.2 documentation</title>
     <link rel="stylesheet" href="_static/better.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -16,12 +16,10 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
-    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="About" href="about.html" />
+    <link rel="next" title="Ripser demonstration" href="notebooks/Basic Usage.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-      <link rel="stylesheet" href="_static/custom_style.css" type="text/css" />
   </head><body>
     <header id="pageheader">
       <h1>
@@ -37,7 +35,7 @@
   <nav id="rellinks">
     <ul>
         <li>
-          <a href="about.html" title="Next document">About</a>
+          <a href="notebooks/Basic Usage.html" title="Next document">Ripser demonstration</a>
           &rarr;
         </li>
     </ul>
@@ -54,9 +52,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p><a class="reference external" href="https://doi.org/10.21105/joss.00925"><img alt="DOI" src="http://joss.theoj.org/papers/10.21105/joss.00925/status.svg" /></a> <a class="reference external" href="https://badge.fury.io/py/ripser"><img alt="PyPI version" src="https://badge.fury.io/py/ripser.svg" /></a> <a class="reference external" href="https://pypi.python.org/pypi/ripser/"><img alt="Downloads" src="https://pypip.in/download/ripser/badge.svg" /></a> <a class="reference external" href="https://travis-ci.org/scikit-tda/ripser.py"><img alt="Travis-CI" src="https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master" /></a> <a class="reference external" href="https://ci.appveyor.com/project/sauln/ripser-py"><img alt="Appveyor" src="https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true" /></a> <a class="reference external" href="https://codecov.io/gh/scikit-tda/ripser.py"><img alt="Codecov" src="https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/MIT)"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a></p>
-<div class="section" id="ripser-py">
-<h1>Ripser.py<a class="headerlink" href="#ripser-py" title="Permalink to this headline">¶</a></h1>
+  <p><a class="reference external" href="https://doi.org/10.21105/joss.00925"><img alt="DOI" src="http://joss.theoj.org/papers/10.21105/joss.00925/status.svg" /></a> <a class="reference external" href="https://badge.fury.io/py/ripser"><img alt="PyPI version" src="https://badge.fury.io/py/ripser.svg" /></a> <a class="reference external" href="https://pypi.python.org/pypi/ripser/"><img alt="Downloads" src="https://pypip.in/download/ripser/badge.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/MIT)"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a></p>
+<p><a class="reference external" href="https://travis-ci.org/scikit-tda/ripser.py"><img alt="Travis-CI" src="https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master" /></a> <a class="reference external" href="https://ci.appveyor.com/project/sauln/ripser-py"><img alt="Appveyor" src="https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true" /></a> <a class="reference external" href="https://codecov.io/gh/scikit-tda/ripser.py"><img alt="Codecov" src="https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg" /></a></p>
 <p>Ripser.py is a lean persistent homology package for Python. Building on the blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for</p>
 <ul class="simple">
 <li>computing persistence cohomology of sparse and dense data sets,</li>
@@ -64,11 +61,19 @@
 <li>computing lowerstar filtrations on images, and</li>
 <li>computing representative cochains.</li>
 </ul>
-<p>Additionally, through extensive testing and continuous integration, Ripser.py is easy to install on Mac, Linux, and Windows platforms.</p>
 <p>We supply a large set of interactive notebooks that demonstrate how to take advantage of all the features available.</p>
+<p>Ripser.py is an evolution of the original C++ Ripser project. We have put extensive work into making the package available to Python developers across all major platforms. If you are having trouble installing, please let us know by opening a github issue.</p>
 <p>You can find the source code on github at <a class="reference external" href="https://github.com/scikit-tda/ripser.py">Scikit-TDA/Ripser.py</a>. For the original C++ library, see <a class="reference external" href="https://github.com/Ripser/ripser/releases/latest">Ripser/ripser</a>.</p>
+<div class="section" id="setup">
+<h1>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
+<p>Ripser.py is available on Pypi. To install, you’ll first need Cython.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">Cython</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">Ripser</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="example-usage">
-<h2>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h2>
+<h1>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
@@ -78,46 +83,38 @@
 <span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">diagram</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="contributions">
+<h1>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h1>
+<p>We welcome contributions of all shapes and sizes. There are lots of opportunities for potential projects, so please get in touch if you would like to help out. Everything from an implementation of your favorite distance, notebooks, examples, and documentation are all equally valuable so please don’t feel you can’t contribute.</p>
+<p>To contribute please fork the project make your changes and submit a pull request. We will do our best to work through any issues with you and get your code merged into the main branch.</p>
+</div>
+<div class="section" id="citing">
+<h1>Citing<a class="headerlink" href="#citing" title="Permalink to this headline">¶</a></h1>
+<p>If you use this package, please site the JoSS paper found here: <a class="reference external" href="https://doi.org/10.21105/joss.00925"><img alt="DOI" src="http://joss.theoj.org/papers/10.21105/joss.00925/status.svg" /></a></p>
+<p>You can use the following bibtex entry</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">ctralie2018ripser</span><span class="p">,</span>
+    <span class="n">doi</span> <span class="o">=</span> <span class="p">{</span><span class="mf">10.21105</span><span class="o">/</span><span class="n">joss</span><span class="o">.</span><span class="mi">00925</span><span class="p">},</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">doi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="mf">10.21105</span><span class="o">/</span><span class="n">joss</span><span class="o">.</span><span class="mi">00925</span><span class="p">},</span>
+    <span class="n">year</span>  <span class="o">=</span> <span class="p">{</span><span class="mi">2018</span><span class="p">},</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="p">{</span><span class="n">Sep</span><span class="p">},</span>
+    <span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">The</span> <span class="n">Open</span> <span class="n">Journal</span><span class="p">},</span>
+    <span class="n">volume</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">},</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="p">{</span><span class="mi">29</span><span class="p">},</span>
+    <span class="n">pages</span> <span class="o">=</span> <span class="p">{</span><span class="mi">925</span><span class="p">},</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="p">{</span><span class="n">Christopher</span> <span class="n">Tralie</span> <span class="ow">and</span> <span class="n">Nathaniel</span> <span class="n">Saul</span> <span class="ow">and</span> <span class="n">Rann</span> <span class="n">Bar</span><span class="o">-</span><span class="n">On</span><span class="p">},</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="p">{{</span><span class="n">Ripser</span><span class="o">.</span><span class="n">py</span><span class="p">}:</span> <span class="n">A</span> <span class="n">Lean</span> <span class="n">Persistent</span> <span class="n">Homology</span> <span class="n">Library</span> <span class="k">for</span> <span class="n">Python</span><span class="p">},</span>
+    <span class="n">journal</span> <span class="o">=</span> <span class="p">{</span><span class="n">The</span> <span class="n">Journal</span> <span class="n">of</span> <span class="n">Open</span> <span class="n">Source</span> <span class="n">Software</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="license">
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>Ripser.py is available under an MIT license! The core C++ code is derived from Ripser, which is also available under an MIT license and copyright to Ulrich Baeur. The modifications, Python code, and documentation is copyright to Christopher Tralie and Nathaniel Saul.</p>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Background</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="about.html#setup">Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="about.html#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="about.html#license">License</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Basic Usage.html">Ripser demonstration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic Usage.html#Default-args-make-it-very-easy.">Default args make it very easy.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic Usage.html#Homology-over-any-prime-basis">Homology over any prime basis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic Usage.html#Specify-which-homology-classes-to-compute">Specify which homology classes to compute</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic Usage.html#Specify-maximum-radius-for-Rips-filtration">Specify maximum radius for Rips filtration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Basic Usage.html#Plotting-Options">Plotting Options</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="reference/index.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="reference/stubs/ripser.ripser.html">ripser.ripser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/stubs/ripser.Rips.html">ripser.Rips</a></li>
-</ul>
-</li>
-</ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Representative Cocycles.html">Representative Cocycles</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Approximate Sparse Filtrations.html">Approximate Sparse Filtrations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Sparse Distance Matrices.html">Sparse Distance Matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Lower Star Time Series.html">Lower Star Time Series</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Lower Star Image Filtrations.html">Lower Star Image Filtrations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Lower Star Image Filtrations.html#Gaussian-Blob-Example">Gaussian Blob Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="notebooks/Lower Star Image Filtrations.html#Cell-Biology-Image-Example">Cell Biology Image Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Moebius Strip And The Field of Coefficients.html">Moebius Strip And The Field of Coefficients</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Greedy Subsampling for Fast Approximate Computation.html">Greedy Permutation</a></li>
-</ul>
-</div>
 </div>
 </div>
 
@@ -130,10 +127,25 @@
             <p class="logo"><a href="#">
               <img class="logo" src="_static/logo.png" alt="Logo"/>
             </a></p>
-  <h3><a href="#">Table of Contents</a></h3>
-  <p class="caption"><span class="caption-text">Background</span></p>
+<form class="search" action="search.html" method="get">
+  <input type="text" name="q"
+   placeholder="type to search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+<a href=https://github.com/scikit-tda/ripser.py>
+    <p class="caption"><span class="caption-text">
+        <img src="_static/gh_logo.png" 
+        height="18px" 
+        width="18px" alt="Github icon">  
+        scikit-tda/ripser.py
+    </span></p>
+</a> 
+
+<p class="caption"><span class="caption-text">Background</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Basic Usage.html">Ripser demonstration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/index.html">API Reference</a></li>
 </ul>
@@ -148,20 +160,6 @@
 <li class="toctree-l1"><a class="reference internal" href="notebooks/Greedy Subsampling for Fast Approximate Computation.html">Greedy Permutation</a></li>
 </ul>
 
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<form class="search" action="search.html" method="get">
-  <input type="text" name="q"
-   placeholder="type to search" />
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -170,7 +168,7 @@
   <nav id="rellinks">
     <ul>
         <li>
-          <a href="about.html" title="Next document">About</a>
+          <a href="notebooks/Basic Usage.html" title="Next document">Ripser demonstration</a>
           &rarr;
         </li>
     </ul>
@@ -183,9 +181,7 @@
   </div>
   <footer id="pagefooter">&copy; 2019, Christopher Tralie and Nathaniel Saul.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-      1.8.4
-        with the <a href="http://github.com/irskep/sphinx-better-theme">
-          better</a> theme.
+      1.8.4.
 
   </footer>
 
