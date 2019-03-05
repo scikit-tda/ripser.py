@@ -102,12 +102,8 @@ setup(
         'testing': [ # `pip install -e ".[testing]"``
             'pytest'  
         ],
-        'docs': [ # `pip install -e ".[docs]"``
-            'sphinx',
-            'nbsphinx',
-            'sphinx-better-theme',
-            'sphinxcontrib-fulltoc',
-            'ipython'
+        'docs': [ # `pip install -e ".[docs]"`
+            'sktda_docs_config'
         ],
         'examples': [
             'persim',

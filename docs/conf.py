@@ -3,7 +3,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
 from ripser import __version__
-from theme_settings import *
+from sktda_docs_config import *
 
 project = u'Ripser.py'
 copyright = u'2019, Christopher Tralie and Nathaniel Saul'

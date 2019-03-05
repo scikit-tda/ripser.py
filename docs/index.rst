@@ -4,7 +4,9 @@
    contain the root `toctree` directive.
 
 
-|DOI| |PyPI version| |Downloads| |Travis-CI| |Appveyor| |Codecov| |License: MIT|
+|DOI| |PyPI version| |Downloads| |License: MIT|
+
+|Travis-CI| |Appveyor| |Codecov| 
 
 Ripser.py
 ==========
