@@ -84,7 +84,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Chris Tralie, Nathaniel Saul",
-    author_email="chris.tralie@gmail.com, nathaniel.saul@wsu.edu",
+    author_email="chris.tralie@gmail.com, nat@riverasaul.com",
     url="https://ripser.scikit-tda.org",
     license='MIT',
     packages=['ripser'],
