@@ -37,6 +37,8 @@ Dependencies:
 
 **Windows users:** If you are using a Windows machine, you will also need to install [MinGW](http://www.mingw.org) on your system.
 
+**Mac users:** Updating your Xcode and Xcode command line tools will probably fix any issues you have with installation.
+
 Cython should be the only library required before installation.  To install, type the following commands into your environment:
 
 ```
