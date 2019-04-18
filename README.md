@@ -60,7 +60,7 @@ from persim import plot_diagrams
 
 data = np.random.random((100,2))
 diagrams = ripser(data)['dgms']
-plot_diagrams(diagrams)
+plot_diagrams(diagrams, show=True)
 ```
 
 We also supply a Scikit-learn transformer style object if you would prefer to use that:
