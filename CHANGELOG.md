@@ -1,4 +1,4 @@
-# 0.3.3:
+# 0.4.0:
     - Added license to distributed packages.
 
 # 0.3.2:
