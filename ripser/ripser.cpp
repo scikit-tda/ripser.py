@@ -51,11 +51,11 @@ derivative works thereof, in binary and source code form.
 #include "ripser.hpp"
 
 
-/* Packing support for Windows */
+/* Disable packing for Windows */
 #if defined _WIN32
-#define PACK( __Declaration__ ) __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop) )
+#define PACK
 #else
-#define PACK( __Declaration__ ) __Declaration__ __attribute__((__packed__))
+#define PACK __attribute__((__packed__))
 #endif
 
 
@@ -108,7 +108,7 @@ std::vector<coefficient_t> multiplicative_inverse_vector(const coefficient_t m) 
 }
 
 #ifdef USE_COEFFICIENTS
-struct entry_t {
+struct PACK entry_t {
 	index_t index : 8 * (sizeof(index_t) - sizeof(coefficient_t));
 	coefficient_t coefficient;
 	entry_t(index_t _index, coefficient_t _coefficient)
