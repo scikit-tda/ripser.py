@@ -859,7 +859,7 @@ public:
 
 template <> class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator {
 private:
-	const ripser& parent;
+	const ripser<sparse_distance_matrix>& parent;
 
 	index_t idx_below, idx_above, v, k, max_vertex_below;
 	const diameter_entry_t simplex;
