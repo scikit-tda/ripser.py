@@ -20,7 +20,7 @@ We supply a large set of interactive notebooks that demonstrate how to take adva
 Ripser.py is an evolution of the original C++ Ripser project. We have put extensive work into making the package available to Python developers across all major platforms. If you are having trouble installing, please let us know by opening a github issue.
 
 
-You can find the source code on github at `Scikit-TDA/Ripser.py <https://github.com/scikit-tda/ripser.py>`_. For the original C++ library, see `Ripser/ripser <https://github.com/Ripser/ripser/releases/latest>`_.
+You can find the source code on github at `Scikit-TDA/Ripser.py <https://github.com/scikit-tda/ripser.py>`_. For the original C++ library, see `Ripser/ripser <https://github.com/Ripser/ripser>`_.
 
 
 
@@ -37,19 +37,34 @@ Ripser.py is available on Pypi. To install, you'll first need Cython.
 Example Usage
 --------------
 
+The interface is as simple as can be:
 
 
 .. code:: python
 
     import numpy as np
-    from ripser import Rips
-    r = Rips()
+    from ripser import ripser
+    from persim import plot_diagrams
 
     data = np.random.random((100,2))
-    diagram = r.fit_transform(data)
-    r.plot(diagram, show=True)
+    diagrams = ripser(data)['dgms']
+    plot_diagrams(diagrams, show=True)
 
 
+We also supply a Scikit-learn transformer style object if you would prefer to use that:
+
+.. code:: python
+
+    import numpy as np
+    from ripser import Rips
+
+    rips = Rips()
+    data = np.random.random((100,2))
+    diagrams = rips.fit_transform(data)
+    rips.plot(diagrams)
+
+
+.. image:: https://i.imgur.com/WmQPYnn.png
 
 
 Contributions

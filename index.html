@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Setup &#8212; Ripser.py 0.3.2 documentation</title>
     <link rel="stylesheet" href="_static/better.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -56,14 +54,14 @@
 <p><a class="reference external" href="https://travis-ci.org/scikit-tda/ripser.py"><img alt="Travis-CI" src="https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master" /></a> <a class="reference external" href="https://ci.appveyor.com/project/sauln/ripser-py"><img alt="Appveyor" src="https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true" /></a> <a class="reference external" href="https://codecov.io/gh/scikit-tda/ripser.py"><img alt="Codecov" src="https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg" /></a></p>
 <p>Ripser.py is a lean persistent homology package for Python. Building on the blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for</p>
 <ul class="simple">
-<li>computing persistence cohomology of sparse and dense data sets,</li>
-<li>visualizing persistence diagrams,</li>
-<li>computing lowerstar filtrations on images, and</li>
-<li>computing representative cochains.</li>
+<li><p>computing persistence cohomology of sparse and dense data sets,</p></li>
+<li><p>visualizing persistence diagrams,</p></li>
+<li><p>computing lowerstar filtrations on images, and</p></li>
+<li><p>computing representative cochains.</p></li>
 </ul>
 <p>We supply a large set of interactive notebooks that demonstrate how to take advantage of all the features available.</p>
 <p>Ripser.py is an evolution of the original C++ Ripser project. We have put extensive work into making the package available to Python developers across all major platforms. If you are having trouble installing, please let us know by opening a github issue.</p>
-<p>You can find the source code on github at <a class="reference external" href="https://github.com/scikit-tda/ripser.py">Scikit-TDA/Ripser.py</a>. For the original C++ library, see <a class="reference external" href="https://github.com/Ripser/ripser/releases/latest">Ripser/ripser</a>.</p>
+<p>You can find the source code on github at <a class="reference external" href="https://github.com/scikit-tda/ripser.py">Scikit-TDA/Ripser.py</a>. For the original C++ library, see <a class="reference external" href="https://github.com/Ripser/ripser">Ripser/ripser</a>.</p>
 <div class="section" id="setup">
 <h1>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
 <p>Ripser.py is available on Pypi. To install, you’ll first need Cython.</p>
@@ -74,15 +72,27 @@
 </div>
 <div class="section" id="example-usage">
 <h1>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h1>
+<p>The interface is as simple as can be:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span>
+<span class="kn">from</span> <span class="nn">persim</span> <span class="kn">import</span> <span class="n">plot_diagrams</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">diagram</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">r</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">diagram</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">diagrams</span> <span class="o">=</span> <span class="n">ripser</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="s1">&#39;dgms&#39;</span><span class="p">]</span>
+<span class="n">plot_diagrams</span><span class="p">(</span><span class="n">diagrams</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>We also supply a Scikit-learn transformer style object if you would prefer to use that:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">Rips</span>
+
+<span class="n">rips</span> <span class="o">=</span> <span class="n">Rips</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">diagrams</span> <span class="o">=</span> <span class="n">rips</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">rips</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">diagrams</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="https://i.imgur.com/WmQPYnn.png" src="https://i.imgur.com/WmQPYnn.png" />
 </div>
 <div class="section" id="contributions">
 <h1>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h1>
@@ -181,7 +191,7 @@
   </div>
   <footer id="pagefooter">&copy; 2019, Christopher Tralie and Nathaniel Saul.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-      1.8.4.
+      2.1.2.
 
   </footer>
 

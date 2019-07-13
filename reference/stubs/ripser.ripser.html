@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>ripser.ripser &#8212; Ripser.py 0.3.2 documentation</title>
     <link rel="stylesheet" href="../../_static/better.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -64,78 +62,74 @@
 <h1>ripser.ripser<a class="headerlink" href="#ripser-ripser" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="ripser.ripser">
-<code class="descclassname">ripser.</code><code class="descname">ripser</code><span class="sig-paren">(</span><em>X</em>, <em>maxdim=1</em>, <em>thresh=inf</em>, <em>coeff=2</em>, <em>distance_matrix=False</em>, <em>do_cocycles=False</em>, <em>metric='euclidean'</em>, <em>n_perm=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#ripser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.ripser" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ripser.</code><code class="sig-name descname">ripser</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">maxdim=1</em>, <em class="sig-param">thresh=inf</em>, <em class="sig-param">coeff=2</em>, <em class="sig-param">distance_matrix=False</em>, <em class="sig-param">do_cocycles=False</em>, <em class="sig-param">metric='euclidean'</em>, <em class="sig-param">n_perm=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ripser/ripser.html#ripser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ripser.ripser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute persistence diagrams for X data array. If X is not a distance matrix, it will be converted to a distance matrix using the chosen metric.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>X</strong> (<em>ndarray</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – A numpy array of either data or distance matrix.
-Can also be a sparse distance matrix of type scipy.sparse</li>
-<li><strong>maxdim</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default 1</em>) – Maximum homology dimension computed. Will compute all dimensions
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – A numpy array of either data or distance matrix.
+Can also be a sparse distance matrix of type scipy.sparse</p></li>
+<li><p><strong>maxdim</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default 1</em>) – Maximum homology dimension computed. Will compute all dimensions
 lower than and equal to this value.
-For 1, H_0 and H_1 will be computed.</li>
-<li><strong>thresh</strong> (<em>float</em><em>, </em><em>default infinity</em>) – Maximum distances considered when constructing filtration.
-If infinity, compute the entire filtration.</li>
-<li><strong>coeff</strong> (<em>int prime</em><em>, </em><em>default 2</em>) – Compute homology with coefficients in the prime field Z/pZ for p=coeff.</li>
-<li><strong>distance_matrix</strong> (<em>bool</em>) – Indicator that X is a distance matrix, if not we compute a
-distance matrix from X using the chosen metric.</li>
-<li><strong>do_cocycles</strong> (<em>bool</em>) – Indicator of whether to compute cocycles, if so, we compute and store
-cocycles in the <cite>cocycles_</cite> dictionary Rips member variable</li>
-<li><strong>metric</strong> (<em>string</em><em> or </em><em>callable</em>) – The metric to use when calculating distance between instances in a
+For 1, H_0 and H_1 will be computed.</p></li>
+<li><p><strong>thresh</strong> (<em>float</em><em>, </em><em>default infinity</em>) – Maximum distances considered when constructing filtration.
+If infinity, compute the entire filtration.</p></li>
+<li><p><strong>coeff</strong> (<em>int prime</em><em>, </em><em>default 2</em>) – Compute homology with coefficients in the prime field Z/pZ for p=coeff.</p></li>
+<li><p><strong>distance_matrix</strong> (<em>bool</em>) – Indicator that X is a distance matrix, if not we compute a
+distance matrix from X using the chosen metric.</p></li>
+<li><p><strong>do_cocycles</strong> (<em>bool</em>) – Indicator of whether to compute cocycles, if so, we compute and store
+cocycles in the <cite>cocycles_</cite> dictionary Rips member variable</p></li>
+<li><p><strong>metric</strong> (<em>string</em><em> or </em><em>callable</em>) – The metric to use when calculating distance between instances in a
 feature array. If metric is a string, it must be one of the options
 specified in pairwise_distances, including “euclidean”, “manhattan”,
 or “cosine”. Alternatively, if metric is a callable function, it is
 called on each pair of instances (rows) and the resulting value
 recorded. The callable should take two arrays from X as input and
-return a value indicating the distance between them.</li>
-<li><strong>n_perm</strong> (<em>int</em>) – The number of points to subsample in a “greedy permutation,”
+return a value indicating the distance between them.</p></li>
+<li><p><strong>n_perm</strong> (<em>int</em>) – The number of points to subsample in a “greedy permutation,”
 or a furthest point sampling of the points.  These points
 will be used in lieu of the full point cloud for a faster
 computation, at the expense of some accuracy, which can
 be bounded as a maximum bottleneck distance to all diagrams
-on the original point set</li>
+on the original point set</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li><em>A dictionary holding all of the results of the computation</em></li>
-<li><dl class="first docutils">
-<dt><strong>{‘dgms’</strong> (<em>list (size maxdim) of ndarray (n_pairs, 2)</em>) –    A list of persistence diagrams, one for each dimension less</dt>
-<dd>than maxdim. Each diagram is an ndarray of size (n_pairs, 2)
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>A dictionary holding all of the results of the computation</em></p></li>
+<li><dl class="simple">
+<dt><strong>{‘dgms’</strong> (<em>list (size maxdim) of ndarray (n_pairs, 2)</em>) –    A list of persistence diagrams, one for each dimension less</dt><dd><p>than maxdim. Each diagram is an ndarray of size (n_pairs, 2)
 with the first column representing the birth time and the
-second column representing the death time of each pair.</dd>
-<dt>’cocycles’: list (size maxdim) of list of ndarray</dt>
-<dd>A list of representative cocycles in each dimension.  The list
+second column representing the death time of each pair.</p>
+</dd>
+<dt>’cocycles’: list (size maxdim) of list of ndarray</dt><dd><p>A list of representative cocycles in each dimension.  The list
 in each dimension is parallel to the diagram in that dimension;
 that is, each entry of the list is a representative cocycle of
 the corresponding point expressed as an ndarray(K, d+1), where K is
 the number of nonzero values of the cocycle and d is the dimension
 of the cocycle.  The first d columns of each array index into
 the simplices of the (subsampled) point cloud, and the last column
-is the value of the cocycle at that simplex</dd>
-<dt>’num_edges’: int</dt>
-<dd>The number of edges added during the computation</dd>
-<dt>’dperm2all’: ndarray(n_samples, n_samples) or ndarray (n_perm, n_samples) if n_perm</dt>
-<dd>The distance matrix used in the computation if n_perm is none.
+is the value of the cocycle at that simplex</p>
+</dd>
+<dt>’num_edges’: int</dt><dd><p>The number of edges added during the computation</p>
+</dd>
+<dt>’dperm2all’: ndarray(n_samples, n_samples) or ndarray (n_perm, n_samples) if n_perm</dt><dd><p>The distance matrix used in the computation if n_perm is none.
 Otherwise, the distance from all points in the permutation to
-all points in the dataset</dd>
-<dt>’idx_perm’: ndarray(n_perm) if n_perm &gt; 0</dt>
-<dd>Index into the original point cloud of the points used
-as a subsample in the greedy permutation</dd>
-<dt>’r_cover’: float</dt>
-<dd>Covering radius of the subsampled points.
-If n_perm &lt;= 0, then the full point cloud was used and this is 0</dd>
+all points in the dataset</p>
+</dd>
+<dt>’idx_perm’: ndarray(n_perm) if n_perm &gt; 0</dt><dd><p>Index into the original point cloud of the points used
+as a subsample in the greedy permutation</p>
+</dd>
+<dt>’r_cover’: float</dt><dd><p>Covering radius of the subsampled points.
+If n_perm &lt;= 0, then the full point cloud was used and this is 0</p>
+</dd>
 </dl>
 </li>
-<li><em>}</em></li>
+<li><p><em>}</em></p></li>
 </ul>
 </p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ripser</span> <span class="kn">import</span> <span class="n">ripser</span><span class="p">,</span> <span class="n">plot_dgms</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
@@ -223,7 +217,7 @@ If n_perm &lt;= 0, then the full point cloud was used and this is 0</dd>
   </div>
   <footer id="pagefooter">&copy; 2019, Christopher Tralie and Nathaniel Saul.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-      1.8.4.
+      2.1.2.
 
   </footer>
 
