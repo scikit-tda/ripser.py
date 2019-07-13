@@ -50,6 +50,14 @@ derivative works thereof, in binary and source code form.
 #include <unordered_map>
 
 
+/* Packing support for Windows */
+#if defined _WIN32
+#define PACK( __Declaration__ ) __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop) )
+#else
+#define PACK( __Declaration__ ) __Declaration__ __attribute__((__packed__))
+#endif
+
+
 template <class Key, class T> class hash_map : public std::unordered_map<Key, T> {};
 typedef float value_t;
 typedef int64_t index_t;
@@ -98,14 +106,15 @@ std::vector<coefficient_t> multiplicative_inverse_vector(const coefficient_t m) 
 }
 
 #ifdef USE_COEFFICIENTS
-struct __attribute__((packed)) entry_t {
+PACK(
+struct entry_t {
 	index_t index : 8 * (sizeof(index_t) - sizeof(coefficient_t));
 	coefficient_t coefficient;
 	entry_t(index_t _index, coefficient_t _coefficient)
 	    : index(_index), coefficient(_coefficient) {}
 	entry_t(index_t _index) : index(_index), coefficient(1) {}
 	entry_t() : index(0), coefficient(1) {}
-};
+});
 
 //static_assert(sizeof(entry_t) == sizeof(index_t), "size of entry_t is not the same as index_t");
 
@@ -208,7 +217,7 @@ public:
 
 	//Initialize from thresholded dense distance matrix
 	template <typename DistanceMatrix>
-	sparse_distance_matrix(const DistanceMatrix& mat, value_t threshold) : 
+	sparse_distance_matrix(const DistanceMatrix& mat, value_t threshold) :
 							neighbors(mat.size()), vertex_births(mat.size(), 0) {
 		for (size_t i = 0; i < size(); ++i) {
 			for (size_t j = 0; j < size(); ++j) {
@@ -219,7 +228,7 @@ public:
 		}
 	}
 	//Initialize from COO format
-	sparse_distance_matrix(int* I, int* J, float* V, int NEdges, int N, float threshold) : 
+	sparse_distance_matrix(int* I, int* J, float* V, int NEdges, int N, float threshold) :
 							neighbors(N), vertex_births(N, 0) {
 		int i, j;
 		value_t val;
@@ -944,7 +953,7 @@ template <> std::vector<diameter_index_t> ripser<sparse_distance_matrix>::get_ed
 template <> value_t ripser<compressed_lower_distance_matrix>::get_vertex_birth(index_t i) {
 	//TODO: Dummy for now; nonzero vertex births are only done through
 	//sparse matrices at the moment
-	return 0.0; 
+	return 0.0;
 }
 
 template <> value_t ripser<sparse_distance_matrix>::get_vertex_birth(index_t i) {
