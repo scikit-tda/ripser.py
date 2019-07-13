@@ -829,7 +829,7 @@ private:
 
 public:
 	simplex_coboundary_enumerator(const diameter_entry_t _simplex, index_t _dim,
-	                              const ripser& parent)
+	                              const ripser<compressed_lower_distance_matrix>& parent)
 	    : idx_below(get_index(_simplex)), idx_above(0), v(parent.n - 1), k(_dim + 1),
 	      vertices(_dim + 1), simplex(_simplex), modulus(parent.modulus), dist(parent.dist),
 	      binomial_coeff(parent.binomial_coeff) {
@@ -874,7 +874,7 @@ private:
 
 public:
 	simplex_coboundary_enumerator(const diameter_entry_t _simplex, index_t _dim,
-	                              const ripser& _parent)
+	                              const ripser<sparse_distance_matrix>& _parent)
 	    : parent(_parent), idx_below(get_index(_simplex)), idx_above(0), v(parent.n - 1),
 	      k(_dim + 1), max_vertex_below(parent.n - 1), simplex(_simplex), modulus(parent.modulus),
 	      dist(parent.dist), binomial_coeff(parent.binomial_coeff), vertices(parent.vertices),
