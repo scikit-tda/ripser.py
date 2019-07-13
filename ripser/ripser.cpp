@@ -106,7 +106,6 @@ std::vector<coefficient_t> multiplicative_inverse_vector(const coefficient_t m) 
 }
 
 #ifdef USE_COEFFICIENTS
-PACK(
 struct entry_t {
 	index_t index : 8 * (sizeof(index_t) - sizeof(coefficient_t));
 	coefficient_t coefficient;
@@ -114,7 +113,7 @@ struct entry_t {
 	    : index(_index), coefficient(_coefficient) {}
 	entry_t(index_t _index) : index(_index), coefficient(1) {}
 	entry_t() : index(0), coefficient(1) {}
-});
+};
 
 //static_assert(sizeof(entry_t) == sizeof(index_t), "size of entry_t is not the same as index_t");
 
