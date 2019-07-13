@@ -57,6 +57,8 @@ derivative works thereof, in binary and source code form.
 #define PACK( __Declaration__ ) __Declaration__ __attribute__((__packed__))
 #endif
 
+
+template <typename DistanceMatrix> class ripser;
 template <> class ripser<compressed_lower_distance_matrix>::simplex_coboundary_enumerator;
 template <> class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator;
 template <> void compressed_distance_matrix<LOWER_TRIANGULAR>::init_rows();
