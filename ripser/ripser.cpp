@@ -48,6 +48,7 @@ derivative works thereof, in binary and source code form.
 #include <queue>
 #include <sstream>
 #include <unordered_map>
+#include "ripser.hpp"
 
 
 /* Packing support for Windows */
@@ -279,14 +280,6 @@ value_t compressed_distance_matrix<LOWER_TRIANGULAR>::operator()(const index_t i
 
 typedef compressed_distance_matrix<LOWER_TRIANGULAR> compressed_lower_distance_matrix;
 typedef compressed_distance_matrix<UPPER_TRIANGULAR> compressed_upper_distance_matrix;
-
-
-template <typename DistanceMatrix> class ripser;
-template <> class ripser<compressed_lower_distance_matrix>::simplex_coboundary_enumerator;
-template <> class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator;
-template <> void compressed_distance_matrix<LOWER_TRIANGULAR>::init_rows();
-template <> void compressed_distance_matrix<UPPER_TRIANGULAR>::init_rows();
-
 
 
 class union_find {
