@@ -57,6 +57,11 @@ derivative works thereof, in binary and source code form.
 #define PACK( __Declaration__ ) __Declaration__ __attribute__((__packed__))
 #endif
 
+template <> class ripser<compressed_lower_distance_matrix>::simplex_coboundary_enumerator;
+template <> class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator;
+template <> void compressed_distance_matrix<LOWER_TRIANGULAR>::init_rows();
+template <> void compressed_distance_matrix<UPPER_TRIANGULAR>::init_rows();
+
 
 template <class Key, class T> class hash_map : public std::unordered_map<Key, T> {};
 typedef float value_t;
