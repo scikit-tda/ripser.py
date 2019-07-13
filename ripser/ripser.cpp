@@ -248,7 +248,7 @@ public:
 	size_t size() const { return neighbors.size(); }
 };
 
-void compressed_distance_matrix<LOWER_TRIANGULAR>::init_rows() {
+template <> void compressed_distance_matrix<LOWER_TRIANGULAR>::init_rows() {
 	value_t* pointer = &distances[0];
 	for (size_t i = 1; i < size(); ++i) {
 		rows[i] = pointer;
@@ -256,7 +256,7 @@ void compressed_distance_matrix<LOWER_TRIANGULAR>::init_rows() {
 	}
 }
 
-void compressed_distance_matrix<UPPER_TRIANGULAR>::init_rows() {
+template <> void compressed_distance_matrix<UPPER_TRIANGULAR>::init_rows() {
 	value_t* pointer = &distances[0] - 1;
 	for (size_t i = 0; i < size() - 1; ++i) {
 		rows[i] = pointer;
@@ -264,11 +264,13 @@ void compressed_distance_matrix<UPPER_TRIANGULAR>::init_rows() {
 	}
 }
 
+template <>
 value_t compressed_distance_matrix<UPPER_TRIANGULAR>::operator()(const index_t i,
                                                                  const index_t j) const {
 	return i == j ? 0 : i > j ? rows[j][i] : rows[i][j];
 }
 
+template <>
 value_t compressed_distance_matrix<LOWER_TRIANGULAR>::operator()(const index_t i,
                                                                  const index_t j) const {
 	return i == j ? 0 : i < j ? rows[j][i] : rows[i][j];
@@ -814,7 +816,7 @@ public:
 	}
 };
 
-class ripser<compressed_lower_distance_matrix>::simplex_coboundary_enumerator {
+template <> class ripser<compressed_lower_distance_matrix>::simplex_coboundary_enumerator {
 private:
 	index_t idx_below, idx_above, v, k;
 	std::vector<index_t> vertices;
@@ -853,7 +855,7 @@ public:
 	}
 };
 
-class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator {
+template <> class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator {
 private:
 	const ripser& parent;
 
@@ -928,7 +930,7 @@ public:
 	}
 };
 
-std::vector<diameter_index_t> ripser<compressed_lower_distance_matrix>::get_edges() {
+template <> std::vector<diameter_index_t> ripser<compressed_lower_distance_matrix>::get_edges() {
 	std::vector<diameter_index_t> edges;
 	for (index_t index = binomial_coeff(n, 2); index-- > 0;) {
 		value_t diameter = compute_diameter(index, 1);
@@ -937,7 +939,7 @@ std::vector<diameter_index_t> ripser<compressed_lower_distance_matrix>::get_edge
 	return edges;
 }
 
-std::vector<diameter_index_t> ripser<sparse_distance_matrix>::get_edges() {
+template <> std::vector<diameter_index_t> ripser<sparse_distance_matrix>::get_edges() {
 	std::vector<diameter_index_t> edges;
 	for (index_t i = 0; i < n; ++i)
 		for (auto n : dist.neighbors[i]) {
@@ -947,16 +949,17 @@ std::vector<diameter_index_t> ripser<sparse_distance_matrix>::get_edges() {
 	return edges;
 }
 
-value_t ripser<compressed_lower_distance_matrix>::get_vertex_birth(index_t i) {
+template <> value_t ripser<compressed_lower_distance_matrix>::get_vertex_birth(index_t i) {
 	//TODO: Dummy for now; nonzero vertex births are only done through
 	//sparse matrices at the moment
 	return 0.0;
 }
 
-value_t ripser<sparse_distance_matrix>::get_vertex_birth(index_t i) {
+template <> value_t ripser<sparse_distance_matrix>::get_vertex_birth(index_t i) {
 	return dist.vertex_births[i];
 }
 
+template <>
 void ripser<compressed_lower_distance_matrix>::assemble_columns_to_reduce(
     std::vector<diameter_index_t>& simplices, std::vector<diameter_index_t>& columns_to_reduce,
     hash_map<index_t, index_t>& pivot_column_index, index_t dim) {
@@ -975,6 +978,7 @@ void ripser<compressed_lower_distance_matrix>::assemble_columns_to_reduce(
 	          greater_diameter_or_smaller_index<diameter_index_t>());
 }
 
+template <>
 void ripser<sparse_distance_matrix>::assemble_columns_to_reduce(
     std::vector<diameter_index_t>& simplices, std::vector<diameter_index_t>& columns_to_reduce,
     hash_map<index_t, index_t>& pivot_column_index, index_t dim) {
