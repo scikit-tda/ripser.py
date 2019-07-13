@@ -58,12 +58,6 @@ derivative works thereof, in binary and source code form.
 #endif
 
 
-template <typename DistanceMatrix> class ripser;
-template <> class ripser<compressed_lower_distance_matrix>::simplex_coboundary_enumerator;
-template <> class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator;
-template <> void compressed_distance_matrix<LOWER_TRIANGULAR>::init_rows();
-template <> void compressed_distance_matrix<UPPER_TRIANGULAR>::init_rows();
-
 
 template <class Key, class T> class hash_map : public std::unordered_map<Key, T> {};
 typedef float value_t;
@@ -285,6 +279,14 @@ value_t compressed_distance_matrix<LOWER_TRIANGULAR>::operator()(const index_t i
 
 typedef compressed_distance_matrix<LOWER_TRIANGULAR> compressed_lower_distance_matrix;
 typedef compressed_distance_matrix<UPPER_TRIANGULAR> compressed_upper_distance_matrix;
+
+
+template <typename DistanceMatrix> class ripser;
+template <> class ripser<compressed_lower_distance_matrix>::simplex_coboundary_enumerator;
+template <> class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator;
+template <> void compressed_distance_matrix<LOWER_TRIANGULAR>::init_rows();
+template <> void compressed_distance_matrix<UPPER_TRIANGULAR>::init_rows();
+
 
 
 class union_find {
