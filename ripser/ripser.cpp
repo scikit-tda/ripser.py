@@ -48,7 +48,6 @@ derivative works thereof, in binary and source code form.
 #include <queue>
 #include <sstream>
 #include <unordered_map>
-#include "ripser.hpp"
 
 
 /* Disable packing for Windows */
