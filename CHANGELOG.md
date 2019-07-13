@@ -1,3 +1,12 @@
+# 0.3.3:
+    - Added license to distributed packages.
+
+# 0.3.2:
+    - Added support for greedy permutations.
+    - Outsourced plotting to persim.
+    - Outsourced data construction in examples to tadasets.
+    - Revamped documentation.
+
 # 0.3.0:
     - Completed JOSS review, thanks @lmcinnes and @arokem!!
     - Documentation details updated.
@@ -28,7 +37,7 @@
 # 0.2.0:
     - Bug fixes (int rounding error for small magnitude threshold)
 
-# 0.1.7: 
+# 0.1.7:
     - Generation of cocycles.
     - Handle inf in C code and in plotting.
     - Many new options for plotting diagrams.
