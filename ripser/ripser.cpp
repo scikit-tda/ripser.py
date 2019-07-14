@@ -43,6 +43,7 @@ derivative works thereof, in binary and source code form.
 #include <cmath>
 #include <cstring>
 #include <fstream>
+#include <iterator>
 #include <iostream>
 #include <numeric>
 #include <queue>
