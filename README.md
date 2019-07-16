@@ -1,10 +1,14 @@
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00925/status.svg)](https://doi.org/10.21105/joss.00925)
 [![PyPI version](https://badge.fury.io/py/ripser.svg)](https://badge.fury.io/py/ripser)
 [![Downloads](https://pypip.in/download/ripser/badge.svg)](https://pypi.python.org/pypi/ripser/)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/ripser.svg)](https://anaconda.org/conda-forge/ripser)
+[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/ripser.svg)](https://anaconda.org/conda-forge/ripser)
+
 [![Build Status](https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master)](https://travis-ci.org/scikit-tda/ripser.py)
 [![Build status](https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true)](https://ci.appveyor.com/project/sauln/ripser-py)
 [![codecov](https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-tda/ripser.py)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 # Ripser.py
 
