@@ -1,3 +1,6 @@
+# 0.4.1:
+    - Fixed packing so C++ is MSVC compatible.
+
 # 0.4.0:
     - Added license to distributed packages.
 
