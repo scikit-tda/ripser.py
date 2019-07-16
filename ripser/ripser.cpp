@@ -43,11 +43,20 @@ derivative works thereof, in binary and source code form.
 #include <cmath>
 #include <cstring>
 #include <fstream>
+#include <iterator>
 #include <iostream>
 #include <numeric>
 #include <queue>
 #include <sstream>
 #include <unordered_map>
+
+
+/* Disable packing for Windows */
+#if defined _WIN32
+#define PACK
+#else
+#define PACK __attribute__((__packed__))
+#endif
 
 
 template <class Key, class T> class hash_map : public std::unordered_map<Key, T> {};
@@ -98,7 +107,7 @@ std::vector<coefficient_t> multiplicative_inverse_vector(const coefficient_t m) 
 }
 
 #ifdef USE_COEFFICIENTS
-struct __attribute__((packed)) entry_t {
+struct PACK entry_t {
 	index_t index : 8 * (sizeof(index_t) - sizeof(coefficient_t));
 	coefficient_t coefficient;
 	entry_t(index_t _index, coefficient_t _coefficient)
@@ -208,7 +217,7 @@ public:
 
 	//Initialize from thresholded dense distance matrix
 	template <typename DistanceMatrix>
-	sparse_distance_matrix(const DistanceMatrix& mat, value_t threshold) : 
+	sparse_distance_matrix(const DistanceMatrix& mat, value_t threshold) :
 							neighbors(mat.size()), vertex_births(mat.size(), 0) {
 		for (size_t i = 0; i < size(); ++i) {
 			for (size_t j = 0; j < size(); ++j) {
@@ -219,7 +228,7 @@ public:
 		}
 	}
 	//Initialize from COO format
-	sparse_distance_matrix(int* I, int* J, float* V, int NEdges, int N, float threshold) : 
+	sparse_distance_matrix(int* I, int* J, float* V, int NEdges, int N, float threshold) :
 							neighbors(N), vertex_births(N, 0) {
 		int i, j;
 		value_t val;
@@ -819,7 +828,7 @@ private:
 
 public:
 	simplex_coboundary_enumerator(const diameter_entry_t _simplex, index_t _dim,
-	                              const ripser& parent)
+	                              const ripser<compressed_lower_distance_matrix>& parent)
 	    : idx_below(get_index(_simplex)), idx_above(0), v(parent.n - 1), k(_dim + 1),
 	      vertices(_dim + 1), simplex(_simplex), modulus(parent.modulus), dist(parent.dist),
 	      binomial_coeff(parent.binomial_coeff) {
@@ -849,7 +858,7 @@ public:
 
 template <> class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator {
 private:
-	const ripser& parent;
+	const ripser<sparse_distance_matrix>& parent;
 
 	index_t idx_below, idx_above, v, k, max_vertex_below;
 	const diameter_entry_t simplex;
@@ -864,7 +873,7 @@ private:
 
 public:
 	simplex_coboundary_enumerator(const diameter_entry_t _simplex, index_t _dim,
-	                              const ripser& _parent)
+	                              const ripser<sparse_distance_matrix>& _parent)
 	    : parent(_parent), idx_below(get_index(_simplex)), idx_above(0), v(parent.n - 1),
 	      k(_dim + 1), max_vertex_below(parent.n - 1), simplex(_simplex), modulus(parent.modulus),
 	      dist(parent.dist), binomial_coeff(parent.binomial_coeff), vertices(parent.vertices),
@@ -944,7 +953,7 @@ template <> std::vector<diameter_index_t> ripser<sparse_distance_matrix>::get_ed
 template <> value_t ripser<compressed_lower_distance_matrix>::get_vertex_birth(index_t i) {
 	//TODO: Dummy for now; nonzero vertex births are only done through
 	//sparse matrices at the moment
-	return 0.0; 
+	return 0.0;
 }
 
 template <> value_t ripser<sparse_distance_matrix>::get_vertex_birth(index_t i) {
