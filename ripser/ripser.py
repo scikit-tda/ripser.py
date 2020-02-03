@@ -199,10 +199,11 @@ def ripser(
 
         from ripser import ripser, plot_dgms
         from sklearn import datasets
+        from persim import plot_diagrams
 
         data = datasets.make_circles(n_samples=110)[0]
         dgms = ripser(data)['dgms']
-        plot_dgms(dgms)
+        plot_diagrams(dgms, show = True)
     """
 
     if distance_matrix:
