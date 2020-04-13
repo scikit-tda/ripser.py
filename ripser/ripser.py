@@ -116,44 +116,46 @@ def ripser(
     metric="euclidean",
     n_perm=None,
 ):
-    """Compute persistence diagrams for X data array. If X is not a distance matrix, it will be converted to a distance matrix using the chosen metric.
+    """Compute persistence diagrams for X.
+
+    X can be a data set of points or a distance matrix. When using a data set
+    as X it will be converted to a distance matrix using the metric specified.
 
     Parameters
     ----------
-    X: ndarray (n_samples, n_features)
-        A numpy array of either data or distance matrix.
-        Can also be a sparse distance matrix of type scipy.sparse
+
+    X : ndarray (n_samples, n_features)
+        A numpy array of either data or distance matrix (also pass `distance_matrix=True`). Can also be a sparse distance matrix of type scipy.sparse
 
     maxdim: int, optional, default 1
-        Maximum homology dimension computed. Will compute all dimensions 
-        lower than and equal to this value. 
-        For 1, H_0 and H_1 will be computed.
+        Maximum homology dimension computed. Will compute all dimensions lower than and equal to this value.  For 1, H_0 and H_1 will be computed.
 
     thresh: float, default infinity
-        Maximum distances considered when constructing filtration. 
-        If infinity, compute the entire filtration.
+        Maximum distances considered when constructing filtration.  If infinity, compute the entire filtration.
 
     coeff: int prime, default 2
         Compute homology with coefficients in the prime field Z/pZ for p=coeff.
 
-    distance_matrix: bool
-        Indicator that X is a distance matrix, if not we compute a 
-        distance matrix from X using the chosen metric.
+    distance_matrix: bool, optional, default False
+        When True the input matrix X will be considered a distance matrix.
 
-    do_cocycles: bool
-        Indicator of whether to compute cocycles, if so, we compute and store
-        cocycles in the `cocycles_` dictionary Rips member variable
+    do_cocycles: bool, optional, default False
+        Computed cocycles will be available in the `cocycles` value
+        of the return dictionary.
 
-    metric: string or callable
-        The metric to use when calculating distance between instances in a 
-        feature array. If metric is a string, it must be one of the options 
-        specified in pairwise_distances, including "euclidean", "manhattan", 
-        or "cosine". Alternatively, if metric is a callable function, it is 
-        called on each pair of instances (rows) and the resulting value 
-        recorded. The callable should take two arrays from X as input and 
-        return a value indicating the distance between them.
+    metric: string or callable, optional, default "euclidean"
+        Use this metric to compute distances between rows of X.
+
+        "euclidean", "manhattan" and "cosine" are already provided metrics
+        to choose from by using their name.
+
+        You can provide a callable function and it will be used with two
+        rows as arguments, it will be called once for each pair of rows in X.
+
+        The computed distance will be available in the result dictionary under
+        the key `dperm2all`.
     
-    n_perm: int
+    n_perm: int, optional, default None
         The number of points to subsample in a "greedy permutation,"
         or a furthest point sampling of the points.  These points
         will be used in lieu of the full point cloud for a faster
@@ -163,38 +165,49 @@ def ripser(
 
     Returns
     -------
-    A dictionary holding all of the results of the computation
+    dict
+        The result of the computation.
 
-    {'dgms': list (size maxdim) of ndarray (n_pairs, 2)
-        A list of persistence diagrams, one for each dimension less 
-        than maxdim. Each diagram is an ndarray of size (n_pairs, 2) 
-        with the first column representing the birth time and the 
-        second column representing the death time of each pair.
-     'cocycles': list (size maxdim) of list of ndarray
-        A list of representative cocycles in each dimension.  The list 
-        in each dimension is parallel to the diagram in that dimension;
-        that is, each entry of the list is a representative cocycle of
-        the corresponding point expressed as an ndarray(K, d+1), where K is
-        the number of nonzero values of the cocycle and d is the dimension
-        of the cocycle.  The first d columns of each array index into
-        the simplices of the (subsampled) point cloud, and the last column
-        is the value of the cocycle at that simplex
-     'num_edges': int
-        The number of edges added during the computation
-     'dperm2all': ndarray(n_samples, n_samples) or ndarray (n_perm, n_samples) if n_perm
-        The distance matrix used in the computation if n_perm is none.
-        Otherwise, the distance from all points in the permutation to
-        all points in the dataset
-     'idx_perm': ndarray(n_perm) if n_perm > 0
-        Index into the original point cloud of the points used
-        as a subsample in the greedy permutation
-     'r_cover': float
-        Covering radius of the subsampled points.  
-        If n_perm <= 0, then the full point cloud was used and this is 0
-    }
+        .. note::
+            Each list in `dgms` has a relative list in `cocycles`.
+
+            >>> r = ripser(...)
+
+            For each dimension ``d`` and index ``k`` then ``r['dgms'][d][k]``
+            is the barcode associated to the representative cocycle
+            ``r['cocycles'][d][k]``.
+
+        The keys available in the dictionary are the:
+
+            * ``dgms``: list (size maxdim) of ndarray (n_pairs, 2)
+                For each dimension less than ``maxdim`` a list of persistence diagrams.
+                Each persistent diagram is a pair (birth time, death time).
+            * ``cocycles``: list (size maxdim) of list of ndarray
+                For each dimension less than ``maxdim`` a list of representative cocycles.
+                Each representative cocycle in dimension ``d`` is represented as a
+                ndarray of ``(k,d+1)`` elements. Each non zero value of the cocycle
+                is laid out in a row, first the ``d`` points of the simplex and then
+                the value of the cocycle on the simplex.
+            * ``num_edges``: int
+                The number of edges added during the computation
+            * ``dperm2all``: ndarray(n_samples, n_samples) or ndarray (n_perm, n_samples) if n_perm
+                The distance matrix used during the computation. When ``n_perm``
+                is not None the distance matrix will only refers to the subsampled
+                dataset.
+            * ``idx_perm``: ndarray(n_perm) if ``n_perm`` > 0
+                Index into the original point cloud of the points used
+                as a subsample in the greedy permutation
+
+                    >>> r = ripser(X, n_perm=k)
+                    >>> subsampling = X[r['idx_perm']]
+
+            * 'r_cover': float
+                Covering radius of the subsampled points.
+                If ``n_perm <= 0``, then the full point cloud was used and this is 0
 
     Examples
     --------
+
     .. code:: python
 
         from ripser import ripser, plot_dgms
@@ -204,11 +217,34 @@ def ripser(
         data = datasets.make_circles(n_samples=110)[0]
         dgms = ripser(data)['dgms']
         plot_diagrams(dgms, show = True)
+
+    Raises
+    ------
+
+    ValueError
+        If the distance matrix is not square.
+
+    ValueError
+        When using both a greedy permutation and a sparse distance matrix.
+
+    ValueError
+        When `n_perm` value is bigger than the number of rows in the matrix.
+
+    ValueError
+        When `n_perm` is non positive.
+
+    Warns
+    ----
+
+        When using a square matrix without toggling `distance_matrix` to True.
+
+        When there are more columns than rows (as each row is a different data point).
+
     """
 
     if distance_matrix:
         if not (X.shape[0] == X.shape[1]):
-            raise Exception("Distance matrix is not square")
+            raise ValueError("Distance matrix is not square")
     else:
         if X.shape[0] == X.shape[1]:
             warnings.warn(
@@ -223,16 +259,16 @@ def ripser(
             )
 
     if n_perm and distance_matrix and sparse.issparse(X):
-        raise Exception(
+        raise ValueError(
             "Greedy permutation is not supported for sparse distance matrices"
         )
     if n_perm and n_perm > X.shape[0]:
-        raise Exception(
+        raise ValueError(
             "Number of points in greedy permutation is greater"
             + " than number of points in the point cloud"
         )
     if n_perm and n_perm < 0:
-        raise Exception(
+        raise ValueError(
             "Should be a strictly positive number of points in the greedy permutation"
         )
 
