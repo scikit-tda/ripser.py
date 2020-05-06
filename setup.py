@@ -5,14 +5,8 @@ import platform
 from setuptools import setup
 from setuptools.extension import Extension
 
-# Ensure Cython is installed before we even attempt to install Ripser.py
-try:
-    from Cython.Build import cythonize
-    from Cython.Distutils import build_ext
-except:
-    print("You don't seem to have Cython installed. Please get a")
-    print("copy from www.cython.org or install it with `pip install Cython`")
-    sys.exit(1)
+from Cython.Build import cythonize
+from Cython.Distutils import build_ext
 
 ## Get version information from _version.py
 import re
