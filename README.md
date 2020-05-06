@@ -46,10 +46,7 @@ Dependencies:
 
 **Mac users:** Updating your Xcode and Xcode command line tools will probably fix any issues you have with installation.
 
-Cython should be the only library required before installation.  To install, type the following commands into your environment:
-
 ```
-pip install cython
 pip install ripser
 ```
 
