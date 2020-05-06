@@ -111,4 +111,18 @@ setup(
         ]
     },
     cmdclass={'build_ext': CustomBuildExtCommand},
+    python_requires='>=3.6',
+    classifiers=[
+        'Intended Audience :: Science/Research',
+        'Intended Audience :: Education',
+        'Intended Audience :: Financial and Insurance Industry',
+        'Intended Audience :: Healthcare Industry',
+        'Topic :: Scientific/Engineering :: Information Analysis',
+        'Topic :: Scientific/Engineering :: Mathematics',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8'
+    ],
+    keywords='persistent homology, rips filtration, persistence diagrams, topology data analysis, algebraic topology, unsupervised learning'
 )
