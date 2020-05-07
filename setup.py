@@ -77,20 +77,21 @@ setup(
         'numpy',
         'scipy',
         'scikit-learn',
-        'persim'
+        'persim',
+        'matplotlib',
     ],
     extras_require={
         'testing': [ # `pip install -e ".[testing]"``
-            'pytest'  
+            'pytest',
         ],
         'docs': [ # `pip install -e ".[docs]"`
-            'sktda_docs_config'
+            'sktda_docs_config',
         ],
         'examples': [
             'persim',
             'tadasets',
             'jupyter',
-            'pillow'
+            'pillow',
         ]
     },
     python_requires='>=3.6',
