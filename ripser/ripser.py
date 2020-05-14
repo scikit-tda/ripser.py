@@ -305,12 +305,12 @@ def ripser(
             maxdim,
             thresh,
             coeff,
-            int(do_cocycles),
+            do_cocycles,
         )
     else:
         I, J = np.meshgrid(np.arange(n_points), np.arange(n_points))
         DParam = np.array(dm[I > J], dtype=np.float32)
-        res = DRFDM(DParam, maxdim, thresh, coeff, int(do_cocycles))
+        res = DRFDM(DParam, maxdim, thresh, coeff, do_cocycles)
 
     # Unwrap persistence diagrams
     dgms = res["births_and_deaths_by_dim"]
