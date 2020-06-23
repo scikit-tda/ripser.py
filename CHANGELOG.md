@@ -1,3 +1,7 @@
+# 0.5.2:
+    - Cocycle indices now correspond to point cloud indices, even
+      when a greedy permutation is in use
+
 # 0.4.1:
     - Fixed packing so C++ is MSVC compatible.
 
