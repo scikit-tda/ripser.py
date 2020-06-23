@@ -186,8 +186,9 @@ def ripser(
                 For each dimension less than ``maxdim`` a list of representative cocycles.
                 Each representative cocycle in dimension ``d`` is represented as a
                 ndarray of ``(k,d+1)`` elements. Each non zero value of the cocycle
-                is laid out in a row, first the ``d`` points of the simplex and then
-                the value of the cocycle on the simplex.
+                is laid out in a row, first the ``d`` indices of the simplex and then
+                the value of the cocycle on the simplex.  The indices of the simplex
+                reference the original point cloud, even if a greedy permutation was used.
             * ``num_edges``: int
                 The number of edges added during the computation
             * ``dperm2all``: ndarray(n_samples, n_samples) or ndarray (n_perm, n_samples) if n_perm
@@ -274,7 +275,9 @@ def ripser(
 
     idx_perm = np.arange(X.shape[0])
     r_cover = 0.0
-    if n_perm:
+    doing_permutation = False
+    if n_perm and n_perm < X.shape[0]:
+        doing_permutation = True
         idx_perm, lambdas, dperm2all = get_greedy_perm(
             X, n_perm=n_perm, distance_matrix=distance_matrix, metric=metric
         )
@@ -327,7 +330,11 @@ def ripser(
             n = int(len(ccl) / (dim + 2))
             ccl = np.reshape(np.array(ccl, dtype=np.int64), [n, dim + 2])
             ccl[:, -1] = np.mod(ccl[:, -1], coeff)
+            if doing_permutation:
+                # Retain original indices in the point cloud
+                ccl[:, 0:-1] = idx_perm[ccl[:, 0:-1]]
             cocycles[dim].append(ccl)
+
     ret = {
         "dgms": dgms,
         "cocycles": cocycles,
