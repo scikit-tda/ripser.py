@@ -193,3 +193,25 @@ class TestParams:
         h12 = res2["dgms"][1]
         assert res2["r_cover"] > 0
         assert np.max(np.abs(h11 - h12)) <= 2 * res2["r_cover"]
+    
+    def test_cocycle_indices_greedyperm(self):
+        """
+        Make sure the original vertex indices are retained in the
+        cocycle simplex specifications, even when a greedy
+        permutation is in use
+        """
+        N = 1000
+        n_perm = 50
+        np.random.seed(N)
+        t = 2 * np.pi * np.random.rand(N)
+        X = np.array([np.cos(t), np.sin(t)]).T
+        res1 = ripser(X, n_perm=n_perm, do_cocycles=True, maxdim=1)
+        cocycles1 = res1['cocycles'][1]
+        idx_perm = res1['idx_perm']
+        X = X[idx_perm, :]
+        res2 = ripser(X, do_cocycles=True, maxdim=1)
+        cocycles2 = res2['cocycles'][1]
+        for cc1, cc2 in zip(cocycles1, cocycles2):
+            assert cc1.shape[0] == cc2.shape[0]
+            cc2[:, 0:-1] = idx_perm[cc2[:, 0:-1]]
+            assert np.allclose(cc1, cc2)
