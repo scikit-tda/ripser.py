@@ -1,3 +1,6 @@
+# 0.5.3
+    - Adding link to ripser++ GPU version by Simon Zhang
+
 # 0.5.2:
     - Cocycle indices now correspond to point cloud indices, even
       when a greedy permutation is in use
