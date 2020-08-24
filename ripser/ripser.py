@@ -299,16 +299,24 @@ def ripser(
         dm = sparse.coo_matrix(dm)
 
     if sparse.issparse(dm):
-        coo = dm.tocoo()
+        if sparse.isspmatrix_coo(dm):
+            # If the matrix is already COO, we need to order the row and column indices
+            # lexicographically to avoid errors. See issue #103
+            row, col, data = dm.row, dm.col, dm.data
+            lex_sort_idx = np.lexsort((col, row))
+            row, col, data = row[lex_sort_idx], col[lex_sort_idx], data[lex_sort_idx]
+        else:
+            # Lexicographic ordering is performed by scipy upon conversion to COO
+            coo = dm.tocoo()
+            row, col, data = coo.row, coo.col, coo.data
         res = DRFDMSparse(
-            coo.row.astype(dtype=np.int32, order="C"),
-            coo.col.astype(dtype=np.int32, order="C"),
-            np.array(coo.data, dtype=np.float32, order="C"),
+            row.astype(dtype=np.int32, order="C"),
+            col.astype(dtype=np.int32, order="C"),
+            np.array(data, dtype=np.float32, order="C"),
             n_points,
             maxdim,
             thresh,
             coeff,
-            do_cocycles,
         )
     else:
         I, J = np.meshgrid(np.arange(n_points), np.arange(n_points))
