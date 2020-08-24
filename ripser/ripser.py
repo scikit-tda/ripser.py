@@ -299,7 +299,7 @@ def ripser(
         dm = sparse.coo_matrix(dm)
 
     if sparse.issparse(dm):
-        if isspmatrix_coo(dm):
+        if sparse.isspmatrix_coo(dm):
             # If the matrix is already COO, we need to order the row and column indices
             # lexicographically to avoid errors. See issue #103
             row, col, data = dm.row, dm.col, dm.data
