@@ -1,3 +1,6 @@
+# 0.5.4
+    - Fixing issue with inconsistent answers from different scipy.sparse formats, courtesy of Umberto Lupo
+
 # 0.5.3
     - Adding link to ripser++ GPU version by Simon Zhang
 
