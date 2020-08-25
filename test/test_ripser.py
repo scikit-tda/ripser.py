@@ -215,3 +215,17 @@ class TestParams:
             assert cc1.shape[0] == cc2.shape[0]
             cc2[:, 0:-1] = idx_perm[cc2[:, 0:-1]]
             assert np.allclose(cc1, cc2)
+    
+    def test_sparse_format(self):
+        """
+        Test to make sure different formats for sparse matrices
+        yield the same answer.  Test courtesy of Umberto Lupo (@ulupo)
+        """
+        data = np.array([6., 8., 2., 4., 5., 9., 10., 3., 1., 1.])
+        row = np.array([0, 0, 0, 0, 1, 1, 1, 2, 2, 3])
+        col = np.array([4, 1, 3, 2, 4, 3, 2, 3, 4, 4])
+        dm = sparse.coo_matrix((data, (row, col)), shape=(5, 5))
+        dgms1 = ripser(dm, distance_matrix=True)['dgms']
+        dgms2 = ripser(dm.tocsr(), distance_matrix=True)['dgms']
+        for dgm1k, dgm2k in zip(dgms1, dgms2):
+            assert(np.allclose(dgm1k, dgm2k))
