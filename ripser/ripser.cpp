@@ -58,6 +58,13 @@ static const std::chrono::milliseconds time_step(40);
 static const std::string clear_line("\r\033[K");
 #endif
 
+/* Disable packing for Windows */
+#if defined _WIN32
+#define PACK
+#else
+#define PACK __attribute__((__packed__))
+#endif
+
 #if defined(USE_ROBINHOOD_HASHMAP)
 #include <robin_hood.h>
 
@@ -152,7 +159,7 @@ std::vector<coefficient_t> multiplicative_inverse_vector(const coefficient_t m)
 
 #ifdef USE_COEFFICIENTS
 
-struct __attribute__((packed)) entry_t {
+struct PACK entry_t {
     index_t index : 8 * sizeof(index_t) - num_coefficient_bits;
     coefficient_t coefficient : num_coefficient_bits;
     entry_t(index_t _index, coefficient_t _coefficient)
