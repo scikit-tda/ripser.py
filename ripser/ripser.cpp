@@ -170,8 +170,8 @@ struct PACK entry_t {
     entry_t() : index(0), coefficient(0) {}
 };
 
-static_assert(sizeof(entry_t) == sizeof(index_t),
-              "size of entry_t is not the same as index_t");
+// static_assert(sizeof(entry_t) == sizeof(index_t),
+//               "size of entry_t is not the same as index_t");
 
 entry_t make_entry(index_t i, coefficient_t c) { return entry_t(i, c); }
 index_t get_index(const entry_t& e) { return e.index; }
