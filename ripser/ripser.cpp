@@ -49,9 +49,7 @@ derivative works thereof, in binary and source code form.
 #include <numeric>
 #include <queue>
 #include <sstream>
-#include <thread>
 #include <unordered_map>
-#include <xmmintrin.h>
 
 // #define INDICATE_PROGRESS
 
