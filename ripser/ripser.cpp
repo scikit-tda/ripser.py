@@ -86,8 +86,9 @@ typedef int16_t coefficient_t;
 
 static const size_t num_coefficient_bits = 8;
 
+// 1L on windows is ALWAYS 32 bits, when on unix systems is pointer size
 static const index_t max_simplex_index =
-    (1l << (8 * sizeof(index_t) - 1 - num_coefficient_bits)) - 1;
+    (uintptr_t(1) << (8 * sizeof(index_t) - 1 - num_coefficient_bits)) - 1;
 
 void check_overflow(index_t i)
 {
