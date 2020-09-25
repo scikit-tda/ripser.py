@@ -47,7 +47,7 @@ extra_link_args = []
 
 if platform.system() == "Windows":
     extra_compile_args.extend([
-        '-std=c++11'
+        '/std:c++14'
     ])
 elif platform.system() == "Darwin":
     extra_compile_args.extend([
