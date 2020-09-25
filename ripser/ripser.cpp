@@ -171,8 +171,12 @@ struct PACK entry_t {
     entry_t() : index(0), coefficient(0) {}
 };
 
-// static_assert(sizeof(entry_t) == sizeof(index_t),
-//               "size of entry_t is not the same as index_t");
+
+/* This assert fails on windows due to the support of packed structures */
+#ifndef _MSC_VER
+static_assert(sizeof(entry_t) == sizeof(index_t),
+              "size of entry_t is not the same as index_t");
+#endif
 
 entry_t make_entry(index_t i, coefficient_t c) { return entry_t(i, c); }
 index_t get_index(const entry_t& e) { return e.index; }
@@ -1051,6 +1055,7 @@ public:
 
         parent.get_simplex_vertices(idx_below, _dim, parent.n,
                                     vertices.rbegin());
+
         for (auto v : vertices) {
             neighbor_it.push_back(dist.neighbors[v].rbegin());
             neighbor_end.push_back(dist.neighbors[v].rend());
