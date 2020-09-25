@@ -280,7 +280,6 @@ public:
     value_t operator()(const index_t i, const index_t j) const;
 
     size_t size() const { return rows.size(); }
-    void print(void) const {};
     void init_rows();
 };
 
@@ -1038,12 +1037,12 @@ class ripser<sparse_distance_matrix>::simplex_coboundary_enumerator
 
 public:
     simplex_coboundary_enumerator(const diameter_entry_t _simplex,
-                                  const index_t _dim, const ripser& parent)
-        : idx_below(get_index(_simplex)), idx_above(0),
-          k(_dim + 1), vertices(_dim + 1), simplex(_simplex),
-          modulus(parent.modulus), dist(parent.dist),
-          binomial_coeff(parent.binomial_coeff), neighbor_it(dist.neighbor_it),
-          neighbor_end(dist.neighbor_end)
+                                  const index_t _dim,
+                                  const ripser<sparse_distance_matrix>& parent)
+        : idx_below(get_index(_simplex)), idx_above(0), k(_dim + 1),
+          vertices(_dim + 1), simplex(_simplex), modulus(parent.modulus),
+          dist(parent.dist), binomial_coeff(parent.binomial_coeff),
+          neighbor_it(dist.neighbor_it), neighbor_end(dist.neighbor_end)
     {
         neighbor_it.clear();
         neighbor_end.clear();
