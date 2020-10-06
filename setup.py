@@ -64,14 +64,29 @@ else:
         "-std=c++11"
     ])
 
+macros = [
+    ("USE_COEFFICIENTS", 1),
+    ("NDEBUG", 1),
+    ("ASSEMBLE_REDUCTION_MATRIX", 1)
+]
+
+# Robinhood
+robinhood_path = 'ripser/robinhood'
+if os.path.isdir(robinhood_path):
+    macros.extend([("USE_ROBINHOOD_HASHMAP", 1)])
+
+    robinhood_include_path = 'src/include'
+    if platform.system() == "Windows":
+        extra_compile_args.extend(['/I'+os.path.join(robinhood_path,
+                                                     robinhood_include_path)])
+    else:
+        extra_compile_args.extend(['-I'+os.path.join(robinhood_path,
+                                                     robinhood_include_path)])
+
 ext_modules = Extension(
     "pyRipser",
     sources=["ripser/pyRipser.pyx"],
-    define_macros=[
-        ("USE_COEFFICIENTS", 1),
-        ("NDEBUG", 1), 
-        ("ASSEMBLE_REDUCTION_MATRIX", 1)
-    ],
+    define_macros=macros,
     extra_compile_args=extra_compile_args,
     extra_link_args=extra_link_args,
     language="c++"
