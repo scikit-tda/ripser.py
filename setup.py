@@ -71,11 +71,11 @@ macros = [
 ]
 
 # Robinhood
-robinhood_path = 'ripser/robinhood'
+robinhood_path = os.path.join('ripser', 'robinhood')
 if os.path.isdir(robinhood_path):
     macros.extend([("USE_ROBINHOOD_HASHMAP", 1)])
 
-    robinhood_include_path = 'src/include'
+    robinhood_include_path = os.path.join('src', 'include')
     if platform.system() == "Windows":
         extra_compile_args.extend(['/I'+os.path.join(robinhood_path,
                                                      robinhood_include_path)])
