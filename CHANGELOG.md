@@ -1,3 +1,8 @@
+# 0.6.0
+- Update C++ backend to commit 286d369 of [ripser](https://github.com/Ripser/ripser) but keeping same functionalities
+- Add support to robinhood hashmap into the C++ Backend
+- Update CI in order to compile C++ with robinhood enable
+
 # 0.5.5
     - Updating CI/CD pipeline.
 
