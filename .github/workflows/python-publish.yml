@@ -22,7 +22,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install setuptools wheel twine Cython
-          pip install -e .
+          python setup.py install
       - name: Build and publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
@@ -45,5 +45,6 @@ jobs:
         shell: bash -l {0}
         run: |    
           conda install numpy pandas scipy matplotlib pytest libpython cython wheel twine
+          python setup.py install
           python setup.py bdist_wheel bdist_wininst
         # twine upload dist/*
