@@ -40,12 +40,33 @@ jobs:
       run: |
         bash <(curl -s https://codecov.io/bash)
 
-  test-on-windows-or-mac:
-    runs-on: ${{ matrix.os }}
+  test-on-mac:
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
-        os: ["macos-latest", "windows-latest"]
+        python-version: [3.6, 3.7]
+
+    steps:
+      - uses: conda-incubator/setup-miniconda@v1
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+          activate-environment: test
+      - name: Set up conda
+        shell: bash -l {0}
+        run: |    
+          conda install numpy pandas scipy matplotlib pytest cython
+          python setup.py install
+      - name: Test with pytest
+        run: |
+          pytest --cov ripser
+
+  test-on-windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
         python-version: [3.6, 3.7]
 
     steps:
