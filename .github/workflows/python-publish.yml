@@ -47,7 +47,7 @@ jobs:
         run: |    
           conda install numpy pandas scipy matplotlib pytest libpython cython wheel twine
           python setup.py install
-          python setup.py bdist_wheel bdist_wininst
+          python setup.py bdist_wheel
           twine upload --repository testpypi dist/*
 
 
