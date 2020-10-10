@@ -62,7 +62,7 @@ jobs:
       - name: Test with pytest
         shell: bash -l {0}
         run: |
-          pytest ripser
+          pytest .
 
   test-on-windows:
     runs-on: windows-latest
@@ -86,4 +86,4 @@ jobs:
       - name: Test with pytest
         shell: bash -l {0}
         run: |
-          pytest ripser
+          pytest .
