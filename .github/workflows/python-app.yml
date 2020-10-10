@@ -48,6 +48,7 @@ jobs:
         python-version: [3.6, 3.7]
 
     steps:
+      - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v1
         with:
           auto-update-conda: true
@@ -70,6 +71,7 @@ jobs:
         python-version: [3.6, 3.7]
 
     steps:
+      - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v1
         with:
           auto-update-conda: true
