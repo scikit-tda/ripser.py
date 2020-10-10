@@ -59,7 +59,7 @@ jobs:
       - name: Set up conda
         run: |
           conda create -q -n test-environment python=${{ matrix.python-version }} numpy pandas scipy matplotlib pytest  
-          activate test-environment
+          conda activate test-environment
           conda install libpython cython 
           python setup.py install
       - name: Test with pytest
