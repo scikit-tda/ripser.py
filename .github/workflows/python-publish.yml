@@ -33,12 +33,19 @@ jobs:
 
   deploy-windows:
     runs-on: windows-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        installer: ["https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe", "https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86.exe"]
+
     steps:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v1
         with:
+          installer-url: ${{ matrix.installer }}
           auto-update-conda: true
-          python-version: 3.7
+          python-version: 3.8
           activate-environment: deploy
 
       - name: Set up conda
@@ -48,3 +55,6 @@ jobs:
           python setup.py install
           python setup.py bdist_wheel bdist_wininst
         # twine upload dist/*
+
+
+        
