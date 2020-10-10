@@ -26,7 +26,7 @@ install:
   - conda info -a
   - "conda create -q -n test-environment
   python=%PYTHON_VERSION% numpy pandas scipy matplotlib pytest"
-  - activate test-environment
+  - conda activate test-environment
   - conda install libpython cython
   - echo [build] > %CONDA_PREFIX%\Lib\distutils\distutils.cfg
   - python setup.py install
