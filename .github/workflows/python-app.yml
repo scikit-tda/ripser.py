@@ -53,15 +53,11 @@ jobs:
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
-      - name: Conda info
-        shell: bash -l {0}
-        run: conda info
+          activate-environment: test
       - name: Set up conda
-        shell: pwsh
-        run: |          
-          conda create -q -n test-environment python=${{ matrix.python-version }} numpy pandas scipy matplotlib pytest  
-          conda activate test-environment
-          conda install libpython cython 
+        shell: bash -l {0}
+        run: |    
+          conda install numpy pandas scipy matplotlib pytest libpython cython
           python setup.py install
       - name: Test with pytest
         run: |
