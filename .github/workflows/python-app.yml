@@ -60,6 +60,7 @@ jobs:
           conda install numpy pandas scipy matplotlib pytest cython
           python setup.py install
       - name: Test with pytest
+        shell: bash -l {0}
         run: |
           pytest --cov ripser
 
@@ -83,5 +84,6 @@ jobs:
           conda install numpy pandas scipy matplotlib pytest libpython cython
           python setup.py install
       - name: Test with pytest
+        shell: bash -l {0}
         run: |
           pytest --cov ripser
