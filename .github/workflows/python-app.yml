@@ -58,7 +58,7 @@ jobs:
         shell: bash -l {0}
         run: |    
           conda install numpy pandas scipy matplotlib pytest cython
-          pip install -e ".[testing]"
+          python setup.py install
       - name: Test with pytest
         shell: bash -l {0}
         run: |
@@ -82,7 +82,7 @@ jobs:
         shell: bash -l {0}
         run: |    
           conda install numpy pandas scipy matplotlib pytest libpython cython
-          pip install -e ".[testing]"
+          python setup.py install
       - name: Test with pytest
         shell: bash -l {0}
         run: |
