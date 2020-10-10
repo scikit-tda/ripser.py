@@ -57,8 +57,8 @@ jobs:
         shell: bash -l {0}
         run: conda info
       - name: Set up conda
-        run: |
-          conda init bash
+        shell: pwsh
+        run: |          
           conda create -q -n test-environment python=${{ matrix.python-version }} numpy pandas scipy matplotlib pytest  
           conda activate test-environment
           conda install libpython cython 
