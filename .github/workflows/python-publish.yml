@@ -34,6 +34,7 @@ jobs:
     strategy:
       matrix:
         arch: ['x86', 'x64']
+        python-version: [3.6, 3.7, 3.8]
 
     runs-on: "windows-latest"
 
@@ -42,7 +43,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: ${{ matrix.arch }}
           architecture: ${{ matrix.arch }}
       - name: Install dependencies
         run: |
