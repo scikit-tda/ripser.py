@@ -38,14 +38,13 @@ jobs:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v1
         with:
-          auto-update-conda: true
           python-version: 3.8
           activate-environment: deploy
 
       - name: Set up conda
         shell: bash -l {0}
         run: |    
-          conda install numpy pandas scipy matplotlib libpython cython wheel twine
+          conda install numpy pandas scipy matplotlib libpython cython wheel twine rfc3986
           python setup.py install
       - name: Build and deploy
         shell: bash -l {0}
