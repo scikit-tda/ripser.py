@@ -51,6 +51,7 @@ jobs:
         run: |        
           python setup.py bdist_wheel
           ls dist/
+          pip install twine
           twine upload --repository testpypi dist/*
 
 
