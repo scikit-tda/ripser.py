@@ -10,13 +10,7 @@ on:
 
 jobs:
   deploy-unix:
-    strategy:
-      matrix:
-        os: ["ubuntu-latest", "windows-latest"]
-
-    runs-on: "${{ matrix.os }}"
-
-
+    runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -36,31 +30,29 @@ jobs:
           python setup.py sdist
           twine upload --repository testpypi dist/*
 
-  deploy-windows:
-    runs-on: windows-latest
-    
+  deploy-windows-pip:
+    strategy:
+      matrix:
+        arch: ['x64', 'x86']
+
+    runs-on: "windows-latest"
+
     steps:
       - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
-          activate-environment: deploy
-
-      - name: Set up conda
-        shell: bash -l {0}
-        run: |    
-          conda install numpy pandas scipy matplotlib libpython cython wheel
+          python-version: '3.x'
+          architecture: ${{ matrix.arch }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine Cython numpy
           python setup.py install
-      - name: Build and deploy
-        shell: bash -l {0}
+      - name: Build and publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: |        
-          python setup.py bdist_wheel
-          ls dist/
-          pip install twine
+        run: |
+          python setup.py sdist
           twine upload --repository testpypi dist/*
-
-
-        
