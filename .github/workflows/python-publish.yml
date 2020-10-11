@@ -6,7 +6,6 @@ name: Upload Python Package
 on:
   release:
     types: [created]
-  workflow_dispatch:
 
 jobs:
   deploy-unix:
@@ -35,7 +34,7 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           python setup.py sdist
-          twine upload  --skip-existing --repository testpypi dist/*
+          twine upload --skip-existing dist/*
 
   deploy-windows-pip:
     strategy:
@@ -66,4 +65,4 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           python setup.py bdist_wheel
-          twine upload --repository testpypi dist/*
+          twine upload --skip-existing dist/*
