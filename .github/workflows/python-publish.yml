@@ -33,7 +33,7 @@ jobs:
   deploy-windows-pip:
     strategy:
       matrix:
-        arch: ['x64', 'x86']
+        arch: ['x86'] # 'x64', 
 
     runs-on: "windows-latest"
 
