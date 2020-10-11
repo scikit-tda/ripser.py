@@ -50,6 +50,7 @@ jobs:
         shell: bash -l {0}
         run: |        
           python setup.py bdist_wheel
+          ls dist/
         # twine upload --repository testpypi dist/*
 
 
