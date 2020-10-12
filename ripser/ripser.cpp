@@ -171,7 +171,6 @@ struct PACK entry_t {
     entry_t() : index(0), coefficient(0) {}
 };
 
-
 /* This assert fails on windows due to the support of packed structures */
 #ifndef _MSC_VER
 static_assert(sizeof(entry_t) == sizeof(index_t),
@@ -1147,7 +1146,11 @@ ripserResults rips_dm(float* D, int N, int modulus, int dim_max,
             max = -std::numeric_limits<value_t>::infinity(), max_finite = max;
     int num_edges = 0;
 
-    if (threshold == std::numeric_limits<value_t>::max()) {
+    /* Use enclosing radius when users does not set threshold or
+     * when users uses infinity as a threshold
+     */
+    if (threshold == std::numeric_limits<value_t>::max() ||
+        threshold == std::numeric_limits<value_t>::infinity()) {
         value_t enclosing_radius = std::numeric_limits<value_t>::infinity();
         for (size_t i = 0; i < dist.size(); ++i) {
             value_t r_i = -std::numeric_limits<value_t>::infinity();
