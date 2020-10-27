@@ -1,3 +1,6 @@
+# 0.5.5
+    - Updating CI/CD pipeline.
+
 # 0.5.4
     - Fixing issue with inconsistent answers from different scipy.sparse formats, courtesy of Umberto Lupo
 
