@@ -526,7 +526,11 @@ class ripser
     struct entry_hash {
         std::size_t operator()(const entry_t& e) const
         {
+#if defined(USE_ROBINHOOD_HASHMAP)
+            return robin_hood::hash<index_t>()(::get_index(e));
+#else
             return std::hash<index_t>()(::get_index(e));
+#endif
         }
     };
 
