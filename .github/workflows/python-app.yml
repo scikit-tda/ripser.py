@@ -90,4 +90,4 @@ jobs:
       - name: Test with pytest
         shell: cmd /C call {0}
         run: |
-          pytest .
+          python -m pytest .
