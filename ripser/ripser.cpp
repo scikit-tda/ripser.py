@@ -162,7 +162,7 @@ std::vector<coefficient_t> multiplicative_inverse_vector(const coefficient_t m)
 
 PACK(struct entry_t {
     index_t index : 8 * sizeof(index_t) - num_coefficient_bits;
-    coefficient_t coefficient : num_coefficient_bits;
+    index_t coefficient : num_coefficient_bits;
     entry_t(index_t _index, coefficient_t _coefficient)
         : index(_index), coefficient(_coefficient)
     {
