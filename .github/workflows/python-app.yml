@@ -82,13 +82,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           activate-environment: test
       - name: Set up conda
-        shell: cmd /C call {0}
+        shell: powershell
         run: |    
           conda install git numpy pandas scipy matplotlib pytest libpython cython
           git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
           python setup.py install
       - name: Test with pytest
-        shell: cmd /C call {0}
+        shell: powershell
         run: |
           conda install pytest
           python -m pytest .
