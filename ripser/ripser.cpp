@@ -58,13 +58,6 @@ static const std::chrono::milliseconds time_step(40);
 static const std::string clear_line("\r\033[K");
 #endif
 
-/* Disable packing for Windows */
-#if defined _WIN32
-#define PACK
-#else
-#define PACK __attribute__((__packed__))
-#endif
-
 #if defined(USE_ROBINHOOD_HASHMAP)
 #include <robin_hood.h>
 
@@ -160,7 +153,14 @@ std::vector<coefficient_t> multiplicative_inverse_vector(const coefficient_t m)
 
 #ifdef USE_COEFFICIENTS
 
-struct PACK entry_t {
+// https://stackoverflow.com/a/3312896/13339777
+#ifdef _MSC_VER
+#define PACK( ... ) __pragma( pack(push, 1) ) __VA_ARGS__ __pragma( pack(pop))
+#else
+#define PACK( ... ) __attribute__((__packed__)) __VA_ARGS__
+#endif
+
+PACK(struct entry_t {
     index_t index : 8 * sizeof(index_t) - num_coefficient_bits;
     coefficient_t coefficient : num_coefficient_bits;
     entry_t(index_t _index, coefficient_t _coefficient)
@@ -169,13 +169,10 @@ struct PACK entry_t {
     }
     entry_t(index_t _index) : index(_index), coefficient(0) {}
     entry_t() : index(0), coefficient(0) {}
-};
+});
 
-/* This assert fails on windows due to the support of packed structures */
-#ifndef _MSC_VER
 static_assert(sizeof(entry_t) == sizeof(index_t),
               "size of entry_t is not the same as index_t");
-#endif
 
 entry_t make_entry(index_t i, coefficient_t c) { return entry_t(i, c); }
 index_t get_index(const entry_t& e) { return e.index; }
