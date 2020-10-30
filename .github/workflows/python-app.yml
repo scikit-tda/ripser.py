@@ -84,6 +84,7 @@ jobs:
       - name: Set up conda
         shell: bash -l {0}
         run: |    
+          echo -e "[build]\ncompiler=msvc\n" >> setup.cfg
           conda install git numpy pandas scipy matplotlib pytest libpython cython
           git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
           python setup.py install

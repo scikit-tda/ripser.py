@@ -4,8 +4,6 @@ import platform
 
 from setuptools import setup
 from setuptools.extension import Extension
-from distutils.command.build_ext import build_ext as test
-import distutils.ccompiler
 
 # Ensure Cython is installed before we even attempt to install Ripser.py
 try:
@@ -31,8 +29,6 @@ else:
 with open('README.md') as f:
     long_description = f.read()
 
-compiler = distutils.ccompiler.get_default_compiler()
-
 class CustomBuildExtCommand(build_ext):
     """ This extension command lets us not require numpy be installed before running pip install ripser 
         build_ext command for use when numpy headers are needed.
@@ -49,7 +45,7 @@ class CustomBuildExtCommand(build_ext):
 extra_compile_args = ["-Ofast", "-D_hypot=hypot"]
 extra_link_args = []
 
-if platform.system() == "Windows" and compiler == "msvc":
+if platform.system() == "Windows":
     extra_compile_args.extend([
         # Supported by Visual C++ >=14.1
         '/std:c++14'
@@ -80,7 +76,7 @@ if os.path.isdir(robinhood_path):
     macros.extend([("USE_ROBINHOOD_HASHMAP", 1)])
 
     robinhood_include_path = os.path.join('src', 'include')
-    if platform.system() == "Windows" and compiler == "msvc":
+    if platform.system() == "Windows":
         extra_compile_args.extend(['/I'+os.path.join(robinhood_path,
                                                      robinhood_include_path)])
     else:
