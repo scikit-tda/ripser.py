@@ -55,6 +55,18 @@ pip install ripser
 
 If you are having trouble installing, please let us know!
 
+## Optional dependency
+
+Ripser.py when compiled from source can have a *steroid*<sup>1</sup> shot by replacing the standard `unordered_map` from the STL by one of the fastest implementation available: [robin_hood](https://github.com/martinus/robin-hood-hashing). Benchmarking of Ripser.py using the `robin_hood` implementation showed speed-ups up to **30%**.
+
+To be able to use `robin_hood` instead of STL, you only need to clone the repository containing the implementation:
+
+```
+# Run this command at the root of the project
+git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
+```
+
+<sup>1</sup> The Python package is already compiled with `robin_hood` by default.
 
 ## Usage
 
