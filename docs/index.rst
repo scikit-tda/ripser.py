@@ -79,7 +79,7 @@ In order to compile, you'll first need to do:
     pip install -e .
 
 You'll then be able to use Ripser.py as in the previous examples but compiled directly from sources.
-In order to obtain the best experience in performances when compiling from sources, you'll need an additional library, robin_hood_hashmap.To be able to use compile with this library enable, do:
+In order to obtain the best experience in performances when compiling from sources, you'll need an additional library, robin_hood_hashmap. To be able to use compile with this library enable, do:
 
 .. code:: bash
 
