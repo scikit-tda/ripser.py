@@ -67,12 +67,48 @@ We also supply a Scikit-learn transformer style object if you would prefer to us
 .. image:: https://i.imgur.com/WmQPYnn.png
 
 
+Source Compilation
+---------------------
+
+In order to compile, you'll first need to do:
+
+.. code:: bash
+
+    git clone https://github.com/scikit-tda/ripser.py
+    cd ripser.py
+    pip install -e .
+
+You'll then be able to use Ripser.py as in the previous examples but compiled directly from sources.
+In order to obtain the best experience in performances when compiling from sources, you'll need an additional library, robin_hood_hashmap.To be able to use compile with this library enable, do:
+
+.. code:: bash
+
+    git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
+
+The following table shows a comparison of performances with and without robin_hood_hashmap:
+
++------------+--------+-------------+-------+---------+--------------+------------------+
+| Dataset    | size   | threshold   | dim   | coeff   | normal [s]   | robin_hood [s]   |
++============+========+=============+=======+=========+==============+==================+
+| sphere3    | 192    |             | 2     | 2       | 1.5          | 1.2              |
++------------+--------+-------------+-------+---------+--------------+------------------+
+| dragon     | 2000   |             | 1     | 2       | 2.9          | 2.5              |
++------------+--------+-------------+-------+---------+--------------+------------------+
+| o3         | 1024   | 1.8         | 3     | 2       | 2.9          | 2.2              |
++------------+--------+-------------+-------+---------+--------------+------------------+
+| random16   | 50     |             | 7     | 2       | 8.4          | 6.0              |
++------------+--------+-------------+-------+---------+--------------+------------------+
+| fractal    | 512    |             | 2     | 2       | 17.7         | 14               |
++------------+--------+-------------+-------+---------+--------------+------------------+
+| o3         | 4096   | 1.4         | 3     | 2       | 68.6         | 53.4             |
++------------+--------+-------------+-------+---------+--------------+------------------+
+
 Contributions
 ----------------
+
 We welcome contributions of all shapes and sizes. There are lots of opportunities for potential projects, so please get in touch if you would like to help out. Everything from an implementation of your favorite distance, notebooks, examples, and documentation are all equally valuable so please don’t feel you can’t contribute.
 
 To contribute please fork the project make your changes and submit a pull request. We will do our best to work through any issues with you and get your code merged into the main branch.
-
 
 Citing
 ----------
