@@ -1193,6 +1193,32 @@ get_edges(const ripser<sparse_distance_matrix, entry_t>& _parent)
     return edges;
 }
 
+template <typename DistanceMatrix>
+ripserResults get_ripser_modulus(DistanceMatrix&& dist, int modulus,
+                                 int dim_max, float threshold, int do_cocycles)
+{
+    // TODO: This seems like a dummy parameter at the moment
+    float ratio = 1.0;
+    ripserResults res;
+
+    switch (modulus) {
+    case 2: {
+        ripser<DistanceMatrix, entry_t_2> r(std::move(dist), dim_max, threshold,
+                                            ratio, modulus, do_cocycles);
+        r.compute_barcodes();
+        r.copy_results(res);
+        break;
+    }
+    default: {
+        ripser<DistanceMatrix, entry_t_N> r(std::move(dist), dim_max, threshold,
+                                            ratio, modulus, do_cocycles);
+        r.compute_barcodes();
+        r.copy_results(res);
+    }
+    }
+    return res;
+}
+
 ripserResults rips_dm(float* D, int N, int modulus, int dim_max,
                       float threshold, int do_cocycles)
 {
@@ -1200,9 +1226,6 @@ ripserResults rips_dm(float* D, int N, int modulus, int dim_max,
     std::vector<value_t> distances(D, D + N);
     compressed_lower_distance_matrix dist = compressed_lower_distance_matrix(
         compressed_upper_distance_matrix(std::move(distances)));
-
-    // TODO: This seems like a dummy parameter at the moment
-    float ratio = 1.0;
 
     value_t min = std::numeric_limits<value_t>::infinity(),
             max = -std::numeric_limits<value_t>::infinity(), max_finite = max;
@@ -1235,31 +1258,12 @@ ripserResults rips_dm(float* D, int N, int modulus, int dim_max,
 
     ripserResults res;
     if (threshold >= max) {
-    if (modulus == 2) {
-        ripser<compressed_lower_distance_matrix, entry_t_2> r(
-            std::move(dist), dim_max, threshold, ratio, modulus, do_cocycles);
-        r.compute_barcodes();
-        r.copy_results(res);
+        res = get_ripser_modulus(std::move(dist), modulus, dim_max, threshold,
+                                 do_cocycles);
     } else {
-        ripser<compressed_lower_distance_matrix, entry_t_N> r(
-            std::move(dist), dim_max, threshold, ratio, modulus, do_cocycles);
-        r.compute_barcodes();
-        r.copy_results(res);
-    }
-    } else {
-    if (modulus == 2) {
-        ripser<sparse_distance_matrix, entry_t_2> r(
-            sparse_distance_matrix(std::move(dist), threshold), dim_max,
-            threshold, ratio, modulus, do_cocycles);
-        r.compute_barcodes();
-        r.copy_results(res);
-    } else {
-        ripser<sparse_distance_matrix, entry_t_N> r(
-            sparse_distance_matrix(std::move(dist), threshold), dim_max,
-            threshold, ratio, modulus, do_cocycles);
-        r.compute_barcodes();
-        r.copy_results(res);
-    }
+        res = get_ripser_modulus(
+            sparse_distance_matrix(std::move(dist), threshold), modulus,
+            dim_max, threshold, do_cocycles);
     }
     res.num_edges = num_edges;
     return res;
@@ -1269,23 +1273,11 @@ ripserResults rips_dm_sparse(int* I, int* J, float* V, int NEdges, int N,
                              int modulus, int dim_max, float threshold,
                              int do_cocycles)
 {
-    // TODO: This seems like a dummy parameter at the moment
-    float ratio = 1.0;
     ripserResults res;
     // Setup distance matrix and figure out threshold
-    if (modulus == 2) {
-        ripser<sparse_distance_matrix, entry_t_2> r(
-            sparse_distance_matrix(I, J, V, NEdges, N, threshold), dim_max,
-            threshold, ratio, modulus, do_cocycles);
-        r.compute_barcodes();
-        r.copy_results(res);
-    } else {
-        ripser<sparse_distance_matrix, entry_t_N> r(
-            sparse_distance_matrix(I, J, V, NEdges, N, threshold), dim_max,
-            threshold, ratio, modulus, do_cocycles);
-        r.compute_barcodes();
-        r.copy_results(res);
-    }
+    res = get_ripser_modulus(
+        sparse_distance_matrix(I, J, V, NEdges, N, threshold), modulus, dim_max,
+        threshold, do_cocycles);
     // Report the number of edges that were added
     int num_edges = 0;
     for (int idx = 0; idx < NEdges; idx++) {
