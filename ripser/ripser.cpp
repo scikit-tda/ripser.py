@@ -83,9 +83,9 @@ static const size_t num_coefficient_bits = 8;
 static const index_t max_simplex_index =
     (uintptr_t(1) << (8 * sizeof(index_t) - 1 - num_coefficient_bits)) - 1;
 
-void check_overflow(index_t i)
+void check_overflow(const index_t i, const bool is_modulus_2)
 {
-    if (i > max_simplex_index)
+    if ((is_modulus_2 && i < 0) || (!is_modulus_2 && i > max_simplex_index))
         throw std::overflow_error(
             "simplex index " + std::to_string((uint64_t) i) +
             " in filtration is larger than maximum index " +
@@ -99,7 +99,8 @@ class binomial_coeff_table
     size_t offset;
 
 public:
-    binomial_coeff_table(index_t n, index_t k) : B((n + 1) * (k + 1))
+    binomial_coeff_table(const index_t n, const index_t k,
+                         const bool is_modulus_2 = false) : B((n + 1) * (k + 1))
     {
         offset = k + 1;
         for (index_t i = 0; i <= n; ++i) {
@@ -109,7 +110,7 @@ public:
                     B[(i - 1) * offset + j - 1] + B[(i - 1) * offset + j];
             if (i <= k)
                 B[i * offset + i] = 1;
-            check_overflow(B[i * offset + std::min(i >> 1, k)]);
+            check_overflow(B[i * offset + std::min(i >> 1, k)], is_modulus_2);
         }
     }
 
@@ -607,7 +608,8 @@ public:
            float _ratio, coefficient_t _modulus, int _do_cocycles)
         : dist(std::move(_dist)), n(dist.size()), dim_max(_dim_max),
           threshold(_threshold), ratio(_ratio), modulus(_modulus),
-          binomial_coeff(n, dim_max + 2),
+          binomial_coeff(n, dim_max + 2,
+                         std::is_same<entry_t, entry_t_2>::value),
           multiplicative_inverse(multiplicative_inverse_vector(_modulus)),
           do_cocycles(_do_cocycles)
     {
