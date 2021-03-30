@@ -317,6 +317,7 @@ def ripser(
             maxdim,
             thresh,
             coeff,
+            do_cocycles
         )
     else:
         I, J = np.meshgrid(np.arange(n_points), np.arange(n_points))
