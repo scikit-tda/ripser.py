@@ -25,15 +25,11 @@ SOFTWARE.
 from itertools import cycle
 import warnings
 
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 from scipy import sparse
 
 import numpy as np
 from sklearn.base import TransformerMixin
 from sklearn.metrics.pairwise import pairwise_distances
-
-import persim
 
 from pyRipser import doRipsFiltrationDM as DRFDM
 from pyRipser import doRipsFiltrationDMSparse as DRFDMSparse
@@ -640,6 +636,9 @@ class Rips(TransformerMixin):
             If you are using self.plot() as part of a subplot, 
             set show=False and call plt.show() only once at the end.
         """
+        import matplotlib.pyplot as plt
+        import matplotlib as mpl
+        import persim
 
         if diagrams is None:
             # Allow using transformed diagrams as default
