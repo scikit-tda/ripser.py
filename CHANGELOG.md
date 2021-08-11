@@ -1,3 +1,6 @@
+# 0.6.1
+    - Lazy import plotting dependencies
+
 # 0.6.0
     - Update C++ backend to commit 286d369 of [ripser](https://github.com/Ripser/ripser) but keeping same functionalities
     - Add support to robinhood hashmap into the C++ Backend
