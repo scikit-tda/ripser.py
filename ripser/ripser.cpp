@@ -46,6 +46,7 @@ derivative works thereof, in binary and source code form.
 #include <iomanip>
 #include <iostream>
 #include <iterator>
+#include <limits>
 #include <numeric>
 #include <queue>
 #include <sstream>
