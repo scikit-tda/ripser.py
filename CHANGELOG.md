@@ -1,3 +1,6 @@
+# 0.6.2
+    - Prevent simplex assembly in last dimension for improved memory usage (courtesy of Umberto Lupo)
+
 # 0.6.1
     - Lazy import plotting dependencies
 
