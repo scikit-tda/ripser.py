@@ -636,8 +636,9 @@ public:
 #endif
                 auto cofacet = cofacets.next();
                 if (get_diameter(cofacet) <= threshold) {
-                    next_simplices.push_back(
-                        {get_diameter(cofacet), get_index(cofacet)});
+                    if (dim != dim_max)
+                        next_simplices.push_back(
+                            {get_diameter(cofacet), get_index(cofacet)});
 
                     if (pivot_column_index.find(get_entry(cofacet)) ==
                         pivot_column_index.end())
