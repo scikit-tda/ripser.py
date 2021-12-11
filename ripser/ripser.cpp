@@ -47,6 +47,7 @@ derivative works thereof, in binary and source code form.
 #include <iostream>
 #include <iterator>
 #include <numeric>
+#include <limits>
 #include <queue>
 #include <sstream>
 #include <unordered_map>
