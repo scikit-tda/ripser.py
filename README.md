@@ -108,9 +108,10 @@ Ripser.py is available under an MIT license! The core C++ code is derived from R
 
 # Citing
 
-If you use this package, please site the JoSS paper found here: [![DOI](http://joss.theoj.org/papers/10.21105/joss.00925/status.svg)](https://doi.org/10.21105/joss.00925)
+If you use this package, please site the JoSS paper found here [![DOI](http://joss.theoj.org/papers/10.21105/joss.00925/status.svg)](https://doi.org/10.21105/joss.00925) and the JACT paper about Ripser found here [![DOI:10.1007/s41468-021-00071-5](https://zenodo.org/badge/DOI/10.1007/s41468-021-00071-5.svg)](https://doi.org/10.1007/s41468-021-00071-5).
 
-You can use the following bibtex entry
+You can use the following bibtex entries:
+
 ```
 @article{ctralie2018ripser,
   doi = {10.21105/joss.00925},
@@ -124,5 +125,22 @@ You can use the following bibtex entry
   author = {Christopher Tralie and Nathaniel Saul and Rann Bar-On},
   title = {{Ripser.py}: A Lean Persistent Homology Library for Python},
   journal = {The Journal of Open Source Software}
+}
+
+@article{Bauer2021Ripser,
+    AUTHOR = {Bauer, Ulrich},
+     TITLE = {Ripser: efficient computation of {V}ietoris-{R}ips persistence
+              barcodes},
+   JOURNAL = {J. Appl. Comput. Topol.},
+  FJOURNAL = {Journal of Applied and Computational Topology},
+    VOLUME = {5},
+      YEAR = {2021},
+    NUMBER = {3},
+     PAGES = {391--423},
+      ISSN = {2367-1726},
+   MRCLASS = {55N31 (55-04)},
+  MRNUMBER = {4298669},
+       DOI = {10.1007/s41468-021-00071-5},
+       URL = {https://doi.org/10.1007/s41468-021-00071-5},
 }
 ```
