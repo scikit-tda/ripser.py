@@ -1,3 +1,6 @@
+# 0.6.4
+    - Add some includes to ripser.cpp for newer Ubuntu/C++ environments
+
 # 0.6.3
     - Update numpy header
 

@@ -39,8 +39,10 @@ derivative works thereof, in binary and source code form.
 */
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cmath>
+#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iomanip>
