@@ -687,16 +687,14 @@ public:
                     v = dset.find(vertices_of_edge[1]);
 
             if (u != v) {
-                if (get_diameter(e) != 0) {
-                    // Elder rule; youngest class (max birth time of u and v)
-                    // dies first
-                    value_t birth =
-                        std::max(dset.get_birth(u), dset.get_birth(v));
-                    value_t death = get_diameter(e);
-                    if (death > birth) {
-                        births_and_deaths_by_dim[0].push_back(birth);
-                        births_and_deaths_by_dim[0].push_back(death);
-                    }
+                // Elder rule; youngest class (max birth time of u and v)
+                // dies first
+                value_t birth =
+                    std::max(dset.get_birth(u), dset.get_birth(v));
+                value_t death = get_diameter(e);
+                if (death > birth) {
+                    births_and_deaths_by_dim[0].push_back(birth);
+                    births_and_deaths_by_dim[0].push_back(death);
                 }
                 dset.link(u, v);
             } else
