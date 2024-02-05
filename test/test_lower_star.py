@@ -23,6 +23,6 @@ class TestLowerStar:
         img = np.ones((5, 5))
         img[1:-1, 1:-1] = 0
         img[2, 2] = 1
-        r1 = lower_star_img(-img)
+        r1 = -lower_star_img(-img)
         r2 = 1-lower_star_img(1-img)
         assert(np.allclose(r1, r2))
