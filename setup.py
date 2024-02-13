@@ -65,9 +65,7 @@ else:
     ])
 
 macros = [
-    ("USE_COEFFICIENTS", 1),
     ("NDEBUG", 1),
-    ("ASSEMBLE_REDUCTION_MATRIX", 1)
 ]
 
 # Robinhood
