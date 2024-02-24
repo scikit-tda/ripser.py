@@ -1,28 +1,25 @@
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00925/status.svg)](https://doi.org/10.21105/joss.00925)
 [![PyPI version](https://badge.fury.io/py/ripser.svg)](https://badge.fury.io/py/ripser)
-[![Downloads](https://pypip.in/download/ripser/badge.svg)](https://pypi.python.org/pypi/ripser/)
+[![Downloads](https://img.shields.io/pypi/dm/ripser)](https://pypi.python.org/pypi/ripser/)
 [![Conda Version](https://img.shields.io/conda/vn/conda-forge/ripser.svg)](https://anaconda.org/conda-forge/ripser)
 [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/ripser.svg)](https://anaconda.org/conda-forge/ripser)
 
-[![Build Status](https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master)](https://travis-ci.org/scikit-tda/ripser.py)
 [![Build status](https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true)](https://ci.appveyor.com/project/sauln/ripser-py)
 [![codecov](https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-tda/ripser.py)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
 # Ripser.py
 
-Ripser.py is a lean persistent homology package for Python. Building on the blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for 
+Ripser.py is a lean persistent homology package for Python. Building on the blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for
 
-- computing persistence cohomology of sparse and dense data sets, 
-- visualizing persistence diagrams, 
-- computing lowerstar filtrations on images, and 
-- computing representative cochains. 
+- computing persistence cohomology of sparse and dense data sets,
+- visualizing persistence diagrams,
+- computing lowerstar filtrations on images, and
+- computing representative cochains.
 
 Additionally, through extensive testing and continuous integration, Ripser.py is easy to install on Mac, Linux, and Windows platforms.
 
-To aid your use of the package, we've put together a large set of notebooks that demonstrate many of the features available. Complete documentation about the package can be found at [ripser.scikit-tda.org](https://ripser.scikit-tda.org). 
-
+To aid your use of the package, we've put together a large set of notebooks that demonstrate many of the features available. Complete documentation about the package can be found at [ripser.scikit-tda.org](https://ripser.scikit-tda.org).
 
 ## Related Projects
 
@@ -32,10 +29,10 @@ If you're looking for a GPU-accelerated version of Ripser, you can find it at [R
 
 ## Setup
 
-
-Ripser.py is available on all major platforms. All that is required is that you install the standard Python numerical computing libraries and Cython. 
+Ripser.py is available on all major platforms. All that is required is that you install the standard Python numerical computing libraries and Cython.
 
 Dependencies:
+
 - Cython
 - numpy
 - scipy
@@ -46,7 +43,7 @@ Dependencies:
 
 **Mac users:** Updating your Xcode and Xcode command line tools will probably fix any issues you have with installation.
 
-Cython should be the only library required before installation.  To install, type the following commands into your environment:
+Cython should be the only library required before installation. To install, type the following commands into your environment:
 
 ```
 pip install cython
@@ -57,7 +54,7 @@ If you are having trouble installing, please let us know!
 
 ## Optional dependency
 
-Ripser.py when compiled from source can have a *steroid*<sup>1</sup> shot by replacing the standard `unordered_map` from the STL by one of the fastest implementation available: [robin_hood](https://github.com/martinus/robin-hood-hashing). Benchmarking of Ripser.py using the `robin_hood` implementation showed speed-ups up to **30%**.
+Ripser.py when compiled from source can have a _steroid_<sup>1</sup> shot by replacing the standard `unordered_map` from the STL by one of the fastest implementation available: [robin_hood](https://github.com/martinus/robin-hood-hashing). Benchmarking of Ripser.py using the `robin_hood` implementation showed speed-ups up to **30%**.
 
 To be able to use `robin_hood` instead of STL, you only need to clone the repository containing the implementation:
 

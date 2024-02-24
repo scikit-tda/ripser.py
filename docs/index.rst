@@ -6,7 +6,7 @@
 
 |DOI| |PyPI version| |Downloads| |License: MIT|
 
-|Travis-CI| |Appveyor| |Codecov| 
+|Appveyor| |Codecov| 
 
 Ripser.py is a lean persistent homology package for Python. Building on the blazing fast C++ Ripser package as the core computational engine, Ripser.py provides an intuitive interface for 
 
@@ -171,14 +171,11 @@ Ripser.py is available under an MIT license! The core C++ code is derived from R
 .. |DOI| image:: http://joss.theoj.org/papers/10.21105/joss.00925/status.svg
     :target: https://doi.org/10.21105/joss.00925
 
-.. |Downloads| image:: https://pypip.in/download/ripser/badge.svg
+.. |Downloads| image::  https://img.shields.io/pypi/dm/ripser
     :target: https://pypi.python.org/pypi/ripser/
 
 .. |PyPI version| image:: https://badge.fury.io/py/ripser.svg
    :target: https://badge.fury.io/py/ripser
-
-.. |Travis-CI| image:: https://travis-ci.org/scikit-tda/ripser.py.svg?branch=master
-    :target: https://travis-ci.org/scikit-tda/ripser.py
 
 .. |Appveyor| image:: https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true
     :target: https://ci.appveyor.com/project/sauln/ripser-py
