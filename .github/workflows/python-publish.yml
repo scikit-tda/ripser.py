@@ -28,7 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade build
           pip install setuptools wheel twine Cython numpy pytest
-          python setup.py install
+          python -m pip install .
       - name: Run tests
         run: pytest .
       - name: Build and publish
@@ -61,7 +61,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade build
           pip install setuptools wheel twine Cython numpy pytest
-          python setup.py install
+          python -m pip install .
       - name: Run tests
         run: pytest .
       - name: Build and publish
