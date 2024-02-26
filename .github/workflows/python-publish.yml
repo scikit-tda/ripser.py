@@ -26,6 +26,7 @@ jobs:
         run: |
           git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
           python -m pip install --upgrade pip
+          python -m pip install --upgrade build
           pip install setuptools wheel twine Cython numpy pytest
           python setup.py install
       - name: Run tests
@@ -35,14 +36,14 @@ jobs:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
-          python setup.py sdist
+          python build
           twine upload --skip-existing dist/*
 
   deploy-windows-pip:
     strategy:
       fail-fast: false
       matrix:
-        arch: ['x86', 'x64']
+        arch: ["x86", "x64"]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     runs-on: "windows-latest"
@@ -58,6 +59,7 @@ jobs:
         run: |
           git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
           python -m pip install --upgrade pip
+          python -m pip install --upgrade build
           pip install setuptools wheel twine Cython numpy pytest
           python setup.py install
       - name: Run tests
@@ -67,5 +69,5 @@ jobs:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
-          python setup.py bdist_wheel
+          python build
           twine upload --skip-existing dist/*
