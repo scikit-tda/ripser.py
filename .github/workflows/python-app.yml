@@ -61,7 +61,7 @@ jobs:
         run: |
           conda install git numpy pandas scipy matplotlib pytest cython
           git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
-          python setup.py install
+          python -m pip install .
       - name: Test with pytest
         shell: bash -l {0}
         run: |
@@ -87,7 +87,7 @@ jobs:
           echo -e "[build]\ncompiler=msvc\n" >> setup.cfg
           conda install git numpy pandas scipy matplotlib pytest libpython cython
           git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
-          python setup.py install
+          python -m pip install .
       - name: Test with pytest
         shell: bash -l {0}
         run: |
