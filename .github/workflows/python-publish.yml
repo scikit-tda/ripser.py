@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: ["x86", "x64"]
+        arch: ["x64"]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     runs-on: "windows-latest"
