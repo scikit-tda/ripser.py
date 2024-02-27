@@ -16,12 +16,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.5
         env:
-          CIBW_SKIP: "pp* cp36-* cp37-* *-win32 *_i686 *musllinux*"
-        #    ...
-        # with:
-        #   package-dir: .
-        #   output-dir: wheelhouse
-        #   config-file: "{package}/pyproject.toml"
+          CIBW_SKIP: "pp* cp36-* cp37-* *-win_arm64 *_i686 *musllinux*"
 
       - uses: actions/upload-artifact@v4
         with:
