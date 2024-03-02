@@ -38,9 +38,12 @@ jobs:
           path: dist/*.tar.gz
 
   upload_pypi:
+    name: Upload release to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
-    environment: pypi
+    environment:
+      name: pypi
+      url: https://pypi.org/p/ripser
     permissions:
       id-token: write
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
