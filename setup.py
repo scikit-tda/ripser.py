@@ -90,7 +90,7 @@ ext_modules = Extension(
 
 
 setup(
-    name="ripser",
+    name="ripser-test-1934",
     version=verstr,
     description="A Lean Persistent Homology Library for Python",
     long_description=long_description,
