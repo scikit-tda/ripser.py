@@ -1,6 +1,6 @@
 name: Build
 
-on: [push, pull_request, release]
+on: [push, pull_request, release, workflow_dispatch]
 
 jobs:
   build_wheels:
@@ -46,7 +46,7 @@ jobs:
       # url: https://pypi.org/p/ripser
     permissions:
       id-token: write
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: github.event_name == 'release'
     steps:
       - uses: actions/download-artifact@v4
         with:
