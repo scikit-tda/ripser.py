@@ -13,13 +13,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest] # , windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.5
+        uses: pypa/cibuildwheel@v2.19.1
         env:
           CIBW_SKIP: "pp* cp36-* cp37-* *win_arm64 *_i686 *musllinux*"
 
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      # url: https://pypi.org/p/ripser
+      url: https://pypi.org/p/ripser
     permissions:
       id-token: write
     if: github.event_name == 'release' && github.event.action == 'published'
@@ -61,5 +61,3 @@ jobs:
           merge-multiple: true
 
       - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/

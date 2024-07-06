@@ -8,10 +8,6 @@ from scipy import sparse
 import itertools
 
 
-def test_dumb():
-    assert True
-
-
 def makeSparseDM(X, thresh):
     """
     Helper function to make a sparse distance matrix
