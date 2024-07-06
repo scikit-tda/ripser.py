@@ -1,7 +1,7 @@
-import sys
 import os
 import platform
 import re
+import sys
 
 from setuptools import Extension, setup
 
@@ -13,8 +13,6 @@ except:
     print("You don't seem to have Cython installed. Please get a")
     print("copy from www.cython.org or install it with `pip install Cython`")
     sys.exit(1)
-
-## Get version information from _version.py
 
 
 def get_version():
@@ -64,6 +62,7 @@ macros = [("USE_COEFFICIENTS", 1), ("NDEBUG", 1), ("ASSEMBLE_REDUCTION_MATRIX", 
 # Robinhood
 robinhood_path = os.path.join("ripser", "robinhood")
 if os.path.isdir(robinhood_path):
+    print("\nFound robinhood. Using for ripser.py compilation.\n")
     macros.extend([("USE_ROBINHOOD_HASHMAP", 1)])
 
     robinhood_include_path = os.path.join("src", "include")
