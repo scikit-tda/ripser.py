@@ -62,7 +62,9 @@ macros = [("USE_COEFFICIENTS", 1), ("NDEBUG", 1), ("ASSEMBLE_REDUCTION_MATRIX", 
 # Robinhood
 robinhood_path = os.path.join("ripser", "robinhood")
 if os.path.isdir(robinhood_path):
-    print("\nFound robinhood. Using for ripser.py compilation.\n")
+    print(
+        "\nFound local copy of robinhood! Using robinhood for ripser.py compilation.\n"
+    )
     macros.extend([("USE_ROBINHOOD_HASHMAP", 1)])
 
     robinhood_include_path = os.path.join("src", "include")
@@ -75,7 +77,7 @@ if os.path.isdir(robinhood_path):
             ["-I" + os.path.join(robinhood_path, robinhood_include_path)]
         )
 else:
-    print("did not find robinhood")
+    print("Did not find a local copy of robinhood. Proceeding anyways.")
 
 ext_modules = Extension(
     "pyRipser",
