@@ -26,7 +26,7 @@ jobs:
         uses: pypa/cibuildwheel@v2.19.2
         env:
           CIBW_SKIP: "pp* cp36-* cp37-* *win_arm64 *_i686 *musllinux*"
-          CIBW_BUILD_VERBOSITY: 3
+          CIBW_BUILD_VERBOSITY: 1
 
       - uses: actions/upload-artifact@v4
         with:

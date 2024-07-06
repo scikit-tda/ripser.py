@@ -74,6 +74,8 @@ if os.path.isdir(robinhood_path):
         extra_compile_args.extend(
             ["-I" + os.path.join(robinhood_path, robinhood_include_path)]
         )
+else:
+    print("did not find robinhood")
 
 ext_modules = Extension(
     "pyRipser",
