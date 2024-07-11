@@ -1,2 +1,58 @@
 [build-system]
-requires = ["setuptools", "wheel", "numpy", "cython"]
+requires = ["setuptools>=61.0", "wheel", "numpy", "Cython"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ripser"
+dynamic = ["version"]
+description = "A Lean Persistent Homology Library for Python"
+readme = "README.md"
+authors = [
+  { name = "Chris Tralie", email = "chris.tralie@gmail.com" },
+  { name = "Nathaniel Saul", email = "nat@riverasaul.com" },
+]
+maintainers = [
+  { name = "Chris Tralie", email = "chris.tralie@gmail.com" },
+  { name = "Nathaniel Saul", email = "nat@riverasaul.com" },
+  { name = "Michael Catanzaro", email = "catanzaromj@pm.me" },
+]
+
+dependencies = ["Cython", "numpy", "persim", "scipy", "scikit-learn"]
+
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Education",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Intended Audience :: Healthcare Industry",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+]
+
+keywords = [
+  "topological data analysis",
+  "persistent homology",
+  "Rips filtration",
+  "algebraic topology",
+  "unsupervised learning",
+  "persistence diagrams",
+]
+
+[project.optional-dependencies]
+testing = ["pytest", "pytest-cov"]
+
+docs = ["sktda_docs_config"]
+
+examples = ["tadasets", "jupyter", "pillow"]
+
+[tool.setuptools.packages.find]
+where = ["ripser"]
+
+[project.urls]
+Homepage = "https://ripser.scikit-tda.org"
+Documentation = "https://ripser.scikit-tda.org"
+Repository = "https://github.com/scikit-tda/ripser.py"
+Issues = "https://github.com/scikit-tda/ripser.py/issues"
+Changelog = "https://github.com/scikit-tda/ripser.py/blob/master/RELEASE.txt"

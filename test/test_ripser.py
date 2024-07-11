@@ -26,6 +26,7 @@ class TestLibrary:
     def test_import(self):
         import ripser
         from ripser import ripser, Rips
+
         assert 1
 
 
@@ -193,7 +194,7 @@ class TestParams:
         h12 = res2["dgms"][1]
         assert res2["r_cover"] > 0
         assert np.max(np.abs(h11 - h12)) <= 2 * res2["r_cover"]
-    
+
     def test_cocycle_indices_greedyperm(self):
         """
         Make sure the original vertex indices are retained in the
@@ -206,26 +207,26 @@ class TestParams:
         t = 2 * np.pi * np.random.rand(N)
         X = np.array([np.cos(t), np.sin(t)]).T
         res1 = ripser(X, n_perm=n_perm, do_cocycles=True, maxdim=1)
-        cocycles1 = res1['cocycles'][1]
-        idx_perm = res1['idx_perm']
+        cocycles1 = res1["cocycles"][1]
+        idx_perm = res1["idx_perm"]
         X = X[idx_perm, :]
         res2 = ripser(X, do_cocycles=True, maxdim=1)
-        cocycles2 = res2['cocycles'][1]
+        cocycles2 = res2["cocycles"][1]
         for cc1, cc2 in zip(cocycles1, cocycles2):
             assert cc1.shape[0] == cc2.shape[0]
             cc2[:, 0:-1] = idx_perm[cc2[:, 0:-1]]
             assert np.allclose(cc1, cc2)
-    
+
     def test_sparse_format(self):
         """
         Test to make sure different formats for sparse matrices
         yield the same answer.  Test courtesy of Umberto Lupo (@ulupo)
         """
-        data = np.array([6., 8., 2., 4., 5., 9., 10., 3., 1., 1.])
+        data = np.array([6.0, 8.0, 2.0, 4.0, 5.0, 9.0, 10.0, 3.0, 1.0, 1.0])
         row = np.array([0, 0, 0, 0, 1, 1, 1, 2, 2, 3])
         col = np.array([4, 1, 3, 2, 4, 3, 2, 3, 4, 4])
         dm = sparse.coo_matrix((data, (row, col)), shape=(5, 5))
-        dgms1 = ripser(dm, distance_matrix=True)['dgms']
-        dgms2 = ripser(dm.tocsr(), distance_matrix=True)['dgms']
+        dgms1 = ripser(dm, distance_matrix=True)["dgms"]
+        dgms2 = ripser(dm.tocsr(), distance_matrix=True)["dgms"]
         for dgm1k, dgm2k in zip(dgms1, dgms2):
-            assert(np.allclose(dgm1k, dgm2k))
+            assert np.allclose(dgm1k, dgm2k)

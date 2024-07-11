@@ -18,10 +18,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Clone robinhood
+        run: |
+          git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
+
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.19.1
+        uses: pypa/cibuildwheel@v2.19.2
         env:
           CIBW_SKIP: "pp* cp36-* cp37-* *win_arm64 *_i686 *musllinux*"
+          CIBW_BUILD_VERBOSITY: 1
 
       - uses: actions/upload-artifact@v4
         with:
@@ -33,6 +38,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Clone robinhood
+        run: |
+          git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
 
       - name: Build sdist
         run: pipx run build --sdist

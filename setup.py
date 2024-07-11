@@ -1,9 +1,9 @@
-import sys
 import os
 import platform
+import re
+import sys
 
-from setuptools import setup
-from setuptools.extension import Extension
+from setuptools import Extension, setup
 
 # Ensure Cython is installed before we even attempt to install Ripser.py
 try:
@@ -14,21 +14,16 @@ except:
     print("copy from www.cython.org or install it with `pip install Cython`")
     sys.exit(1)
 
-## Get version information from _version.py
-import re
 
-VERSIONFILE = "ripser/_version.py"
-verstrline = open(VERSIONFILE, "rt").read()
-VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
-mo = re.search(VSRE, verstrline, re.M)
-if mo:
-    verstr = mo.group(1)
-else:
-    raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
-
-# Use README.md as the package long description
-with open("README.md") as f:
-    long_description = f.read()
+def get_version():
+    VERSIONFILE = "ripser/_version.py"
+    verstrline = open(VERSIONFILE, "rt").read()
+    VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
+    mo = re.search(VSRE, verstrline, re.M)
+    if mo:
+        return mo.group(1)
+    else:
+        raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
 
 class CustomBuildExtCommand(build_ext):
@@ -67,6 +62,9 @@ macros = [("USE_COEFFICIENTS", 1), ("NDEBUG", 1), ("ASSEMBLE_REDUCTION_MATRIX", 
 # Robinhood
 robinhood_path = os.path.join("ripser", "robinhood")
 if os.path.isdir(robinhood_path):
+    print(
+        "\nFound local copy of robinhood! Using robinhood for ripser.py compilation.\n"
+    )
     macros.extend([("USE_ROBINHOOD_HASHMAP", 1)])
 
     robinhood_include_path = os.path.join("src", "include")
@@ -78,6 +76,8 @@ if os.path.isdir(robinhood_path):
         extra_compile_args.extend(
             ["-I" + os.path.join(robinhood_path, robinhood_include_path)]
         )
+else:
+    print("Did not find a local copy of robinhood. Proceeding anyways.")
 
 ext_modules = Extension(
     "pyRipser",
@@ -90,40 +90,7 @@ ext_modules = Extension(
 
 
 setup(
-    name="ripser",
-    version=verstr,
-    description="A Lean Persistent Homology Library for Python",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    author="Chris Tralie, Nathaniel Saul",
-    author_email="chris.tralie@gmail.com, nat@riverasaul.com",
-    url="https://ripser.scikit-tda.org",
-    license="MIT",
-    packages=["ripser"],
     ext_modules=cythonize(ext_modules),
-    install_requires=["Cython", "numpy", "scipy", "scikit-learn", "persim"],
-    extras_require={
-        "testing": [  # `pip install -e ".[testing]"``
-            "pytest"
-        ],
-        "docs": [  # `pip install -e ".[docs]"`
-            "sktda_docs_config"
-        ],
-        "examples": ["persim", "tadasets", "jupyter", "pillow"],
-    },
     cmdclass={"build_ext": CustomBuildExtCommand},
-    python_requires=">=3.6",
-    classifiers=[
-        "Intended Audience :: Science/Research",
-        "Intended Audience :: Education",
-        "Intended Audience :: Financial and Insurance Industry",
-        "Intended Audience :: Healthcare Industry",
-        "Topic :: Scientific/Engineering :: Information Analysis",
-        "Topic :: Scientific/Engineering :: Mathematics",
-        "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-    ],
-    keywords="persistent homology, rips filtration, persistence diagrams, topology data analysis, algebraic topology, unsupervised learning",
+    version=get_version(),
 )
