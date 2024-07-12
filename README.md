@@ -60,16 +60,16 @@ To be able to use `robin_hood` instead of STL, you only need to clone the reposi
 
 ```
 # Run this command at the root of the project
-git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
+git clone https://github.com/martinus/robin-hood-hashing robinhood
 ```
 
 After cloning robinhood with the above command, install `ripser.py` with
 
 ```
-pip install -v -e .
+pip install -v .
 ```
 
-This will install a local, editable version of `ripser.py` with verbose output. In the verbose output,
+This will install a local version of `ripser.py` with verbose output. In the verbose output,
 you will see confirmation that robinhood was found or not.
 
 <sup>1</sup> The Python package is already compiled with `robin_hood` by default.
