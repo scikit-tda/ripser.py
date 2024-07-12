@@ -29,7 +29,15 @@ If you're looking for a GPU-accelerated version of Ripser, you can find it at [R
 
 ## Setup
 
-Ripser.py is available on all major platforms. All that is required is that you install the standard Python numerical computing libraries and Cython.
+Ripser.py is available on `pypi` with wheels for all major platforms. To install, type the following command into your environment:
+
+```bash
+pip install python
+```
+### Local build
+
+If the above command fails, you can build `ripser.py` locally. All that is required is that you 
+install the standard Python numerical computing libraries and Cython.
 
 Dependencies:
 
@@ -47,12 +55,12 @@ Cython should be the only library required before installation. To install, type
 
 ```
 pip install cython
-pip install ripser
 ```
 
-If you are having trouble installing, please let us know!
+Following this, clone the repository, `cd` into the clone, and execute `pip install -v .`
 
-## Optional dependency
+
+#### Optional dependency
 
 Ripser.py when compiled from source can have a _steroid_<sup>1</sup> shot by replacing the standard `unordered_map` from the STL by one of the fastest implementation available: [robin_hood](https://github.com/martinus/robin-hood-hashing). Benchmarking of Ripser.py using the `robin_hood` implementation showed speed-ups up to **30%**.
 
@@ -73,6 +81,8 @@ This will install a local version of `ripser.py` with verbose output. In the ver
 you will see confirmation that robinhood was found or not.
 
 <sup>1</sup> The Python package is already compiled with `robin_hood` by default.
+
+If you are having trouble installing, please let us know!
 
 ## Usage
 
