@@ -60,7 +60,7 @@ else:
 macros = [("USE_COEFFICIENTS", 1), ("NDEBUG", 1), ("ASSEMBLE_REDUCTION_MATRIX", 1)]
 
 # Robinhood
-robinhood_path = os.path.join("ripser", "robinhood")
+robinhood_path = os.path.join("robinhood")
 if os.path.isdir(robinhood_path):
     print(
         "\nFound local copy of robinhood! Using robinhood for ripser.py compilation.\n"
