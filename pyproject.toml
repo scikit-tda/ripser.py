@@ -47,9 +47,6 @@ docs = ["sktda_docs_config"]
 
 examples = ["tadasets", "jupyter", "pillow"]
 
-[tool.setuptools.packages.find]
-where = ["ripser"]
-
 [project.urls]
 Homepage = "https://ripser.scikit-tda.org"
 Documentation = "https://ripser.scikit-tda.org"

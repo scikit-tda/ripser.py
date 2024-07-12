@@ -16,7 +16,7 @@ except:
 
 
 def get_version():
-    VERSIONFILE = "ripser/_version.py"
+    VERSIONFILE = "src/ripser/_version.py"
     verstrline = open(VERSIONFILE, "rt").read()
     VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
     mo = re.search(VSRE, verstrline, re.M)
@@ -81,7 +81,7 @@ else:
 
 ext_modules = Extension(
     "pyRipser",
-    sources=["ripser/pyRipser.pyx"],
+    sources=["src/ripser/pyRipser.pyx"],
     define_macros=macros,
     extra_compile_args=extra_compile_args,
     extra_link_args=extra_link_args,
