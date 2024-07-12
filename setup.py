@@ -16,7 +16,7 @@ except:
 
 
 def get_version():
-    VERSIONFILE = "ripser/_version.py"
+    VERSIONFILE = "src/ripser/_version.py"
     verstrline = open(VERSIONFILE, "rt").read()
     VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
     mo = re.search(VSRE, verstrline, re.M)
@@ -60,7 +60,7 @@ else:
 macros = [("USE_COEFFICIENTS", 1), ("NDEBUG", 1), ("ASSEMBLE_REDUCTION_MATRIX", 1)]
 
 # Robinhood
-robinhood_path = os.path.join("ripser", "robinhood")
+robinhood_path = os.path.join("robinhood")
 if os.path.isdir(robinhood_path):
     print(
         "\nFound local copy of robinhood! Using robinhood for ripser.py compilation.\n"
@@ -81,7 +81,7 @@ else:
 
 ext_modules = Extension(
     "pyRipser",
-    sources=["ripser/pyRipser.pyx"],
+    sources=["src/ripser/pyRipser.pyx"],
     define_macros=macros,
     extra_compile_args=extra_compile_args,
     extra_link_args=extra_link_args,

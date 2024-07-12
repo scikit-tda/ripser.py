@@ -20,7 +20,7 @@ jobs:
 
       - name: Clone robinhood
         run: |
-          git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
+          git clone https://github.com/martinus/robin-hood-hashing robinhood
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.19.2
@@ -41,7 +41,7 @@ jobs:
 
       - name: Clone robinhood
         run: |
-          git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
+          git clone https://github.com/martinus/robin-hood-hashing robinhood
 
       - name: Build sdist
         run: pipx run build --sdist
