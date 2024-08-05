@@ -1,3 +1,11 @@
+# 0.6.11
+
+    - Update cocycle notebook (fix #83).
+
+# 0.6.10
+
+    - Update build process to include python code and wheels. No code change.
+
 # 0.6.9
 
     - Convert package to `src` style.
