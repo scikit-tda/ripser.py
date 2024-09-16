@@ -23,7 +23,7 @@ jobs:
           git clone https://github.com/martinus/robin-hood-hashing robinhood
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.19.2
+        uses: pypa/cibuildwheel@v2.21.0
         env:
           CIBW_SKIP: "pp* cp36-* cp37-* *win_arm64 *_i686 *musllinux*"
           CIBW_BUILD_VERBOSITY: 1
