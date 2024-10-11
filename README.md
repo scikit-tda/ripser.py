@@ -32,33 +32,30 @@ If you're looking for a GPU-accelerated version of Ripser, you can find it at [R
 Ripser.py is available on `pypi` with wheels for all major platforms. To install, type the following command into your environment:
 
 ```bash
-pip install python
+pip install ripser
 ```
+
 ### Local build
 
-If the above command fails, you can build `ripser.py` locally. All that is required is that you 
-install the standard Python numerical computing libraries and Cython.
+If the above command fails or if you want to develop and contribute to
+`ripser.py`, you can build `ripser.py` locally. To do so, clone this
+repository. From within the cloned repository, execute `pip install .` to build
+locally, or `pip install -e .` for a local,
+[editable](https://setuptools.pypa.io/en/latest/userguide/development_mode.html)
+build. Either of the above two commands will install all required dependencies.
+Explicitly, the dependencies of `ripser.py` are
 
-Dependencies:
+- Cython,
+- numpy,
+- scipy,
+- scikit-learn,
+- persim,
 
-- Cython
-- numpy
-- scipy
-- scikit-learn
-- persim
+and their required dependencies.
 
-**Windows users:** If you are using a Windows machine, you will also need to install [MinGW](http://www.mingw.org) on your system.
+**Windows users:** If you are using a Windows machine, you _may_ also need to install [MinGW](http://www.mingw.org) on your system.
 
 **Mac users:** Updating your Xcode and Xcode command line tools will probably fix any issues you have with installation.
-
-Cython should be the only library required before installation. To install, type the following commands into your environment:
-
-```
-pip install cython
-```
-
-Following this, clone the repository, `cd` into the clone, and execute `pip install -v .`
-
 
 #### Optional dependency
 
