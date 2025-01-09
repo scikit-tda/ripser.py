@@ -102,6 +102,60 @@ def get_greedy_perm(X, n_perm=None, distance_matrix=False, metric="euclidean"):
     return (idx_perm, lambdas, dperm2all)
 
 
+def estimate_ripser_memory(X, maxdim=1, distance_matrix=False):
+    """Estimate the RAM requirements for running Ripser.
+
+    Parameters
+    ----------
+    X : ndarray (n_samples, n_features)
+        A numpy array of either data or distance matrix.
+    
+    maxdim : int, optional (default=1)
+        Maximum homology dimension to be computed.
+    
+    distance_matrix : bool, optional (default=False)
+        Whether X is a distance matrix.
+
+    Returns
+    -------
+    float
+        Estimated RAM requirement in GB.
+
+    Notes
+    -----
+    This is a rough estimation based on:
+    1. Memory for distance matrix: O(n^2) where n is number of points
+    2. Memory for simplicial complex: O(n^(d+1)) where d is maxdim
+    3. Memory for persistence computation: O(n^3) worst case for matrix reduction
+    """
+    if distance_matrix:
+        n_points = X.shape[0]
+    else:
+        n_points = X.shape[0]
+    
+    # Base memory for distance matrix (8 bytes per float64)
+    distance_matrix_memory = (n_points * n_points * 8) / (1024**3)  # in GB
+    
+    # Memory for simplicial complex (worst case)
+    # For each dimension d, we need to store combinations of d+1 points
+    # Using scipy.special.comb for exact calculation would be more accurate
+    # but this is a rough upper bound
+    complex_memory = 0
+    for d in range(maxdim + 1):
+        # Approximate number of d-simplices (overestimate)
+        n_simplices = (n_points ** (d + 1)) / np.math.factorial(d + 1)
+        # Each simplex needs (d+1) integers for vertices + 1 float for filtration value
+        complex_memory += (n_simplices * ((d + 1) * 4 + 8)) / (1024**3)  # in GB
+    
+    # Memory for persistence computation (worst case)
+    # This is a rough estimate based on the boundary matrix
+    persistence_memory = (n_points**3 * 8) / (1024**3)  # in GB
+    
+    total_memory = distance_matrix_memory + complex_memory + persistence_memory
+    
+    return total_memory
+
+
 def ripser(
     X,
     maxdim=1,
@@ -651,4 +705,4 @@ class Rips(TransformerMixin):
         )
 
 
-__all__ = ["Rips", "ripser", "lower_star_img"]
+__all__ = ["Rips", "ripser", "lower_star_img", "estimate_ripser_memory"]

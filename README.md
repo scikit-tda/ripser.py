@@ -95,6 +95,17 @@ diagrams = ripser(data)['dgms']
 plot_diagrams(diagrams, show=True)
 ```
 
+You can also estimate the RAM requirements before running Ripser:
+
+```python
+import numpy as np
+from ripser import estimate_ripser_memory
+
+data = np.random.random((1000, 2))
+estimated_gb = estimate_ripser_memory(data, maxdim=2)
+print(f"Estimated RAM required: {estimated_gb:.2f} GB")
+```
+
 We also supply a Scikit-learn transformer style object if you would prefer to use that:
 
 ```
