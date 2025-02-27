@@ -10,6 +10,7 @@ copyright = u'2019, Christopher Tralie and Nathaniel Saul'
 author = u'Christopher Tralie and Nathaniel Saul'
 version = __version__
 release = __version__
+language = 'en'
 
 html_theme_options.update({
   # Google Analytics info
@@ -20,3 +21,10 @@ html_theme_options.update({
 
 html_short_title = project
 htmlhelp_basename = 'ripserdoc'
+
+# Set canonical URL from the Read the Docs Domain
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
+
+# Tell Jinja2 templates the build is running on Read the Docs
+if os.environ.get("READTHEDOCS", "") == "True":
+    html_context["READTHEDOCS"] = True
