@@ -1,2 +1,2 @@
 cython
-sphinx<=8.2.0
+sphinx<8.2.0
