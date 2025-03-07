@@ -43,7 +43,7 @@ keywords = [
 [project.optional-dependencies]
 testing = ["pytest", "pytest-cov"]
 
-docs = ["sktda_docs_config"]
+docs = ["sktda_docs_config", "sphinx<8.2.0"]
 
 examples = ["tadasets", "jupyter", "pillow"]
 
