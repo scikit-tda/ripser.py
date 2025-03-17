@@ -34,6 +34,9 @@ jobs:
         env:
           CIBW_SKIP: "pp* cp36-* cp37-* *win_arm64 *_i686"
           CIBW_BUILD_VERBOSITY: 1
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: "pytest {project}/tests"
+          CIBW_TEST_SKIP: "*win32 *musllinux*"
 
       - uses: actions/upload-artifact@v4
         with:
