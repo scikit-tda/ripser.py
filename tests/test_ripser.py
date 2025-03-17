@@ -27,7 +27,7 @@ class TestLibrary:
         import ripser
         from ripser import ripser, Rips
 
-        assert 1
+        assert True
 
 
 class TestTransform:
