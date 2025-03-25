@@ -38,10 +38,16 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         run: |
-          pytest --cov ripser
+          pytest --cov-report=xml --cov=./
       - name: Upload coverage results
-        run: |
-          bash <(curl -s https://codecov.io/bash)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          name: ripser
+          verbose: true
+          fail_ci_if_error: true
 
   test-conda:
     runs-on: macos-latest
