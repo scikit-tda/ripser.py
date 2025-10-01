@@ -41,7 +41,7 @@ class CustomBuildExtCommand(build_ext):
         build_ext.run(self)
 
 
-extra_compile_args = ["-Ofast", "-D_hypot=hypot"]
+extra_compile_args = ["-O3", "-D_hypot=hypot"]
 extra_link_args = []
 
 if platform.system() == "Windows":
