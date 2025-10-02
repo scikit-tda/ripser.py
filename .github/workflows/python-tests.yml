@@ -38,7 +38,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         run: |
-          pytest --cov-report=xml --cov=./
+          pytest --cov-report=xml --cov-report=term --cov=src/ripser
       - name: Upload coverage results
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
         uses: codecov/codecov-action@v5
