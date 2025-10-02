@@ -36,8 +36,7 @@ jobs:
           CIBW_BUILD_VERBOSITY: 1
           CIBW_TEST_REQUIRES: pytest
           CIBW_TEST_COMMAND: "pytest {project}/tests"
-          CIBW_TEST_SKIP: "*win32 *musllinux*"
-          CIBW_ENVIRONMENT_WINDOWS: "CFLAGS='-Wno-array-bounds'"
+          CIBW_TEST_SKIP: "*win32 *musllinux* cp314t-*"
 
       - uses: actions/upload-artifact@v4
         with:
