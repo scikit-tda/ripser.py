@@ -43,9 +43,9 @@ keywords = [
 [project.optional-dependencies]
 testing = ["pytest", "pytest-cov"]
 
-docs = ["sktda_docs_config", "sphinx<8.2.0"]
+docs = ["sktda_docs_config", "sphinx<8.2.0",  "jupyter", "pillow"]
 
-examples = ["tadasets", "jupyter", "pillow"]
+ruff = ["ruff<0.12.0"]
 
 [project.urls]
 Homepage = "https://ripser.scikit-tda.org"
@@ -53,3 +53,19 @@ Documentation = "https://ripser.scikit-tda.org"
 Repository = "https://github.com/scikit-tda/ripser.py"
 Issues = "https://github.com/scikit-tda/ripser.py/issues"
 Changelog = "https://github.com/scikit-tda/ripser.py/blob/master/RELEASE.txt"
+
+[tool.ruff]
+# Exclude Jupyter notebooks and other generated/build files
+exclude = [
+    "*.ipynb",
+    "docs/notebooks/*.ipynb", 
+    "docs/conf.py",
+    "_build/",
+    "build/",
+    "__pycache__/",
+    "*.egg-info/",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Disable ambiguous variable name errors in tests
+"tests/*" = ["E741"]

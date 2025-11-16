@@ -9,7 +9,7 @@ from setuptools import Extension, setup
 try:
     from Cython.Build import cythonize
     from Cython.Distutils import build_ext
-except:
+except ImportError:
     print("You don't seem to have Cython installed. Please get a")
     print("copy from www.cython.org or install it with `pip install Cython`")
     sys.exit(1)
