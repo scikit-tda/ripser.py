@@ -34,7 +34,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
-        os: ["ubuntu-latest", "macos-latest"]
+        os: ["ubuntu-latest", "macos-latest", "macos-14"]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -60,12 +60,11 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           name: ripser
-          name: ripser
           verbose: true
           fail_ci_if_error: false
 
   test-conda:
-    runs-on: macos-latest
+    runs-on: [macos-latest, macos-14]
     strategy:
       fail-fast: false
       matrix:
