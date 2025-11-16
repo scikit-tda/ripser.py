@@ -7,6 +7,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/020nrvrq2rdg2iu1?svg=true)](https://ci.appveyor.com/project/sauln/ripser-py)
 [![codecov](https://codecov.io/gh/scikit-tda/ripser.py/branch/master/graph/badge.svg)](https://codecov.io/gh/scikit-tda/ripser.py)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 # Ripser.py
 
@@ -111,9 +112,15 @@ rips.plot(diagrams)
 
 # Contributions
 
-We welcome all kinds of contributions! Please get in touch if you would like to help out. Everything from code to notebooks to examples and documentation are all equally valuable so please don't feel you can't contribute. To contribute please fork the project make your changes and submit a pull request. We will do our best to work through any issues with you and get your code merged into the main branch.
+We welcome all kinds of contributions! Please get in touch if you would like to
+help out. Everything from code to notebooks to examples and documentation are
+all equally valuable so please don't feel you can't contribute.
+To contribute please fork the project make your changes and submit a pull request. See scikit-tda's
+[contributing docs](https://github.com/scikit-tda/scikit-tda/blob/master/CONTRIBUTING.md) for more
+detailed information. We will do our best to work through any issues with you and get your code merged into the main branch.
 
 If you found a bug, have questions, or are just having trouble with the library, please open an issue in our [issue tracker](https://github.com/scikit-tda/ripser.py/issues/new) and we'll try to help resolve the concern.
+
 
 # License
 
