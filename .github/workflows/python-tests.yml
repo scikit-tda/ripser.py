@@ -81,7 +81,7 @@ jobs:
       - name: Set up conda
         shell: bash -l {0}
         run: |
-          conda install -c conda-forge ripser
+          conda install -c conda-forge ripser pytest
       - name: Test conda-forge installation
         shell: bash -l {0}
         run: |
