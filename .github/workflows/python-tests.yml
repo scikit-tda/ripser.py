@@ -86,7 +86,7 @@ jobs:
         shell: bash -l {0}
         run: |
           python -c "import ripser; print('ripser version:', ripser.__version__)"
-          pytest --pyargs ripser
+          pytest .
 
   test-on-windows:
     runs-on: windows-latest
