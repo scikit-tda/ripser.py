@@ -81,17 +81,20 @@ jobs:
           python-version: ${{ matrix.python-version }}
           activate-environment: test
 
-      - name: Install dependencies
-        run: conda install --yes conda-build numpy scipy
-
-      - name: Build conda ripser
-        run: conda build . --output-folder ./conda-dist
-
-      - name: Test conda-forge installation
+      - name: Install conda dependencies
+        shell: bash -l {0}
         run: |
-          conda install --use-local ripser
-          conda install pytest
-          python -c "import ripser; print('ripser version:', ripser.__version__)"
+          conda install numpy scipy scikit-learn matplotlib pytest cython
+          git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
+
+      - name: Install ripser with pip in conda environment
+        shell: bash -l {0}
+        run: |
+          pip install -e ".[testing]"
+
+      - name: Test with pytest
+        shell: bash -l {0}
+        run: |
           pytest .
 
   test-on-windows:
