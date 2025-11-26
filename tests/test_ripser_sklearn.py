@@ -166,3 +166,12 @@ class TestParams:
         h12 = rips2.fit_transform(X)[1]
         assert rips2.r_cover_ > 0
         assert np.max(np.abs(h11 - h12)) <= 2 * rips2.r_cover_
+
+
+class TestPlot:
+    def test_plotting_without_errors(self):
+        data = np.random.random((10, 2))
+        rips = Rips()
+        rips.fit_transform(data)
+        # Should not error
+        rips.plot(show=False)
