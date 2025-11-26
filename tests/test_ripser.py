@@ -24,9 +24,6 @@ def makeSparseDM(X, thresh):
 class TestLibrary:
     # Does the library install in scope? Are the objects in scope?
     def test_import(self):
-        import ripser
-        from ripser import ripser, Rips
-
         assert True
 
 
@@ -34,13 +31,13 @@ class TestTransform:
     def test_input_warnings(self):
         data = np.random.random((3, 10))
 
-        with pytest.warns(UserWarning, match="has more columns than rows") as w:
+        with pytest.warns(UserWarning, match="has more columns than rows"):
             ripser(data)
 
         data = np.random.random((3, 3))
         with pytest.warns(
             UserWarning, match="input matrix is square, but the distance_matrix"
-        ) as w:
+        ):
             ripser(data)
 
     def test_non_square_dist_matrix(self):
@@ -80,9 +77,9 @@ class TestParams:
 
         dgm3 = ripser(data, coeff=3)["dgms"]
         dgm2 = ripser(data)["dgms"]
-        assert (
-            dgm2 is not dgm3
-        ), "This is a vacuous assertion, we only care that the above operations did not throw errors"
+        assert dgm2 is not dgm3, (
+            "This is a vacuous assertion, we only care that the above operations did not throw errors"
+        )
 
     def test_maxdim(self):
         np.random.seed(3100)
@@ -190,6 +187,7 @@ class TestParams:
         res1 = ripser(X)
         res2 = ripser(X, n_perm=10)
         idx = res2["idx_perm"]
+        assert idx is not None
         h11 = res1["dgms"][1]
         h12 = res2["dgms"][1]
         assert res2["r_cover"] > 0

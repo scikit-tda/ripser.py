@@ -23,9 +23,6 @@ def makeSparseDM(X, thresh):
 class TestLibrary:
     # Does the library install in scope? Are the objects in scope?
     def test_import(self):
-        import ripser
-        from ripser import Rips
-
         assert 1
 
     def test_instantiate(self):
@@ -35,21 +32,19 @@ class TestLibrary:
 
 class TestTransform:
     def test_input_warnings(self):
-
         rips = Rips()
         data = np.random.random((3, 10))
 
-        with pytest.warns(UserWarning, match="has more columns than rows") as w:
+        with pytest.warns(UserWarning, match="has more columns than rows"):
             rips.transform(data)
 
         data = np.random.random((3, 3))
         with pytest.warns(
             UserWarning, match="input matrix is square, but the distance_matrix"
-        ) as w:
+        ):
             rips.transform(data)
 
     def test_non_square_dist_matrix(self):
-
         rips = Rips()
         data = np.random.random((3, 10))
 
@@ -91,9 +86,9 @@ class TestParams:
 
         rips2 = Rips(coeff=2)
         dgm2 = rips2.fit_transform(data)
-        assert (
-            dgm2 is not dgm3
-        ), "This is a vacuous assertion, we only care that the above operations did not throw errors"
+        assert dgm2 is not dgm3, (
+            "This is a vacuous assertion, we only care that the above operations did not throw errors"
+        )
 
     def test_maxdim(self):
         np.random.seed(3100)
@@ -171,3 +166,12 @@ class TestParams:
         h12 = rips2.fit_transform(X)[1]
         assert rips2.r_cover_ > 0
         assert np.max(np.abs(h11 - h12)) <= 2 * rips2.r_cover_
+
+
+class TestPlot:
+    def test_plotting_without_errors(self):
+        data = np.random.random((10, 2))
+        rips = Rips()
+        rips.fit_transform(data)
+        # Should not error
+        rips.plot(show=False)

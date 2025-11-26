@@ -19,6 +19,7 @@ jobs:
             ubuntu-24.04-arm,
             windows-latest,
             macos-13,
+            macos-14,
             macos-latest,
           ]
 
@@ -38,7 +39,7 @@ jobs:
           CIBW_TEST_COMMAND: "pytest {project}/tests"
           CIBW_TEST_SKIP: "*win32 *musllinux* cp314t-*"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
@@ -56,7 +57,7 @@ jobs:
       - name: Build sdist
         run: pipx run build --sdist
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: cibw-sdist
           path: dist/*.tar.gz
@@ -72,7 +73,7 @@ jobs:
       id-token: write
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           # unpacks all CIBW artifacts into dist/
           pattern: cibw-*

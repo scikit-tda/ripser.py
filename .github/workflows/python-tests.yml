@@ -11,11 +11,30 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint_and_format_check_with_ruff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: "format --check"
+
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: "check"
+
   test:
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-        os: ["ubuntu-latest", "macos-latest"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        os: ["ubuntu-latest", "macos-latest", "macos-14"]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -30,45 +49,49 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 pytest-cov Cython
           pip install -e ".[testing]"
-      - name: Lint with flake8
-        run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
       - name: Test with pytest
         run: |
           pytest --cov-report=xml --cov-report=term --cov=src/ripser
+
       - name: Upload coverage results
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
         uses: codecov/codecov-action@v5
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           name: ripser
           verbose: true
-          fail_ci_if_error: true
+          fail_ci_if_error: false
 
   test-conda:
-    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"] # 3.14 not supported by conda yet
+        os: ["macos-latest", "macos-14"]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v5
-      - uses: conda-incubator/setup-miniconda@v3
+
+      - name: Set up miniconda
+        uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           activate-environment: test
-      - name: Set up conda
+
+      - name: Install conda dependencies
         shell: bash -l {0}
         run: |
-          conda install git numpy pandas scipy matplotlib pytest cython
+          conda install numpy scipy scikit-learn matplotlib pytest cython
           git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
-          python -m pip install .
+
+      - name: Install ripser with pip in conda environment
+        shell: bash -l {0}
+        run: |
+          pip install -e ".[testing]"
+
       - name: Test with pytest
         shell: bash -l {0}
         run: |
@@ -79,7 +102,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
       - uses: actions/checkout@v5
@@ -92,7 +115,7 @@ jobs:
         shell: bash -l {0}
         run: |
           echo -e "[build]\ncompiler=msvc\n" >> setup.cfg
-          conda install git numpy pandas scipy matplotlib pytest libpython cython
+          conda install git numpy pandas scipy matplotlib pytest cython
           git clone https://github.com/martinus/robin-hood-hashing ripser/robinhood
           python -m pip install .
       - name: Test with pytest
