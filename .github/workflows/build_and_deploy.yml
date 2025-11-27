@@ -1,12 +1,12 @@
 name: Build
-
 on:
   push:
+    branches:
+      - '**'  # Run on all branches in your fork
   pull_request:
   workflow_dispatch:
   release:
     types: [published]
-
 jobs:
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
@@ -22,14 +22,11 @@ jobs:
             macos-14,
             macos-latest,
           ]
-
     steps:
       - uses: actions/checkout@v5
-
       - name: Clone robinhood
         run: |
           git clone https://github.com/martinus/robin-hood-hashing robinhood
-
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.2.0
         env:
@@ -38,30 +35,70 @@ jobs:
           CIBW_TEST_REQUIRES: pytest
           CIBW_TEST_COMMAND: "pytest {project}/tests"
           CIBW_TEST_SKIP: "*win32 *musllinux* cp314t-*"
-
+      - name: List built wheels
+        run: |
+          ls -lh wheelhouse/
       - uses: actions/upload-artifact@v5
         with:
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
-
+          
   build_sdist:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-
       - name: Clone robinhood
         run: |
           git clone https://github.com/martinus/robin-hood-hashing robinhood
-
       - name: Build sdist
         run: pipx run build --sdist
-
       - uses: actions/upload-artifact@v5
         with:
           name: cibw-sdist
           path: dist/*.tar.gz
-
+          
+  upload_test_pypi:
+    name: Upload to TestPyPI
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    # Run on all pushes to your fork (not on PRs from others)
+    if: github.event_name == 'push' && github.repository_owner == 'catanzaromj'
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
+          
+      - name: Debug downloaded files
+        run: |
+          echo "=== All files in dist/ ==="
+          ls -lhR dist/
+          echo ""
+          echo "=== Checking wheel integrity ==="
+          python -c "
+          import zipfile
+          from pathlib import Path
+          for wheel in sorted(Path('dist').rglob('*.whl')):
+              size = wheel.stat().st_size
+              print(f'{wheel.name}: {size} bytes')
+              if size < 1000:
+                  print(f'  WARNING: File is suspiciously small!')
+              try:
+                  with zipfile.ZipFile(wheel) as z:
+                      z.testzip()
+                  print(f'  ✓ Valid zip')
+              except Exception as e:
+                  print(f'  ✗ ERROR: {e}')
+          "
+          
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          
   upload_pypi:
     name: Upload release to PyPI
     needs: [build_wheels, build_sdist]
@@ -71,13 +108,12 @@ jobs:
       url: https://pypi.org/p/ripser
     permissions:
       id-token: write
+    # Only run on actual releases
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
       - uses: actions/download-artifact@v5
         with:
-          # unpacks all CIBW artifacts into dist/
           pattern: cibw-*
           path: dist
           merge-multiple: true
-
       - uses: pypa/gh-action-pypi-publish@release/v1
