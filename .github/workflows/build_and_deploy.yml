@@ -36,8 +36,8 @@ jobs:
           CIBW_TEST_COMMAND: "pytest {project}/tests"
           CIBW_TEST_SKIP: "*win32 *musllinux* cp314t-*"
       - name: List built wheels
-        run: |
-          ls -lh wheelhouse/
+        run: ls -lh wheelhouse/
+        shell: bash
       - uses: actions/upload-artifact@v5
         with:
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
