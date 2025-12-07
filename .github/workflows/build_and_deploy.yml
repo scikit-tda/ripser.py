@@ -1,8 +1,6 @@
 name: Build
 on:
   push:
-    branches:
-      - '**'  # Run on all branches in your fork
   pull_request:
   workflow_dispatch:
   release:
@@ -18,7 +16,7 @@ jobs:
             ubuntu-latest,
             ubuntu-24.04-arm,
             windows-latest,
-            macos-13, # intel 
+            macos-13, # intel x86_64
             # macos-14,
             macos-latest, # arm 64
           ]
@@ -35,9 +33,6 @@ jobs:
           CIBW_TEST_REQUIRES: pytest
           CIBW_TEST_COMMAND: "pytest {project}/tests"
           CIBW_TEST_SKIP: "*win32 *musllinux* cp314t-*"
-      - name: List built wheels
-        run: ls -lh wheelhouse/
-        shell: bash
       - uses: actions/upload-artifact@v5
         with:
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}

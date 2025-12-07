@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel", "numpy", "Cython"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ripser-test-1934"
+name = "ripser"
 dynamic = ["version"]
 description = "A Lean Persistent Homology Library for Python"
 readme = "README.md"
