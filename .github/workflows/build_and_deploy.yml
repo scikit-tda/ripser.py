@@ -18,9 +18,9 @@ jobs:
             ubuntu-latest,
             ubuntu-24.04-arm,
             windows-latest,
-            # macos-13,
+            macos-13, # intel 
             # macos-14,
-            macos-latest,
+            macos-latest, # arm 64
           ]
     steps:
       - uses: actions/checkout@v5
