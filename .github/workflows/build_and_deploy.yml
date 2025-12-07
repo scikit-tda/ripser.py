@@ -58,27 +58,6 @@ jobs:
           name: cibw-sdist
           path: dist/*.tar.gz
           
-  upload_test_pypi:
-    name: Upload to TestPyPI
-    needs: [build_wheels, build_sdist]
-    runs-on: ubuntu-latest
-    # Run on all pushes to your fork (not on PRs from others)
-    if: github.event_name == 'push' && github.repository_owner == 'catanzaromj'
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/download-artifact@v5
-        with:
-          pattern: cibw-*
-          path: dist
-          merge-multiple: true
-          
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          skip-existing: true
-          verbose: true
-          
   upload_pypi:
     name: Upload release to PyPI
     needs: [build_wheels, build_sdist]
