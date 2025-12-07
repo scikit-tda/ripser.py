@@ -73,53 +73,6 @@ jobs:
           path: dist
           merge-multiple: true
           
-      - name: Debug downloaded files
-        run: |
-          echo "=== All files in dist/ ==="
-          ls -lhR dist/
-          echo ""
-          echo "=== Checking wheel integrity ==="
-          python -c "
-          import zipfile
-          from pathlib import Path
-          for wheel in sorted(Path('dist').rglob('*.whl')):
-              size = wheel.stat().st_size
-              print(f'{wheel.name}: {size} bytes')
-              if size < 1000:
-                  print(f'  WARNING: File is suspiciously small!')
-              try:
-                  with zipfile.ZipFile(wheel) as z:
-                      z.testzip()
-                  print(f'  ✓ Valid zip')
-              except Exception as e:
-                  print(f'  ✗ ERROR: {e}')
-          "
-          
-      - name: Detailed check of cp313 arm64 wheel
-        run: |
-          python -c "
-          import zipfile
-          import hashlib
-          wheel = 'dist/ripser_test_1934-0.6.19-cp313-cp313-macosx_11_0_arm64.whl'
-          print(f'File size: {open(wheel, \"rb\").seek(0, 2)} bytes')
-          with open(wheel, 'rb') as f:
-              f.seek(0)
-              first_bytes = f.read(100)
-              print(f'First 100 bytes (hex): {first_bytes.hex()}')
-              print(f'First 20 bytes (ascii): {first_bytes[:20]}')
-              f.seek(0)
-              md5 = hashlib.md5(f.read()).hexdigest()
-              print(f'MD5: {md5}')
-    
-          try:
-              with zipfile.ZipFile(wheel, 'r') as z:
-                  print(f'Zip file has {len(z.namelist())} files')
-                  bad = z.testzip()
-                  print(f'testzip result: {bad}')
-          except Exception as e:
-              print(f'Error opening zip: {e}')
-          "
-
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
