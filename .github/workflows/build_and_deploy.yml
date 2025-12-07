@@ -21,7 +21,7 @@ jobs:
             macos-latest, # arm 64
           ]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Clone robinhood
         run: |
           git clone https://github.com/martinus/robin-hood-hashing robinhood
@@ -42,7 +42,7 @@ jobs:
     name: Build source distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Clone robinhood
         run: |
           git clone https://github.com/martinus/robin-hood-hashing robinhood
