@@ -16,7 +16,7 @@ jobs:
             ubuntu-latest,
             ubuntu-24.04-arm,
             windows-latest,
-            macos-13, # intel x86_64
+            macos-15-intel, # intel x86_64
             # macos-14,
             macos-latest, # arm 64
           ]
@@ -26,7 +26,7 @@ jobs:
         run: |
           git clone https://github.com/martinus/robin-hood-hashing robinhood
       - name: Build wheels
-        uses: pypa/cibuildwheel@v3.2.0
+        uses: pypa/cibuildwheel@v3.3.0
         env:
           CIBW_SKIP: "*win_arm64 *_i686"
           CIBW_BUILD_VERBOSITY: 1
