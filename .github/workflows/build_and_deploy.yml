@@ -65,7 +65,7 @@ jobs:
     # Only run on actual releases
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v7
         with:
           pattern: cibw-*
           path: dist
