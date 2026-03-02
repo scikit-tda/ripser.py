@@ -9,3 +9,8 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "chore(deps): "
+    groups:
+      artifact-actions:
+        patterns:
+          - "actions/upload-artifact"
+          - "actions/download-artifact"
