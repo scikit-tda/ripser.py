@@ -229,6 +229,7 @@ class TestParams:
         for dgm1k, dgm2k in zip(dgms1, dgms2):
             assert np.allclose(dgm1k, dgm2k)
 
+
 class TestCorrelationToDistance:
     def test_perfect_correlation_mapping(self):
         """Test exact expected mathematical mappings for key values."""
@@ -237,20 +238,18 @@ class TestCorrelationToDistance:
         # Perfect positive corr => Dist 0
         # Uncorrelated => Dist sqrt(2)
         # Perfect negative corr -> Dist 2
-        C = np.array([
-            [1.0, 0.0, -1.0],
-            [0.0, 1.0,  0.0],
-            [-1.0, 0.0,  1.0]
-        ])
-        expected = np.array([
-            [0.0, np.sqrt(2), 2.0],
-            [np.sqrt(2), 0.0, np.sqrt(2)],
-            [2.0, np.sqrt(2), 0.0]
-        ])
-        
+        C = np.array([[1.0, 0.0, -1.0], [0.0, 1.0, 0.0], [-1.0, 0.0, 1.0]])
+        expected = np.array(
+            [
+                [0.0, np.sqrt(2), 2.0],
+                [np.sqrt(2), 0.0, np.sqrt(2)],
+                [2.0, np.sqrt(2), 0.0],
+            ]
+        )
+
         D = correlation_to_distance(C)
         assert np.allclose(D, expected)
-        assert np.all(np.diag(D)==0.0)
+        assert np.all(np.diag(D) == 0.0)
 
     def test_input_validation_errors(self):
         """Verify that incorrect structures trigger ValueErrors."""
@@ -269,7 +268,9 @@ class TestCorrelationToDistance:
 
         # out of bounds (> 1.05)
         C_bad_bounds = np.array([[1.0, 1.1], [1.1, 1.0]])
-        with pytest.raises(ValueError, match="significantly outside the valid correlation bounds"):
+        with pytest.raises(
+            ValueError, match="significantly outside the valid correlation bounds"
+        ):
             correlation_to_distance(C_bad_bounds)
 
     def test_input_precision_warnings(self):
@@ -279,8 +280,10 @@ class TestCorrelationToDistance:
         # minor out-of-bounds variations (<= 1.05) warn and clip safely
         C_minor_over = np.array([[1.0, 1.02], [1.02, 1.02]])
         C_minor_over[1, 1] = 1.0
-        
-        with pytest.warns(RuntimeWarning, match="slightly outside the valid correlation bounds"):
+
+        with pytest.warns(
+            RuntimeWarning, match="slightly outside the valid correlation bounds"
+        ):
             D = correlation_to_distance(C_minor_over)
             # verify that clipping to 1.0 leads to dist of 0.0
             assert D[0, 1] == 0.0
