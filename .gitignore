@@ -14,3 +14,4 @@ venv/
 .vscode/
 .ipynb_checkpoints
 pyRipser.cpp
+*.pyd

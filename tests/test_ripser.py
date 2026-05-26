@@ -228,3 +228,78 @@ class TestParams:
         dgms2 = ripser(dm.tocsr(), distance_matrix=True)["dgms"]
         for dgm1k, dgm2k in zip(dgms1, dgms2):
             assert np.allclose(dgm1k, dgm2k)
+
+
+class TestCorrelationToDistance:
+    def test_perfect_correlation_mapping(self):
+        """Test exact expected mathematical mappings for key values."""
+        from ripser import correlation_to_distance
+
+        # Perfect positive corr => Dist 0
+        # Uncorrelated => Dist sqrt(2)
+        # Perfect negative corr -> Dist 2
+        C = np.array([[1.0, 0.0, -1.0], [0.0, 1.0, 0.0], [-1.0, 0.0, 1.0]])
+        expected = np.array(
+            [
+                [0.0, np.sqrt(2), 2.0],
+                [np.sqrt(2), 0.0, np.sqrt(2)],
+                [2.0, np.sqrt(2), 0.0],
+            ]
+        )
+
+        D = correlation_to_distance(C)
+        assert np.allclose(D, expected)
+        assert np.all(np.diag(D) == 0.0)
+
+    def test_input_validation_errors(self):
+        """Verify that incorrect structures trigger ValueErrors."""
+        from ripser import correlation_to_distance
+
+        # non-2D
+        with pytest.raises(ValueError, match="Input must be a 2D matrix"):
+            correlation_to_distance(np.array([1, 2, 3]))
+        # non-square
+        with pytest.raises(ValueError, match="Matrix must be square"):
+            correlation_to_distance(np.array([[1.0, 0.5, 0.1], [0.5, 1.0, 0.2]]))
+        # asymmetric
+        C_asym = np.array([[1.0, 0.8], [0.2, 1.0]])
+        with pytest.raises(ValueError, match="Matrix must be symmetric"):
+            correlation_to_distance(C_asym)
+
+        # out of bounds (> 1.05)
+        C_bad_bounds = np.array([[1.0, 1.1], [1.1, 1.0]])
+        with pytest.raises(
+            ValueError, match="significantly outside the valid correlation bounds"
+        ):
+            correlation_to_distance(C_bad_bounds)
+
+    def test_input_precision_warnings(self):
+        """Verify soft warnings and clipping for minor floating point variations."""
+        from ripser import correlation_to_distance
+
+        # minor out-of-bounds variations (<= 1.05) warn and clip safely
+        C_minor_over = np.array([[1.0, 1.02], [1.02, 1.02]])
+        C_minor_over[1, 1] = 1.0
+
+        with pytest.warns(
+            RuntimeWarning, match="slightly outside the valid correlation bounds"
+        ):
+            D = correlation_to_distance(C_minor_over)
+            # verify that clipping to 1.0 leads to dist of 0.0
+            assert D[0, 1] == 0.0
+
+        # diagonal variations away from 1.0 trigger a warning
+        C_bad_diag = np.array([[0.998, 0.5], [0.5, 1.0]])
+        with pytest.warns(RuntimeWarning, match="diagonal elements deviate from 1.0"):
+            D = correlation_to_distance(C_bad_diag)
+            assert np.all(np.diag(D) == 0.0)
+
+    def test_check_input_bypass(self):
+        """Ensure check_input=False bypasses bottlenecks or structural errors entirely."""
+        from ripser import correlation_to_distance
+
+        C_broken = np.array([[5.0, -10.0], [20.0, 3.0]])
+        # this WOULD normally throw a ValueError, but bypasses now
+        D = correlation_to_distance(C_broken, check_input=False)
+        assert np.all(np.diag(D) == 0.0)
+        assert D.shape == (2, 2)

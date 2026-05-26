@@ -355,6 +355,92 @@ def ripser(
     return ret
 
 
+def correlation_to_distance(C, check_input=True):
+    """
+    Converts a Pearson/Spearman correlation matrix into a metric space matrix.
+
+    Using the transformation :math:`D = \\sqrt{2(1 - C)}`, this maps a correlation
+    matrix into a valid Euclidean/chordal metric space on a hypersphere. It is
+    ideal for downstream persistent homology workflows, satisfying the triangle
+    inequality.
+
+    Parameters
+    ----------
+    C: ndarray (n_samples, n_samples).
+        A symmetric correlation matrix with values in the range [-1,1]
+    check_input: bool, default=True.
+        If True, validate the input matrix as square, symmetric,
+        bound-compliant and has a valid diagonal
+
+    Returns
+    ----------
+    D: ndarray (n_samples, n_samples).
+        A symmetric distance matrix with values in the range [0,2].
+        Diagonal is zeroed out.
+
+    Raises
+    ----------
+    ValueError
+        If the input is not 2D, is not square, is asymmetric, or contains
+        values outside [-1,1] by > 0.05
+
+    Warns
+    ----------
+    RuntimeWarning
+        If the input contains values outside [-1,1] by < 0.05,
+        If the input diagonal has entries outside of 1.0 by < 1e-3
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from ripser import ripser, correlation_to_distance
+    >>> # Generate a dummy symmetric correlation matrix
+    >>> C = np.array([[1.0, 0.4, -0.2], [0.4, 1.0, 0.1], [-0.2, 0.1, 1.0]])
+    >>> D = correlation_to_distance(C)
+    >>> print(D)
+    [[0.         1.09544512 1.54919334]
+     [1.09544512 0.         1.34164079]
+     [1.54919334 1.34164079 0.        ]]
+    >>> # Feed straight into ripser
+    >>> result = ripser(D, distance_matrix=True)
+    """
+    C = np.asarray(C, dtype=float)
+    if check_input:  # user MAY bypass checks; np.allclose is potential bottleneck
+        # errors
+        if C.ndim != 2:
+            raise ValueError(
+                f"Input must be a 2D matrix, got a {C.ndim}D array instead."
+            )
+        if C.shape[0] != C.shape[1]:
+            raise ValueError(f"Matrix must be square (n x n), got shape {C.shape}.")
+        if not np.allclose(C, C.T, rtol=1e-5, atol=1e-5):
+            raise ValueError("Matrix must be symmetric; C_ij must equal C_ji")
+        if np.any(
+            (C < -1.05) | (C > 1.05)
+        ):  # severe deviations often mean covar. or unscaled data
+            raise ValueError(
+                "Values are significantly outside the valid correlation bounds [-1,1]. "
+                "Ensure you are passing a correlation matrix, not a covariance or raw data matrix."
+            )
+        # warnings
+        if np.any((C < -1.0) | (C > 1.0)):  # moderate deviations will be rounded
+            warnings.warn(
+                "Some values are slightly outside the valid correlation bounds [-1,1]. "
+                "For floating-point precision, these values have been clipped.",
+                RuntimeWarning,
+            )
+        if not np.allclose(np.diag(C), 1.0, atol=1e-3):
+            warnings.warn(
+                "The matrix diagonal elements deviate from 1.0. Ensure this is a correlation matrix.",
+                RuntimeWarning,
+            )
+
+    D = 2.0 * (1.0 - np.clip(C, -1.0, 1.0))
+    np.sqrt(D, out=D)
+    np.fill_diagonal(D, 0.0)
+    return D
+
+
 def lower_star_img(img):
     """
     Construct a lower star filtration on an image
