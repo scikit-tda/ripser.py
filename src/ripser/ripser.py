@@ -34,9 +34,9 @@ from pyRipser import doRipsFiltrationDM as DRFDM
 from pyRipser import doRipsFiltrationDMSparse as DRFDMSparse
 
 
-def dpoint2pointcloud(X, i, metric):
+def dpoint2pointcloud(X, i, metric, **metric_params):
     """
-    Return the distance from the ith point in a Euclidean point cloud
+    Return the distance from the ith point in a point cloud
     to the rest of the points
     Parameters
     ----------
@@ -47,8 +47,13 @@ def dpoint2pointcloud(X, i, metric):
     metric: string or callable
         The metric to use when calculating distance between instances in a
         feature array
+    **metric_params: dict
+        Additional metric parameters, such as the full point cloud's variance
+        or inverse covariance.
     """
-    ds = pairwise_distances(X, X[i, :][None, :], metric=metric).flatten()
+    ds = pairwise_distances(
+        X, X[i, :][None, :], metric=metric, **metric_params
+    ).flatten()
     ds[i] = 0
     return ds
 
@@ -89,9 +94,16 @@ def get_greedy_perm(X, n_perm=None, distance_matrix=False, metric="euclidean"):
         def dpoint2all(i):
             return X[i, :]
     else:
+        # Match the statistics inferred for a full pairwise-distance matrix.
+        # Reuse them for every sampled point without allocating that matrix.
+        metric_params = {}
+        if metric == "seuclidean":
+            metric_params["V"] = np.var(X, axis=0, ddof=1)
+        elif metric == "mahalanobis":
+            metric_params["VI"] = np.linalg.inv(np.cov(X.T)).T
 
         def dpoint2all(i):
-            return dpoint2pointcloud(X, i, metric)
+            return dpoint2pointcloud(X, i, metric, **metric_params)
 
     ds = dpoint2all(0)
     dperm2all = [ds]
