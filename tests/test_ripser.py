@@ -174,6 +174,24 @@ class TestParams:
             I2 = I2[np.argsort(I2[:, 0] - I2[:, 1]), :]
             assert np.allclose(I1, I2)
 
+    @pytest.mark.parametrize("metric", ["seuclidean", "mahalanobis"])
+    @pytest.mark.parametrize("dtype", [np.int64, np.float32, np.float64])
+    def test_greedyperm_data_dependent_metric(self, metric, dtype):
+        X = np.array(
+            [[0, 0], [1, 3], [2, 1], [4, 2], [5, 7], [7, 3], [8, 5], [9, 9]],
+            dtype=dtype,
+        )
+        original = X.copy()
+        distances = pairwise_distances(X, metric=metric)
+        expected = ripser(distances, distance_matrix=True, n_perm=4)
+        actual = ripser(X, metric=metric, n_perm=4)
+        np.testing.assert_array_equal(actual["idx_perm"], expected["idx_perm"])
+        np.testing.assert_allclose(actual["dperm2all"], expected["dperm2all"])
+        assert actual["r_cover"] == pytest.approx(expected["r_cover"])
+        for actual_dgm, expected_dgm in zip(actual["dgms"], expected["dgms"]):
+            np.testing.assert_allclose(actual_dgm, expected_dgm)
+        np.testing.assert_array_equal(X, original)
+
     def test_greedyperm_circlebottleneck(self):
         """
         Test a relationship between the bottleneck
